@@ -1,7 +1,15 @@
 #!/usr/bin/python
 
-class Rabbit():
+import pygame
+import Functions
+from pygame.locals import *
+
+class Rabbit(pygame.sprite.Sprite):
 	def __init__(self, id = -1, name = ""):
+		pygame.sprite.Sprite.__init__(self)
+		self.image, self.rect = Functions.loadPNG("test.png")
+		screen = pygame.display.get_surface()
+		self.area = screen.get_rect()
 		self.id = id
 		self.name = name
 
