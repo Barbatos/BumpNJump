@@ -6,7 +6,7 @@ import Resources
 from pygame.locals import *
 
 class Animation(pygame.sprite.Sprite):
-	def __init__(self, image, nbFrames, FPS):
+	def __init__(self, image, nbFrames):
 		pygame.sprite.Sprite.__init__(self)
 		self.arrAnim = []
 		for i in range(0, nbFrames):
@@ -23,7 +23,6 @@ class Animation(pygame.sprite.Sprite):
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 
-		self.FPS = FPS
 		self.interval = 0
 		self.nbFrames = nbFrames
 		self.play = True
@@ -38,7 +37,7 @@ class Animation(pygame.sprite.Sprite):
 		return self.play
 
 	def update(self):
-		if self.interval < float(self.FPS)/24:
+		if self.interval < 60./24:
 			self.interval += 1
 		else:
 			self.interval = 0

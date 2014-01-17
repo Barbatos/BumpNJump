@@ -34,7 +34,7 @@ class BumpNJump():
 		rabbit = Rabbit(1, "john")
 		rabbitSprite = pygame.sprite.RenderPlain(rabbit)
 
-		testAnim = Animation("anim", 19, 60)
+		testAnim = Animation("rabbit_walk_left", 8)
 		testAnimSprite = pygame.sprite.RenderPlain(testAnim)
 		testAnim.playAnim()
 
