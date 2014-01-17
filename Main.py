@@ -39,13 +39,11 @@ class Main():
 
 				elif event.type == KEYDOWN:
 					if event.key == K_UP:
-						rabbit.moveUp()
-					if event.key == K_DOWN:
-						rabbit.moveDown()
+						rabbit.jump()
 					if event.key == K_LEFT:
-						rabbit.moveLeft()
+						rabbit.moveLeftStart()
 					if event.key == K_RIGHT:
-						rabbit.moveRight()
+						rabbit.moveRightStart()
 					if event.key == K_p:
 						if testAnim.isRunning():
 							testAnim.stopAnim()
@@ -53,8 +51,10 @@ class Main():
 							testAnim.playAnim()
 
 				elif event.type == KEYUP:
-					if event.key == K_UP or event.key == K_DOWN or event.key == K_LEFT or event.key == K_RIGHT:
-						rabbit.standStill()
+					if event.key == K_LEFT:
+						rabbit.moveLeftStop()
+					if event.key == K_RIGHT:
+						rabbit.moveRightStop()
 
 			screen.blit(background, testAnim.rect, testAnim.rect)
 			screen.blit(background, rabbit.rect, rabbit.rect)
