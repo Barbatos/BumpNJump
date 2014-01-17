@@ -33,10 +33,6 @@ class Main():
 		clock = pygame.time.Clock()
 
 		while 1:
-			clock.tick(60)
-
-			testAnim.update()
-
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					return
@@ -62,11 +58,16 @@ class Main():
 
 			screen.blit(background, testAnim.rect, testAnim.rect)
 			screen.blit(background, rabbit.rect, rabbit.rect)
+
 			rabbitSprite.update()
 			rabbitSprite.draw(screen)
 			testAnimSprite.update()
 			testAnimSprite.draw(screen)
 
+			testAnim.update()
+
 			pygame.display.flip()
+
+			clock.tick(60)
 
 	if __name__ == '__main__': main()
