@@ -18,9 +18,9 @@ class Main():
 		background = background.convert()
 		background.fill((100, 150, 100))
 
-		test = Rabbit(1, "john")
+		rabbit = Rabbit(1, "john")
 
-		testSprite = pygame.sprite.RenderPlain(test)
+		rabbitSprite = pygame.sprite.RenderPlain(rabbit)
 
 		screen.blit(background, (0, 0))
 		pygame.display.flip()
@@ -34,8 +34,24 @@ class Main():
 				if event.type == QUIT:
 					return
 
-			testSprite.update()
-			testSprite.draw(screen)
+				elif event.type == KEYDOWN:
+					if event.key == K_UP:
+						rabbit.moveUp()
+					if event.key == K_DOWN:
+						rabbit.moveDown()
+					if event.key == K_LEFT:
+						rabbit.moveLeft()
+					if event.key == K_RIGHT:
+						rabbit.moveRight()
+
+				elif event.type == KEYUP:
+					if event.key == K_UP or event.key == K_DOWN or event.key == K_LEFT or event.key == K_RIGHT:
+						rabbit.standStill()
+
+			screen.blit(background, rabbit.rect, rabbit.rect)
+			rabbitSprite.update()
+			rabbitSprite.draw(screen)
+
 			pygame.display.flip()
 
 	if __name__ == '__main__': main()
