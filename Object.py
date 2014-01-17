@@ -6,7 +6,7 @@ import Resources
 class Object(pygame.sprite.Sprite):
 	def __init__(self, id = -1, name = "", img = "", x = 0, y = 0):
 		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = Resources.loadPNG(img, True)
+		self.image, self.rect = Resources.loadPNG(img, False)
 		screen = pygame.display.get_surface()
 
 		self.id = id
