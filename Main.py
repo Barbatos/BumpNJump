@@ -12,7 +12,7 @@ from Animation import *
 class Main():
 	def main():
 		pygame.init()
-		screen = pygame.display.set_mode((1200, 675))
+		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
 		background = pygame.Surface(screen.get_size())
