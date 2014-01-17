@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import pygame
-import math
 import Resources
 from pygame.locals import *
 

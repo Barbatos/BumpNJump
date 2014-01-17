@@ -8,6 +8,7 @@ import pygame
 from pygame.locals import *
 from Rabbit import *
 from Animation import *
+from Object import *
 
 class Main():
 	def main():
@@ -20,17 +21,22 @@ class Main():
 		background.fill((100, 150, 100))
 
 		rabbit = Rabbit(1, "john")
-
 		rabbitSprite = pygame.sprite.RenderPlain(rabbit)
-
-		screen.blit(background, (0, 0))
-		pygame.display.flip()
 
 		testAnim = Animation("anim", 19, 60)
 		testAnimSprite = pygame.sprite.RenderPlain(testAnim)
 		testAnim.playAnim()
 
+		object1 = Object(1, "obj1", "anim0001.png", 100, 530)
+		object1Sprite = pygame.sprite.RenderPlain(object1)
+
+		object2 = Object(2, "obj2", "anim0001.png", 133, 497)
+		object2Sprite = pygame.sprite.RenderPlain(object2)
+
 		clock = pygame.time.Clock()
+
+		screen.blit(background, (0, 0))
+		pygame.display.flip()
 
 		while 1:
 			for event in pygame.event.get():
@@ -58,11 +64,20 @@ class Main():
 
 			screen.blit(background, testAnim.rect, testAnim.rect)
 			screen.blit(background, rabbit.rect, rabbit.rect)
+			screen.blit(background, object1.rect, object1.rect)
+			screen.blit(background, object2.rect, object2.rect)
 
 			rabbitSprite.update()
 			rabbitSprite.draw(screen)
+
 			testAnimSprite.update()
 			testAnimSprite.draw(screen)
+
+			object1Sprite.update()
+			object1Sprite.draw(screen)
+
+			object2Sprite.update()
+			object2Sprite.draw(screen)
 
 			testAnim.update()
 
