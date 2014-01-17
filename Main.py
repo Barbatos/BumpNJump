@@ -10,8 +10,19 @@ from Rabbit import *
 from Animation import *
 from Object import *
 
-class Main():
-	def main():
+class BumpNJump():
+
+	def initObjects(self):
+		self.objectList.append(Object(1, "obj1", "anim0001.png", 100, 530))
+		self.objectList.append(Object(2, "obj2", "anim0001.png", 133, 497))
+
+		for obj in self.objectList:
+			self.objectSpritesList.append(pygame.sprite.RenderPlain(obj))
+
+	def __init__(self):
+		self.objectList = []
+		self.objectSpritesList = []
+
 		pygame.init()
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
@@ -27,11 +38,7 @@ class Main():
 		testAnimSprite = pygame.sprite.RenderPlain(testAnim)
 		testAnim.playAnim()
 
-		object1 = Object(1, "obj1", "anim0001.png", 100, 530)
-		object1Sprite = pygame.sprite.RenderPlain(object1)
-
-		object2 = Object(2, "obj2", "anim0001.png", 133, 497)
-		object2Sprite = pygame.sprite.RenderPlain(object2)
+		self.initObjects()
 
 		clock = pygame.time.Clock()
 
@@ -64,8 +71,9 @@ class Main():
 
 			screen.blit(background, testAnim.rect, testAnim.rect)
 			screen.blit(background, rabbit.rect, rabbit.rect)
-			screen.blit(background, object1.rect, object1.rect)
-			screen.blit(background, object2.rect, object2.rect)
+
+			for obj in self.objectList:
+				screen.blit(background, obj.rect, obj.rect)
 
 			rabbitSprite.update()
 			rabbitSprite.draw(screen)
@@ -73,11 +81,9 @@ class Main():
 			testAnimSprite.update()
 			testAnimSprite.draw(screen)
 
-			object1Sprite.update()
-			object1Sprite.draw(screen)
-
-			object2Sprite.update()
-			object2Sprite.draw(screen)
+			for s in self.objectSpritesList:
+				s.update()
+				s.draw(screen)
 
 			testAnim.update()
 
@@ -85,4 +91,6 @@ class Main():
 
 			clock.tick(60)
 
-	if __name__ == '__main__': main()
+if __name__ == '__main__': 
+	app = BumpNJump()
+	app.run()
