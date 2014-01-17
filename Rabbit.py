@@ -62,7 +62,6 @@ class Rabbit(pygame.sprite.Sprite):
  	
  	def moveLeftStart(self):
  		self.movingLeft = True
- 		#self.movePos[0] -= self.speed
 
  	def moveLeftStop(self):
  		self.movingLeft = False
@@ -70,7 +69,6 @@ class Rabbit(pygame.sprite.Sprite):
 
  	def moveRightStart(self):
  		self.movingRight = True
- 		#self.movePos[0] += self.speed
 	
 	def moveRightStop(self): 
 		self.movingRight = False

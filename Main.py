@@ -38,7 +38,7 @@ class Main():
 					return
 
 				elif event.type == KEYDOWN:
-					if event.key == K_UP:
+					if event.key == K_UP or event.key == K_SPACE:
 						rabbit.jump()
 					if event.key == K_LEFT:
 						rabbit.moveLeftStart()
