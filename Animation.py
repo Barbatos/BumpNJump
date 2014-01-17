@@ -10,7 +10,6 @@ class Animation(pygame.sprite.Sprite):
 		pygame.sprite.Sprite.__init__(self)
 		self.arrAnim = []
 		for i in range(0, nbFrames):
-			print i
 			if i + 1 < 10:
 				self.arrAnim.append(Resources.loadPNG(image + "000" + str(i + 1) + ".png", True))
 			elif i + 1 < 100:
@@ -34,6 +33,9 @@ class Animation(pygame.sprite.Sprite):
 
 	def stopAnim(self):
 		self.play = False
+
+	def isRunning(self):
+		return self.play
 
 	def update(self):
 		if self.interval < float(self.FPS)/24:

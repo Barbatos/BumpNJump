@@ -28,6 +28,7 @@ class Main():
 
 		testAnim = Animation("anim", 19, 60)
 		testAnimSprite = pygame.sprite.RenderPlain(testAnim)
+		testAnim.playAnim()
 
 		clock = pygame.time.Clock()
 
@@ -43,20 +44,20 @@ class Main():
 				elif event.type == KEYDOWN:
 					if event.key == K_UP:
 						rabbit.moveUp()
-						testAnim.playAnim()
 					if event.key == K_DOWN:
 						rabbit.moveDown()
-						testAnim.playAnim()
 					if event.key == K_LEFT:
 						rabbit.moveLeft()
-						testAnim.playAnim()
 					if event.key == K_RIGHT:
 						rabbit.moveRight()
-						testAnim.playAnim()
+					if event.key == K_p:
+						if testAnim.isRunning():
+							testAnim.stopAnim()
+						else:
+							testAnim.playAnim()
 
 				elif event.type == KEYUP:
 					if event.key == K_UP or event.key == K_DOWN or event.key == K_LEFT or event.key == K_RIGHT:
-						testAnim.stopAnim()
 						rabbit.standStill()
 
 			screen.blit(background, testAnim.rect, testAnim.rect)
