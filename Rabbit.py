@@ -12,6 +12,8 @@ class Rabbit(pygame.sprite.Sprite):
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 
+		self.floorLevel = screen.get_height() - self.rect.h
+
 		self.movingLeft = False
 		self.movingRight = False
 		self.isJumping = False
@@ -21,11 +23,12 @@ class Rabbit(pygame.sprite.Sprite):
 		self.name = name
 
 		self.yVelocity = 0
-		self.xVelocity = 5
+		self.xVelocity = 7
 		self.gravity = 1.2
+		self.jumpVelocity = -15
 
 		self.movePos = [0,0]
-		self.rect.topleft = (100, 550)
+		self.rect.topleft = (100, self.floorLevel)
 
 	def __repr__(self):
 		print("Rabbit " + self.id + ": " + self.name)
@@ -36,9 +39,15 @@ class Rabbit(pygame.sprite.Sprite):
 			self.yVelocity += self.gravity
 			self.rect.y += self.yVelocity
 
-			if self.rect.y > 550:
-				self.rect.y = 550
+			if self.rect.y > self.floorLevel:
+				self.rect.y = self.floorLevel
 				self.isJumping = False 
+
+		if self.movingLeft == True:
+			self.movePos[0] = -self.xVelocity
+
+		if self.movingRight == True:
+			self.movePos[0] = self.xVelocity
 
 		newpos = self.rect.move(self.movePos)
 		if self.area.contains(newpos):
@@ -48,13 +57,12 @@ class Rabbit(pygame.sprite.Sprite):
 
 	def jump(self):
 		if self.isJumping == False:
-			self.yVelocity = -15
+			self.yVelocity = self.jumpVelocity
 			self.isJumping = True
  	
  	def moveLeftStart(self):
  		self.movingLeft = True
- 		self.movePos[0] -= self.speed
- 		self.state = "moveLeft"
+ 		#self.movePos[0] -= self.speed
 
  	def moveLeftStop(self):
  		self.movingLeft = False
@@ -62,16 +70,11 @@ class Rabbit(pygame.sprite.Sprite):
 
  	def moveRightStart(self):
  		self.movingRight = True
- 		self.movePos[0] += self.speed
- 		self.state = "moveRight"
+ 		#self.movePos[0] += self.speed
 	
 	def moveRightStop(self): 
 		self.movingRight = False
 		self.movePos[0] = 0
-
- 	def standStill(self):
- 		self.state = "standStill"
- 		self.movePos = [50, 550]
 
 	def getId(self):
 		return self.id
