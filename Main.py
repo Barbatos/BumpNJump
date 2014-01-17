@@ -1,16 +1,12 @@
 #!/usr/bin/python
 
-try:
-	import sys
-	import os
-	import math
-	import random
-	import pygame
-	from pygame.locals import *
-	from Rabbit import *
-except ImportError, err:
-	print "couldn't load module. %s" % (err)
-	sys.exit(2)
+import sys
+import os
+import math
+import random
+import pygame
+from pygame.locals import *
+from Rabbit import *
 
 class Main():
 	def main():
