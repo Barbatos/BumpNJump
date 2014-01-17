@@ -8,7 +8,7 @@ from pygame.locals import *
 class Rabbit(pygame.sprite.Sprite):
 	def __init__(self, id = -1, name = ""):
 		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = Resources.loadPNG("test.png")
+		self.image, self.rect = Resources.loadPNG("test.png", False)
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 		self.speed = 10
@@ -27,20 +27,19 @@ class Rabbit(pygame.sprite.Sprite):
 		pygame.event.pump()
 
 	def moveUp(self):
-		self.movePos[1] = self.movePos[1] - self.speed
+		self.movePos[1] -= self.speed
 		self.state = "moveUp"
-		print "moveup"
 
 	def moveDown(self):
-		self.movePos[1] = self.movePos[1] + self.speed
+		self.movePos[1] += self.speed
 		self.state = "moveDown"
  	
  	def moveLeft(self):
- 		self.movePos[0] = self.movePos[0] - self.speed
+ 		self.movePos[0] -= self.speed
  		self.state = "moveLeft"
 
  	def moveRight(self):
- 		self.movePos[0] = self.movePos[0] + self.speed
+ 		self.movePos[0] += self.speed
  		self.state = "moveRight"
  		
  	def standStill(self):

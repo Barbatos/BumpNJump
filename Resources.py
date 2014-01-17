@@ -4,8 +4,11 @@ import os
 import pygame
 from pygame.locals import *
 
-def loadPNG(name):
-	fullname = os.path.join('resources/img', name)
+def loadPNG(name, anim):
+	if anim:
+		fullname = os.path.join('resources/anim', name)
+	else:
+		fullname = os.path.join('resources/img', name)
 	try:
 		image = pygame.image.load(fullname)
 		if image.get_alpha() is None:
