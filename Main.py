@@ -57,6 +57,10 @@ class BumpNJump():
 						rabbit.moveLeftStart()
 					if event.key == K_RIGHT:
 						rabbit.moveRightStart()
+					if event.key == K_o:
+						testAnim.rewind()
+					if event.key == K_i:
+						testAnim.flipAnim()
 					if event.key == K_p:
 						if testAnim.isRunning():
 							testAnim.stopAnim()
@@ -93,4 +97,4 @@ class BumpNJump():
 
 if __name__ == '__main__': 
 	app = BumpNJump()
-	app.run()
+	
