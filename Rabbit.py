@@ -5,10 +5,9 @@ import Resources
 from Animation import *
 from pygame.locals import *
 
-class Rabbit(pygame.sprite.Sprite):
+class Rabbit():
 	def __init__(self, id = -1, name = ""):
-		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = Resources.loadPNG("test.png", False)
+		self.rect = pygame.Rect(0, 0, 50, 50)
 		self.walkAnim = Animation("rabbit_walk", 8)
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()

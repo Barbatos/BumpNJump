@@ -32,13 +32,8 @@ class BumpNJump():
 		background.fill((100, 150, 100))
 
 		rabbit = Rabbit(1, "john")
-		rabbitSprite = pygame.sprite.RenderPlain(rabbit)
 		animRabbitSprite = pygame.sprite.RenderPlain(rabbit.getAnim())
-		rabbit.getAnim().playAnim()
-
-		testAnim = Animation("rabbit_walk", 8)
-		testAnimSprite = pygame.sprite.RenderPlain(testAnim)
-		testAnim.playAnim()
+		rabbit.getAnim().stopAnim()
 
 		self.initObjects()
 
@@ -75,27 +70,21 @@ class BumpNJump():
 					if event.key == K_RIGHT:
 						rabbit.moveRightStop()
 
-			screen.blit(background, testAnim.rect, testAnim.rect)
 			screen.blit(background, rabbit.rect, rabbit.rect)
 			screen.blit(background, rabbit.getAnim().getRect(), rabbit.getAnim().getRect())
 
 			for obj in self.objectList:
 				screen.blit(background, obj.rect, obj.rect)
 
-			rabbitSprite.update()
-			rabbitSprite.draw(screen)
+			rabbit.update()
 
 			animRabbitSprite.update()
 			animRabbitSprite.draw(screen)
-
-			testAnimSprite.update()
-			testAnimSprite.draw(screen)
 
 			for s in self.objectSpritesList:
 				s.update()
 				s.draw(screen)
 
-			testAnim.update()
 			rabbit.getAnim().update()
 
 			pygame.display.flip()
