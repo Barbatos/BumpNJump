@@ -56,6 +56,9 @@ class Animation(pygame.sprite.Sprite):
 		else:
 			self.flip = True
 
+	def getFlip(self):
+		return self.flip
+
 	def getRect(self):
 		return self.rect
 

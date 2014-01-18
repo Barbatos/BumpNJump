@@ -33,8 +33,10 @@ class BumpNJump():
 
 		rabbit = Rabbit(1, "john")
 		rabbitSprite = pygame.sprite.RenderPlain(rabbit)
+		animRabbitSprite = pygame.sprite.RenderPlain(rabbit.getAnim())
+		rabbit.getAnim().playAnim()
 
-		testAnim = Animation("rabbit_walk_left", 8)
+		testAnim = Animation("rabbit_walk", 8)
 		testAnimSprite = pygame.sprite.RenderPlain(testAnim)
 		testAnim.playAnim()
 
@@ -75,12 +77,16 @@ class BumpNJump():
 
 			screen.blit(background, testAnim.rect, testAnim.rect)
 			screen.blit(background, rabbit.rect, rabbit.rect)
+			screen.blit(background, rabbit.getAnim().getRect(), rabbit.getAnim().getRect())
 
 			for obj in self.objectList:
 				screen.blit(background, obj.rect, obj.rect)
 
 			rabbitSprite.update()
 			rabbitSprite.draw(screen)
+
+			animRabbitSprite.update()
+			animRabbitSprite.draw(screen)
 
 			testAnimSprite.update()
 			testAnimSprite.draw(screen)
@@ -90,6 +96,7 @@ class BumpNJump():
 				s.draw(screen)
 
 			testAnim.update()
+			rabbit.getAnim().update()
 
 			pygame.display.flip()
 

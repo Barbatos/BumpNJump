@@ -2,12 +2,14 @@
 
 import pygame
 import Resources
+from Animation import *
 from pygame.locals import *
 
 class Rabbit(pygame.sprite.Sprite):
 	def __init__(self, id = -1, name = ""):
 		pygame.sprite.Sprite.__init__(self)
 		self.image, self.rect = Resources.loadPNG("test.png", False)
+		self.walkAnim = Animation("rabbit_walk", 8)
 		screen = pygame.display.get_surface()
 		self.area = screen.get_rect()
 
@@ -52,6 +54,9 @@ class Rabbit(pygame.sprite.Sprite):
 		if self.area.contains(newpos):
 			self.rect = newpos
 
+		self.walkAnim.getRect().x = self.rect.x
+		self.walkAnim.getRect().y = self.rect.y
+
 		pygame.event.pump()
 
 	def jump(self):
@@ -60,16 +65,26 @@ class Rabbit(pygame.sprite.Sprite):
 			self.isJumping = True
  	
  	def moveLeftStart(self):
+ 		if(self.walkAnim.getFlip()):
+ 			self.walkAnim.flipAnim()
+ 		self.walkAnim.playAnim()
  		self.movingLeft = True
 
  	def moveLeftStop(self):
+ 		self.walkAnim.stopAnim()
+ 		self.walkAnim.rewind()
  		self.movingLeft = False
  		self.movePos[0] = 0
 
  	def moveRightStart(self):
+ 		if(not self.walkAnim.getFlip()):
+ 			self.walkAnim.flipAnim()
+ 		self.walkAnim.playAnim()
  		self.movingRight = True
 	
-	def moveRightStop(self): 
+	def moveRightStop(self):
+		self.walkAnim.stopAnim()
+		self.walkAnim.rewind()
 		self.movingRight = False
 		self.movePos[0] = 0
 
@@ -78,6 +93,9 @@ class Rabbit(pygame.sprite.Sprite):
 
 	def getName(self):
 		return self.name
+
+	def getAnim(self):
+		return self.walkAnim
 
 	def setId(self, id):
 		self.id = id
