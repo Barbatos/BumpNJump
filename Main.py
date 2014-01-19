@@ -31,7 +31,7 @@ class BumpNJump():
 		background = background.convert()
 		background.fill((100, 150, 100))
 
-		rabbit = Rabbit(1, "john")
+		rabbit = Rabbit(1, "john", self.objectList, self.objectSpritesList)
 		animRabbitSprite = pygame.sprite.RenderPlain(rabbit.getAnim())
 		rabbit.getAnim().stopAnim()
 
