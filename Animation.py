@@ -74,8 +74,7 @@ class Animation(pygame.sprite.Sprite):
 				self.currentFrameNb += 1
 				self.currentFrameNb %= self.nbFrames
 
-		if self.flip:
-			self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames]
-		else:
-			self.image, self.rect = self.arrAnim[self.currentFrameNb]
-
+			if self.flip:
+				self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames]
+			else:
+				self.image, self.rect = self.arrAnim[self.currentFrameNb]

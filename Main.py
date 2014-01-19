@@ -91,10 +91,10 @@ class BumpNJump():
 			animRabbitSprite.update()
 			animRabbitSprite.draw(screen)
 
+			rabbit.getAnim().update()
+
 			self.objectSpritesList.update()
 			self.objectSpritesList.draw(screen)
-
-			rabbit.getAnim().update()
 
 			pygame.display.flip()
 

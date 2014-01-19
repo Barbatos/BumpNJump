@@ -19,10 +19,10 @@ class Object(pygame.sprite.Sprite):
 		print "Object " + self.name + " (" + self.x + "," + self.y + ")"
 
 	def getName(self):
-		return self.name 
+		return self.name
 
 	def getPosX(self):
-		return self.posX 
+		return self.posX
 
 	def getPosY(self):
 		return self.posY
