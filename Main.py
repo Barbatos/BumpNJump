@@ -43,9 +43,19 @@ class BumpNJump():
 		pygame.display.flip()
 
 		while 1:
+			key = pygame.key.get_pressed()
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					return
+
+				elif event.type == MOUSEMOTION and key[K_LSHIFT]:
+					mse = pygame.mouse.get_pos()
+					if not any(obj.rect.collidepoint(mse) for obj in self.objectList):
+						x = (int(mse[0]) / 32)*32
+						y = (int(mse[1]) / 32)*32
+						ob = Object("obj", "earth.png", x,y)
+						self.objectList.append(ob)
+						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
 
 				elif event.type == KEYDOWN:
 					if event.key == K_UP or event.key == K_SPACE:
