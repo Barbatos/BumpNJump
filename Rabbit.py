@@ -123,8 +123,9 @@ class Rabbit():
  		self.movingRight = False
 
  	def moveLeftStop(self):
- 		self.walkAnim.stopAnim()
- 		self.walkAnim.rewind()
+ 		if not self.movingRight:
+	 		self.walkAnim.stopAnim()
+	 		self.walkAnim.rewind()
  		self.movingLeft = False
  		self.movePos[0] = 0
 
@@ -136,8 +137,9 @@ class Rabbit():
  		self.movingLeft = False
 	
 	def moveRightStop(self):
-		self.walkAnim.stopAnim()
-		self.walkAnim.rewind()
+		if not self.movingLeft:
+			self.walkAnim.stopAnim()
+			self.walkAnim.rewind()
 		self.movingRight = False
 		self.movePos[0] = 0
 
