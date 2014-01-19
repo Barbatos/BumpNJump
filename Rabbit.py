@@ -6,6 +6,7 @@ from Animation import *
 from pygame.locals import *
 
 class Rabbit():
+	pygame.mixer.pre_init(44100, -16, 1, 512)
 	pygame.mixer.init()
 
 	def __init__(self, id = -1, name = "", objectList = [], objectSpritesList = []):
