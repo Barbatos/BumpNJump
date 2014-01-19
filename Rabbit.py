@@ -6,6 +6,8 @@ from Animation import *
 from pygame.locals import *
 
 class Rabbit():
+	pygame.mixer.init()
+
 	def __init__(self, id = -1, name = "", objectList = [], objectSpritesList = []):
 		self.rect = pygame.Rect(0, 0, 50, 50)
 		self.walkAnim = Animation("rabbit_walk", 8)
@@ -24,6 +26,8 @@ class Rabbit():
 		self.speed = 8
 		self.id = id
 		self.name = name
+
+		self.jumpSound = pygame.mixer.Sound("resources/sound/jump.wav")
 
 		self.yVelocity = 0
 		self.xVelocity = 7
@@ -112,6 +116,7 @@ class Rabbit():
 
 	def jump(self):
 		if self.isJumping == False:
+			self.jumpSound.play()
 			self.yVelocity = self.jumpVelocity
 			self.isJumping = True
  	
