@@ -120,6 +120,7 @@ class Rabbit():
  			self.walkAnim.flipAnim()
  		self.walkAnim.playAnim()
  		self.movingLeft = True
+ 		self.movingRight = False
 
  	def moveLeftStop(self):
  		self.walkAnim.stopAnim()
@@ -132,6 +133,7 @@ class Rabbit():
  			self.walkAnim.flipAnim()
  		self.walkAnim.playAnim()
  		self.movingRight = True
+ 		self.movingLeft = False
 	
 	def moveRightStop(self):
 		self.walkAnim.stopAnim()
