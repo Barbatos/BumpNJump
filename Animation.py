@@ -79,5 +79,3 @@ class Animation(pygame.sprite.Sprite):
 		else:
 			self.image, self.rect = self.arrAnim[self.currentFrameNb]
 
-		screen = pygame.display.get_surface()
-		self.area = screen.get_rect()
