@@ -13,15 +13,15 @@ from Object import *
 class BumpNJump():
 
 	def initObjects(self):
-		self.objectList.append(Object(1, "obj1", "earth.png", 100, 530))
-		self.objectList.append(Object(2, "obj2", "earth.png", 133, 497))
+		self.objectList.append(Object("obj1", "earth.png", 100, 530))
+		self.objectList.append(Object("obj2", "earth.png", 133, 497))
 
 		for obj in self.objectList:
-			self.objectSpritesList.append(pygame.sprite.RenderPlain(obj))
+			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
 
 	def __init__(self):
 		self.objectList = []
-		self.objectSpritesList = []
+		self.objectSpritesList = pygame.sprite.Group()
 
 		pygame.init()
 		screen = pygame.display.set_mode((800, 600))
@@ -81,9 +81,8 @@ class BumpNJump():
 			animRabbitSprite.update()
 			animRabbitSprite.draw(screen)
 
-			for s in self.objectSpritesList:
-				s.update()
-				s.draw(screen)
+			self.objectSpritesList.update()
+			self.objectSpritesList.draw(screen)
 
 			rabbit.getAnim().update()
 
