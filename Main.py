@@ -13,8 +13,8 @@ from Object import *
 class BumpNJump():
 
 	def initObjects(self):
-		self.objectList.append(Object(1, "obj1", "anim0001.png", 100, 530))
-		self.objectList.append(Object(2, "obj2", "anim0001.png", 133, 497))
+		self.objectList.append(Object(1, "obj1", "earth.png", 100, 530))
+		self.objectList.append(Object(2, "obj2", "earth.png", 133, 497))
 
 		for obj in self.objectList:
 			self.objectSpritesList.append(pygame.sprite.RenderPlain(obj))

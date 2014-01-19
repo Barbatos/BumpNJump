@@ -18,7 +18,7 @@ class Rabbit():
 		self.movingRight = False
 		self.isJumping = False
 
-		self.speed = 10
+		self.speed = 8
 		self.id = id
 		self.name = name
 
