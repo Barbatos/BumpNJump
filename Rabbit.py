@@ -23,6 +23,7 @@ class Rabbit():
 		self.movingLeft = False
 		self.movingRight = False
 		self.isJumping = False
+		self.isOnBlock = False
 
 		self.speed = 8
 		self.id = id
@@ -49,16 +50,17 @@ class Rabbit():
 		if self.movingRight == True:
 			self.movePos[0] = self.xVelocity
 
-		self.checkForCollision()
+		#if self.isJumping == True:
 
-		if self.isJumping == True:
-
+		if self.yVelocity is not 0:
 			self.yVelocity += self.gravity
 			self.rect.y += self.yVelocity
 
 			if self.rect.y > self.floorLevel:
+				print "HEY"
 				self.rect.y = self.floorLevel
-				self.isJumping = False 
+				self.yVelocity = 0
+				#self.isJumping = False 
 
 		self.checkForCollision()
 
@@ -72,54 +74,41 @@ class Rabbit():
 		pygame.event.pump()
 
 	def checkForCollision(self):
-		if not self.movingLeft and not self.movingRight and not self.isJumping:
+		if not self.movingLeft and not self.movingRight and self.yVelocity == 0 and self.xVelocity == 0:#and not self.isJumping:
 			return
 
-		for obj in [self.objectList[i] for i in self.rect.collidelistall(self.objectList)]:
-			if self.xVelocity > 0: 
-				self.rect.right = obj.rect.left
+		for obj in self.objectList:
+			if self.movingLeft:
+				if ((obj.rect.x + obj.rect.w) > self.rect.x) and (obj.rect.x < self.rect.x):
+					if (self.rect.y + self.rect.h) > obj.rect.y:
+						if self.rect.y < (obj.rect.y + obj.rect.h):
+							self.movePos[0] = 0
 
-			if self.xVelocity < 0:
-				self.rect.left = obj.rect.right
+			if self.movingRight:
+				if (self.rect.x + self.rect.w) > (obj.rect.x) and (obj.rect.x > self.rect.x):
+					if (self.rect.y + self.rect.h) > obj.rect.y:
+						if self.rect.y < (obj.rect.y + obj.rect.h):
+							self.movePos[0] = 0
 
-			if self.yVelocity > 0:
-				self.rect.bottom = obj.rect.top
-				self.isJumping = False
+			if ((self.rect.y + self.rect.h) >= obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 10)) and (self.rect.y < obj.rect.y):
+				if (self.rect.x + self.rect.w) > obj.rect.x:
+					if (self.rect.x < (obj.rect.x + obj.rect.w)):
+						if self.yVelocity >= 0 and not self.isOnBlock:
+							self.rect.y = obj.rect.y - self.rect.h
+							self.isJumping = False
+							self.isOnBlock = True
+							self.yVelocity = 0
 
-			if self.yVelocity < 0:
-				self.rect.top = obj.rect.bottom
-
-		#object_hit_list = pygame.sprite.spritecollide(self, self.objectSpritesList, False)
-		#for obj in object_hit_list:
-		#	if self.movingLeft and (self.rect.left >= obj.rect.left):
-		#		self.rect.left = obj.rect.right
-		#	if self.movingRight and (self.rect.right <= obj.rect.right):
-		#		self.rect.right = obj.rect.left
-		#	#if self.isJumping and (self.rect.top <= obj.rect.top):
-		#	#	self.rect.top = obj.rect.bottom
-		#	if self.isJumping and (self.rect.bottom <= obj.rect.bottom):
-		#		self.rect.bottom = obj.rect.top
-		#		self.isJumping = False
-		#	else:
-		#		self.rect.top = self.floorLevel
-		#		self.isJumping = False
-
-		#for obj in self.objectList:
-		#	if self.movingLeft:
-		#		if ((obj.rect.x + obj.rect.w) >= self.rect.x) and (obj.rect.x <= self.rect.x):
-		#			if ((obj.rect.y + obj.rect.h) >= self.rect.y):
-		#				self.movePos[0] = 0
-
-		#	if self.movingRight:
-		#		if ((obj.rect.x + obj.rect.w) <= self.rect.x) and (obj.rect.x >= self.rect.x):
-		#			if ((obj.rect.y + obj.rect.h) >= self.rect.y):
-		#				self.movePos[0] = 0
+			else:
+				if self.isOnBlock:
+					self.isOnBlock = False
+					self.yVelocity = 2
 
 	def jump(self):
-		if self.isJumping == False:
-			self.jumpSound.play()
-			self.yVelocity = self.jumpVelocity
-			self.isJumping = True
+		#if self.isJumping == False:
+		self.jumpSound.play()
+		self.yVelocity = self.jumpVelocity
+		#self.isJumping = True
  	
  	def moveLeftStart(self):
  		if(self.walkAnim.getFlip()):
