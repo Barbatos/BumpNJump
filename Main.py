@@ -60,6 +60,12 @@ class BumpNJump():
 						self.objectList.append(ob)
 						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
 
+				elif event.type == MOUSEMOTION and key[K_LALT]:
+					mse = pygame.mouse.get_pos()
+					if any(obj.rect.collidepoint(mse) for obj in self.objectList):
+						self.objectSpritesList.remove(obj)
+						self.objectList.remove(obj)
+
 				elif event.type == KEYDOWN:
 					if event.key == K_UP or event.key == K_SPACE:
 						rabbit.jump()
@@ -83,6 +89,7 @@ class BumpNJump():
 					if event.key == K_RIGHT:
 						rabbit.moveRightStop()
 
+			screen.fill((100, 150, 100))
 			screen.blit(background, rabbit.rect, rabbit.rect)
 			screen.blit(background, rabbit.getAnim().getRect(), rabbit.getAnim().getRect())
 
