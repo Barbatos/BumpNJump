@@ -13,8 +13,8 @@ from Object import *
 class BumpNJump():
 
 	def initObjects(self):
-		self.objectList.append(Object("obj1", "earth.png", 100, 530))
-		self.objectList.append(Object("obj2", "earth.png", 133, 497))
+		self.objectList.append(Object("obj1", "earth.png", 100, 550))
+		self.objectList.append(Object("obj2", "earth.png", 50, 500))
 
 		for obj in self.objectList:
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
@@ -45,14 +45,14 @@ class BumpNJump():
 		while 1:
 			key = pygame.key.get_pressed()
 			for event in pygame.event.get():
-				if event.type == QUIT:
+				if event.type == QUIT or event.type == K_ESCAPE:
 					return
 
 				elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):
 					mse = pygame.mouse.get_pos()
 					if not any(obj.rect.collidepoint(mse) for obj in self.objectList):
-						x = (int(mse[0]) / 32)*32
-						y = (int(mse[1]) / 32)*32
+						x = (int(mse[0]) / 50)*50
+						y = (int(mse[1]) / 50)*50
 						if key[K_LSHIFT]:
 							ob = Object("obj", "earth.png", x, y)
 						else:
