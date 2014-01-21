@@ -45,7 +45,7 @@ class BumpNJump():
 		while 1:
 			key = pygame.key.get_pressed()
 			for event in pygame.event.get():
-				if event.type == QUIT or event.type == K_ESCAPE:
+				if event.type == QUIT:
 					return
 
 				elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):

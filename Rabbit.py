@@ -43,7 +43,7 @@ class Rabbit():
 		self.rect.topleft = (300, self.floorLevel)
 
 	def __repr__(self):
-		print "Rabbit " + self.id + ": " + self.name
+		print "Rabbit ", self.id,  ": ", self.name
 
 	def update(self):
 
@@ -74,8 +74,6 @@ class Rabbit():
 			self.movingUp = False
 			self.movingDown = False
 
-		
-
 		self.checkForCollision()
 
 		newpos = self.rect.move(self.movePos)
@@ -93,18 +91,24 @@ class Rabbit():
 
 		for obj in self.objectList:
 			if self.movingLeft:
-				if ((obj.rect.x + obj.rect.w) > self.rect.x) and (obj.rect.x < self.rect.x):
+				if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
 					if (self.rect.y + self.rect.h) > obj.rect.y:
 						if self.rect.y < (obj.rect.y + obj.rect.h):
 							self.movePos[0] = 0
 
 			if self.movingRight:
-				if (self.rect.x + self.rect.w) > (obj.rect.x) and (obj.rect.x > self.rect.x):
+				if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
 					if (self.rect.y + self.rect.h) > obj.rect.y:
 						if self.rect.y < (obj.rect.y + obj.rect.h):
 							self.movePos[0] = 0
 
-			if ((self.rect.y + self.rect.h) >= obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 25)) and (self.rect.y < obj.rect.y):
+			if self.movingUp:
+				if (self.rect.y < (obj.rect.y + obj.rect.h)) and (obj.rect.y < self.rect.y):
+					if (self.rect.x + self.rect.w) > obj.rect.x:
+						if self.rect.x < (obj.rect.x + obj.rect.w):
+							self.movePos[1] = 0.01
+
+			if ((self.rect.y + self.rect.h) > obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 25)) and (self.rect.y < obj.rect.y):
 				if (self.rect.x + self.rect.w) > obj.rect.x:
 					if (self.rect.x < (obj.rect.x + obj.rect.w)):
 						if self.movePos[1] >= 0 and not self.isOnBlock:
