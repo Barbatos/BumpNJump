@@ -15,7 +15,7 @@ class Object(pygame.sprite.Sprite):
 
 		self.rect.topleft = (self.posX, self.posY)
 
-	def __repr__(self):
+	def __str__(self):
 		print "Object ", self.name, " (", str(self.posX), ",", str(self.posY), ")"
 
 	def getName(self):

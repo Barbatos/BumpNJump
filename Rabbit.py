@@ -10,8 +10,9 @@ class Rabbit():
 	pygame.mixer.init()
 
 	def __init__(self, id = -1, name = "", objectList = [], objectSpritesList = []):
-		self.rect = pygame.Rect(0, 0, 50, 50)
-		self.walkAnim = Animation("rabbit_walk", 8)
+		self.rect = pygame.Rect(0, 0, 45, 48)
+		self.rabbitAnim = Animation("rabbit", 15)
+		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
 
@@ -42,7 +43,7 @@ class Rabbit():
 		self.movePos = [0,0]
 		self.rect.topleft = (300, self.floorLevel)
 
-	def __repr__(self):
+	def __str__(self):
 		print "Rabbit ", self.id,  ": ", self.name
 
 	def update(self):
@@ -80,13 +81,27 @@ class Rabbit():
 		if self.area.contains(newpos) and not self.collide:
 			self.rect = newpos
 
-		self.walkAnim.getRect().x = self.rect.x
-		self.walkAnim.getRect().y = self.rect.y
+		if self.isJumping:
+			self.rabbitAnim.setFrameRange(9, 15)
+			if self.movingUp:
+				self.rabbitAnim.stopAnim()
+				self.rabbitAnim.setCurrentFrame(9)
+			else:
+				self.rabbitAnim.playAnim()
+
+		else:
+			self.rabbitAnim.setFrameRange(1, 8)
+			if not self.movingLeft and not self.movingRight:
+				self.rabbitAnim.stopAnim()
+				self.rabbitAnim.rewind()
+
+		self.rabbitAnim.getRect().x = self.rect.x
+		self.rabbitAnim.getRect().y = self.rect.y
 
 		pygame.event.pump()
 
 	def checkForCollision(self):
-		if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0:#and not self.isJumping:
+		if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0 and not self.isJumping:
 			return
 
 		for obj in self.objectList:
@@ -108,51 +123,65 @@ class Rabbit():
 						if self.rect.x < (obj.rect.x + obj.rect.w):
 							self.movePos[1] = 0.01
 
-			if ((self.rect.y + self.rect.h) > obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 25)) and (self.rect.y < obj.rect.y):
+			if ((self.rect.y + self.rect.h) > obj.rect.y) and (self.rect.y < obj.rect.y):
 				if (self.rect.x + self.rect.w) > obj.rect.x:
 					if (self.rect.x < (obj.rect.x + obj.rect.w)):
 						if self.movePos[1] >= 0 and not self.isOnBlock:
-							self.rect.y = obj.rect.y - self.rect.h
 							self.isJumping = False
 							self.isOnBlock = True
 							self.movePos[1] = 0
+							self.rect.y = obj.rect.y - self.rect.h
 
 			else:
 				if self.isOnBlock:
 					self.isOnBlock = False
-					self.movePos[1] = 0.1
+					self.movePos[1] = 0.01
+
+			# if ((self.rect.y + self.rect.h) > obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 25)) and (self.rect.y < obj.rect.y):
+			# 	if (self.rect.x + self.rect.w) > obj.rect.x:
+			# 		if (self.rect.x < (obj.rect.x + obj.rect.w)):
+			# 			if self.movePos[1] >= 0 and not self.isOnBlock:
+			# 				self.rect.y = obj.rect.y - self.rect.h
+			# 				self.isJumping = False
+			# 				self.isOnBlock = True
+			# 				self.movePos[1] = 0
+
+			# else:
+			# 	if self.isOnBlock:
+			# 		self.isOnBlock = False
+			# 		self.movePos[1] = 0.01
 
 	def jump(self):
 		if self.isJumping == False:
-		#self.jumpSound.play()
+			self.jumpSound.play()
 			self.movePos[1] = self.jumpVelocity
 		self.isJumping = True
  	
  	def moveLeftStart(self):
- 		if(self.walkAnim.getFlip()):
- 			self.walkAnim.flipAnim()
- 		self.walkAnim.playAnim()
+ 		if(self.rabbitAnim.getFlip()):
+ 			self.rabbitAnim.flipAnim()
+ 		self.rabbitAnim.playAnim()
  		self.movingLeft = True
  		self.movingRight = False
 
  	def moveLeftStop(self):
  		if not self.movingRight:
-	 		self.walkAnim.stopAnim()
-	 		self.walkAnim.rewind()
+	 		self.rabbitAnim.stopAnim()
+	 		self.rabbitAnim.rewind()
  		self.movingLeft = False
  		self.movePos[0] = 0
 
  	def moveRightStart(self):
- 		if(not self.walkAnim.getFlip()):
- 			self.walkAnim.flipAnim()
- 		self.walkAnim.playAnim()
+ 		if(not self.rabbitAnim.getFlip()):
+ 			self.rabbitAnim.flipAnim()
+ 		self.rabbitAnim.playAnim()
  		self.movingRight = True
  		self.movingLeft = False
 	
 	def moveRightStop(self):
 		if not self.movingLeft:
-			self.walkAnim.stopAnim()
-			self.walkAnim.rewind()
+			self.rabbitAnim.stopAnim()
+			self.rabbitAnim.rewind()
 		self.movingRight = False
 		self.movePos[0] = 0
 
@@ -163,7 +192,7 @@ class Rabbit():
 		return self.name
 
 	def getAnim(self):
-		return self.walkAnim
+		return self.rabbitAnim
 
 	def setId(self, id):
 		self.id = id

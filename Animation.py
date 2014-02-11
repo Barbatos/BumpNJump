@@ -24,16 +24,15 @@ class Animation(pygame.sprite.Sprite):
 			else:
 				self.arrAnim.append(Resources.loadPNG(image + "0" + str(i + 1) + ".png", True, True))
 
-		self.currentFrameNb = 0
-		self.image, self.rect = self.arrAnim[self.currentFrameNb]
-
-		screen = pygame.display.get_surface()
-		self.area = screen.get_rect()
-
 		self.flip = False
 		self.interval = 0
 		self.nbFrames = nbFrames
 		self.play = True
+		self.start = 0
+		self.end = nbFrames - 1
+
+		self.currentFrameNb = self.start
+		self.image, self.rect = self.arrAnim[self.currentFrameNb]
 
 	def playAnim(self):
 		self.play = True
@@ -48,13 +47,20 @@ class Animation(pygame.sprite.Sprite):
 		self.currentFrameNb = 0
 
 	def nextFrame(self):
-		currentFrameNb += 1
+		self.currentFrameNb += 1
+
+	def setCurrentFrame(self, index):
+		self.currentFrameNb = index - 1
 
 	def flipAnim(self):
 		if self.flip:
 			self.flip = False
 		else:
 			self.flip = True
+
+	def setFrameRange(self, start, end):
+		self.start = start - 1
+		self.end = end - 1
 
 	def getFlip(self):
 		return self.flip
@@ -72,7 +78,9 @@ class Animation(pygame.sprite.Sprite):
 			self.interval = 0
 			if self.play:
 				self.currentFrameNb += 1
-				self.currentFrameNb %= self.nbFrames
+
+				if self.currentFrameNb > self.end:
+					self.currentFrameNb = self.start
 
 			if self.flip:
 				self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames]

@@ -4,7 +4,7 @@ import os
 import pygame
 from pygame.locals import *
 
-def loadPNG(name, anim, flip = False):
+def loadPNG(name, anim = False, flip = False):
 	if anim:
 		fullname = os.path.join('resources/anim', name)
 	else:
