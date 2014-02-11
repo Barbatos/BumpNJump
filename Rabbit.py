@@ -107,13 +107,13 @@ class Rabbit():
 		for obj in self.objectList:
 			if self.movingLeft:
 				if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
-					if (self.rect.y + self.rect.h) > obj.rect.y:
+					if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
 						if self.rect.y < (obj.rect.y + obj.rect.h):
 							self.movePos[0] = 0
 
 			if self.movingRight:
 				if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
-					if (self.rect.y + self.rect.h) > obj.rect.y:
+					if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
 						if self.rect.y < (obj.rect.y + obj.rect.h):
 							self.movePos[0] = 0
 
@@ -125,7 +125,7 @@ class Rabbit():
 
 			if ((self.rect.y + self.rect.h) > obj.rect.y) and (self.rect.y < obj.rect.y):
 				if (self.rect.x + self.rect.w) > obj.rect.x:
-					if (self.rect.x < (obj.rect.x + obj.rect.w)):
+					if self.rect.x < (obj.rect.x + obj.rect.w):
 						if self.movePos[1] >= 0 and not self.isOnBlock:
 							self.isJumping = False
 							self.isOnBlock = True
