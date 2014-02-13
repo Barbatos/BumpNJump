@@ -9,12 +9,12 @@ from pygame.locals import *
 from Rabbit import *
 from Animation import *
 from Object import *
+from Resources import *
 
 class BumpNJump():
 
 	def initObjects(self):
-		self.objectList.append(Object("obj1", "earth.png", 100, 550))
-		self.objectList.append(Object("obj2", "earth.png", 50, 500))
+		self.objectList.append(Object("obj1", "earth.png", 250, 550))
 
 		for obj in self.objectList:
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
@@ -27,9 +27,10 @@ class BumpNJump():
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
+		backgroundImage, backgroundRect = loadPNG("background.png")
+
 		background = pygame.Surface(screen.get_size())
 		background = background.convert()
-		background.fill((100, 150, 100))
 
 		rabbit = Rabbit(1, "john", self.objectList, self.objectSpritesList)
 		animRabbitSprite = pygame.sprite.RenderPlain(rabbit.getAnim())
@@ -39,7 +40,7 @@ class BumpNJump():
 
 		clock = pygame.time.Clock()
 
-		screen.blit(background, (0, 0))
+		screen.blit(backgroundImage, (0, 0))
 		pygame.display.flip()
 
 		while 1:
@@ -80,9 +81,9 @@ class BumpNJump():
 					if event.key == K_RIGHT:
 						rabbit.moveRightStop()
 
-			screen.fill((100, 150, 100))
-			screen.blit(background, rabbit.rect, rabbit.rect)
-			screen.blit(background, rabbit.getAnim().getRect(), rabbit.getAnim().getRect())
+			screen.blit(backgroundImage, backgroundRect, backgroundRect)
+			screen.blit(backgroundImage, rabbit.rect, rabbit.rect)
+			screen.blit(backgroundImage, rabbit.getAnim().getRect(), rabbit.getAnim().getRect())
 
 			for obj in self.objectList:
 				screen.blit(background, obj.rect, obj.rect)

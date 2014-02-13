@@ -37,8 +37,8 @@ class Rabbit():
 		self.jumpSound = pygame.mixer.Sound("resources/sound/jump.wav")
 
 		self.velocity = 7
-		self.gravity = 1.2
-		self.jumpVelocity = -15
+		self.gravity = 0.6
+		self.jumpVelocity = -8
 
 		self.movePos = [0,0]
 		self.rect.topleft = (300, self.floorLevel)
@@ -124,18 +124,24 @@ class Rabbit():
 							self.movePos[1] = 0.01
 
 			if ((self.rect.y + self.rect.h) > obj.rect.y) and (self.rect.y < obj.rect.y):
+				print "bla1"
 				if (self.rect.x + self.rect.w) > obj.rect.x:
+					print "bla2"
 					if self.rect.x < (obj.rect.x + obj.rect.w):
+						print "bla3"
 						if self.movePos[1] >= 0 and not self.isOnBlock:
+							print "bla4"
+							self.rect.y = obj.rect.y - self.rect.h
+							self.movePos[1] = 0
 							self.isJumping = False
 							self.isOnBlock = True
-							self.movePos[1] = 0
-							self.rect.y = obj.rect.y - self.rect.h
 
 			else:
 				if self.isOnBlock:
 					self.isOnBlock = False
 					self.movePos[1] = 0.01
+
+			print self.isOnBlock
 
 			# if ((self.rect.y + self.rect.h) > obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 25)) and (self.rect.y < obj.rect.y):
 			# 	if (self.rect.x + self.rect.w) > obj.rect.x:
@@ -152,7 +158,7 @@ class Rabbit():
 			# 		self.movePos[1] = 0.01
 
 	def jump(self):
-		if self.isJumping == False:
+		if not self.isJumping:
 			self.jumpSound.play()
 			self.movePos[1] = self.jumpVelocity
 		self.isJumping = True
