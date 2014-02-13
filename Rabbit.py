@@ -124,20 +124,19 @@ class Rabbit():
 							self.movePos[1] = 0.01
 
 			if ((self.rect.y + self.rect.h) > obj.rect.y) and (self.rect.y < obj.rect.y):
-				print "bla1"
 				if (self.rect.x + self.rect.w) > obj.rect.x:
-					print "bla2"
 					if self.rect.x < (obj.rect.x + obj.rect.w):
-						print "bla3"
 						if self.movePos[1] >= 0 and not self.isOnBlock:
-							print "bla4"
 							self.rect.y = obj.rect.y - self.rect.h
 							self.movePos[1] = 0
 							self.isJumping = False
 							self.isOnBlock = True
 
-			else:
-				if self.isOnBlock:
+			if self.isJumping:
+				self.isOnBlock = False
+
+			if self.isOnBlock:
+				if (self.rect.x > (obj.rect.x + obj.rect.w)) or ((self.rect.x + self.rect.w) < obj.rect.x):
 					self.isOnBlock = False
 					self.movePos[1] = 0.01
 
