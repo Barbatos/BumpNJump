@@ -16,13 +16,6 @@ class Animation(pygame.sprite.Sprite):
 				self.arrAnim.append(Resources.loadPNG(image + "00" + str(i + 1) + ".png", True))
 			else:
 				self.arrAnim.append(Resources.loadPNG(image + "0" + str(i + 1) + ".png", True))
-		for i in range(0, nbFrames):
-			if i + 1 < 10:
-				self.arrAnim.append(Resources.loadPNG(image + "000" + str(i + 1) + ".png", True, True))
-			elif i + 1 < 100:
-				self.arrAnim.append(Resources.loadPNG(image + "00" + str(i + 1) + ".png", True, True))
-			else:
-				self.arrAnim.append(Resources.loadPNG(image + "0" + str(i + 1) + ".png", True, True))
 
 		self.flip = False
 		self.interval = 0
@@ -50,7 +43,7 @@ class Animation(pygame.sprite.Sprite):
 						self.currentFrameNb = self.end
 
 			if self.flip:
-				self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames]
+				self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames/2]
 			else:
 				self.image, self.rect = self.arrAnim[self.currentFrameNb]
 

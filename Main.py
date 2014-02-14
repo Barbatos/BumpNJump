@@ -32,9 +32,13 @@ class BumpNJump():
 		background = pygame.Surface(screen.get_size())
 		background = background.convert()
 
-		rabbit = Rabbit(1, "john", self.objectList, self.objectSpritesList)
-		animRabbitSprite = pygame.sprite.RenderPlain(rabbit.getAnim())
-		rabbit.getAnim().stopAnim()
+		john = Rabbit(1, "john", self.objectList, self.objectSpritesList)
+		animJohnSprite = pygame.sprite.RenderPlain(john.getAnim())
+		john.getAnim().stopAnim()
+
+		regis = Rabbit(2, "regis", self.objectList, self.objectSpritesList)
+		animRegisSprite = pygame.sprite.RenderPlain(regis.getAnim())
+		regis.getAnim().stopAnim()
 
 		self.initObjects()
 
@@ -68,37 +72,55 @@ class BumpNJump():
 						self.objectList.remove(obj)
 
 				elif event.type == KEYDOWN:
-					if event.key == K_UP or event.key == K_SPACE:
-						rabbit.jump()
+					if event.key == K_UP:
+						john.jump()
 					if event.key == K_LEFT:
-						rabbit.moveLeftStart()
+						john.moveLeftStart()
 					if event.key == K_RIGHT:
-						rabbit.moveRightStart()
+						john.moveRightStart()
+					if event.key == K_w:
+						regis.jump()
+					if event.key == K_a:
+						regis.moveLeftStart()
+					if event.key == K_d:
+						regis.moveRightStart()
 
 				elif event.type == KEYUP:
 					if event.key == K_LEFT:
-						rabbit.moveLeftStop()
+						john.moveLeftStop()
 					if event.key == K_RIGHT:
-						rabbit.moveRightStop()
+						john.moveRightStop()
+					if event.key == K_a:
+						regis.moveLeftStop()
+					if event.key == K_d:
+						regis.moveRightStop()
 
 			screen.blit(backgroundImage, backgroundRect, backgroundRect)
-			screen.blit(backgroundImage, rabbit.rect, rabbit.rect)
-			screen.blit(backgroundImage, rabbit.getAnim().getRect(), rabbit.getAnim().getRect())
+			screen.blit(backgroundImage, john.rect, john.rect)
+			screen.blit(backgroundImage, john.getAnim().getRect(), john.getAnim().getRect())
+
+			screen.blit(backgroundImage, regis.rect, regis.rect)
+			screen.blit(backgroundImage, regis.getAnim().getRect(), regis.getAnim().getRect())
 
 			for obj in self.objectList:
-				screen.blit(background, obj.rect, obj.rect)
+				screen.blit(backgroundImage, obj.rect, obj.rect)
 
-			rabbit.update()
+			john.update()
+			regis.update()
 
-			animRabbitSprite.update()
-			animRabbitSprite.draw(screen)
+			animJohnSprite.update()
+			animJohnSprite.draw(screen)
 
-			rabbit.getAnim().update()
+			animRegisSprite.update()
+			animRegisSprite.draw(screen)
+
+			john.getAnim().update()
+			regis.getAnim().update()
 
 			self.objectSpritesList.update()
 			self.objectSpritesList.draw(screen)
 
-			pygame.display.flip()
+			pygame.display.update()
 
 			clock.tick(60)
 
