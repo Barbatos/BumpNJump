@@ -10,7 +10,7 @@ class Rabbit():
 	pygame.mixer.init()
 
 	def __init__(self, id = -1, name = "", objectList = [], objectSpritesList = []):
-		self.rect = pygame.Rect(0, 0, 43, 50)
+		self.rect = pygame.Rect(0, 0, 43, 48)
 		self.rabbitAnim = Animation("rabbit", 30)
 		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
