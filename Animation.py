@@ -30,12 +30,36 @@ class Animation(pygame.sprite.Sprite):
 		self.play = True
 		self.start = 0
 		self.end = nbFrames - 1
+		self.cyclic = True
 
 		self.currentFrameNb = self.start
 		self.image, self.rect = self.arrAnim[self.currentFrameNb]
 
-	def playAnim(self):
+	def update(self):
+		if self.interval < 60./24:
+			self.interval += 1
+		else:
+			self.interval = 0
+			if self.play:
+				self.currentFrameNb += 1
+
+				if self.currentFrameNb > self.end:
+					if self.cyclic:
+						self.currentFrameNb = self.start
+					else:
+						self.currentFrameNb = self.end
+
+			if self.flip:
+				self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames]
+			else:
+				self.image, self.rect = self.arrAnim[self.currentFrameNb]
+
+	def playAnim(self, cyclic = True):
 		self.play = True
+		if not cyclic:
+			self.cyclic = False
+		else:
+			self.cyclic = True
 
 	def stopAnim(self):
 		self.play = False
@@ -70,19 +94,3 @@ class Animation(pygame.sprite.Sprite):
 
 	def setRect(self, rect):
 		self.rect = rect
-
-	def update(self):
-		if self.interval < 60./24:
-			self.interval += 1
-		else:
-			self.interval = 0
-			if self.play:
-				self.currentFrameNb += 1
-
-				if self.currentFrameNb > self.end:
-					self.currentFrameNb = self.start
-
-			if self.flip:
-				self.image, self.rect = self.arrAnim[self.currentFrameNb + self.nbFrames]
-			else:
-				self.image, self.rect = self.arrAnim[self.currentFrameNb]

@@ -36,7 +36,7 @@ class Rabbit():
 
 		self.jumpSound = pygame.mixer.Sound("resources/sound/jump.wav")
 
-		self.velocity = 7
+		self.velocity = 5
 		self.gravity = 0.6
 		self.jumpVelocity = -8
 
@@ -87,13 +87,15 @@ class Rabbit():
 				self.rabbitAnim.stopAnim()
 				self.rabbitAnim.setCurrentFrame(9)
 			else:
-				self.rabbitAnim.playAnim()
+				self.rabbitAnim.playAnim(False)
 
 		else:
 			self.rabbitAnim.setFrameRange(1, 8)
 			if not self.movingLeft and not self.movingRight:
 				self.rabbitAnim.stopAnim()
 				self.rabbitAnim.rewind()
+			else:
+				self.rabbitAnim.playAnim()
 
 		self.rabbitAnim.getRect().x = self.rect.x
 		self.rabbitAnim.getRect().y = self.rect.y
@@ -118,12 +120,12 @@ class Rabbit():
 							self.movePos[0] = 0
 
 			if self.movingUp:
-				if (self.rect.y < (obj.rect.y + obj.rect.h)) and (obj.rect.y < self.rect.y):
+				if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
 					if (self.rect.x + self.rect.w) > obj.rect.x:
 						if self.rect.x < (obj.rect.x + obj.rect.w):
 							self.movePos[1] = 0.01
 
-			if ((self.rect.y + self.rect.h) > obj.rect.y) and (self.rect.y < obj.rect.y):
+			if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
 				if (self.rect.x + self.rect.w) > obj.rect.x:
 					if self.rect.x < (obj.rect.x + obj.rect.w):
 						if self.movePos[1] >= 0 and not self.isOnBlock:
@@ -139,22 +141,6 @@ class Rabbit():
 				if (self.rect.x > (obj.rect.x + obj.rect.w)) or ((self.rect.x + self.rect.w) < obj.rect.x):
 					self.isOnBlock = False
 					self.movePos[1] = 0.01
-
-			print self.isOnBlock
-
-			# if ((self.rect.y + self.rect.h) > obj.rect.y) and ((self.rect.y + self.rect.h) < (obj.rect.y + 25)) and (self.rect.y < obj.rect.y):
-			# 	if (self.rect.x + self.rect.w) > obj.rect.x:
-			# 		if (self.rect.x < (obj.rect.x + obj.rect.w)):
-			# 			if self.movePos[1] >= 0 and not self.isOnBlock:
-			# 				self.rect.y = obj.rect.y - self.rect.h
-			# 				self.isJumping = False
-			# 				self.isOnBlock = True
-			# 				self.movePos[1] = 0
-
-			# else:
-			# 	if self.isOnBlock:
-			# 		self.isOnBlock = False
-			# 		self.movePos[1] = 0.01
 
 	def jump(self):
 		if not self.isJumping:
