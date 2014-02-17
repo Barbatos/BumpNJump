@@ -81,7 +81,6 @@ class Rabbit():
 			self.movingDown = False
 
 		self.checkForCollision()
-		self.checkForRabbit()
 
 		newpos = self.rect.move(self.movePos)
 		if self.area.contains(newpos) and not self.collide:
@@ -108,76 +107,57 @@ class Rabbit():
 
 		pygame.event.pump()
 
+	def collisionDetection(self, obj, rabbit = False):
+		if self.movingLeft:
+			if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
+				if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
+					if self.rect.y < (obj.rect.y + obj.rect.h):
+						self.movePos[0] = 0
+
+		if self.movingRight:
+			if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
+				if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
+					if self.rect.y < (obj.rect.y + obj.rect.h):
+						self.movePos[0] = 0
+
+		if self.movingUp:
+			if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
+				if (self.rect.x + self.rect.w) > obj.rect.x+3:
+					if self.rect.x < (obj.rect.x + obj.rect.w - 5):
+						self.movePos[1] = 0.01
+
+		if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
+			if (self.rect.x + self.rect.w) > obj.rect.x+3:
+				if self.rect.x < (obj.rect.x + obj.rect.w - 5):
+					if self.movePos[1] >= 0 and not self.isOnBlock:
+						self.isJumping = False
+						
+						if rabbit:
+							self.jump(-5)
+							obj.replaceRabbit()
+							self.points += 1
+						else:
+							self.rect.y = obj.rect.y - self.rect.h
+							self.movePos[1] = 0
+							self.isOnBlock = True
+
+		if self.isJumping:
+			self.isOnBlock = False
+
+		if self.isOnBlock:
+			if (self.rect.x > (obj.rect.x + obj.rect.w)) or ((self.rect.x + self.rect.w) < obj.rect.x):
+				self.isOnBlock = False
+				self.movePos[1] = 0.01
+
 	def checkForCollision(self):
 		if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0 and not self.isJumping:
 			return
 
 		for obj in self.objectList:
-			if self.movingLeft:
-				if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
-					if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
-						if self.rect.y < (obj.rect.y + obj.rect.h):
-							self.movePos[0] = 0
-
-			if self.movingRight:
-				if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
-					if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
-						if self.rect.y < (obj.rect.y + obj.rect.h):
-							self.movePos[0] = 0
-
-			if self.movingUp:
-				if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
-					if (self.rect.x + self.rect.w) > obj.rect.x:
-						if self.rect.x < (obj.rect.x + obj.rect.w):
-							self.movePos[1] = 0.01
-
-			if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
-				if (self.rect.x + self.rect.w) > obj.rect.x:
-					if self.rect.x < (obj.rect.x + obj.rect.w):
-						if self.movePos[1] >= 0 and not self.isOnBlock:
-							self.rect.y = obj.rect.y - self.rect.h
-							self.movePos[1] = 0
-							self.isJumping = False
-							self.isOnBlock = True
-
-			if self.isJumping:
-				self.isOnBlock = False
-
-			if self.isOnBlock:
-				if (self.rect.x > (obj.rect.x + obj.rect.w)) or ((self.rect.x + self.rect.w) < obj.rect.x):
-					self.isOnBlock = False
-					self.movePos[1] = 0.01
-
-	def checkForRabbit(self):
-		if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0 and not self.isJumping:
-			return
+			self.collisionDetection(obj, False)
 
 		for rabbit in self.rabbitList:
-			if self.movingLeft:
-				if (self.rect.x < (rabbit.rect.x + rabbit.rect.w)) and (rabbit.rect.x < self.rect.x):
-					if (self.rect.y + self.rect.h) > (rabbit.rect.y + 1):
-						if self.rect.y < (rabbit.rect.y + rabbit.rect.h):
-							self.movePos[0] = 0
-
-			if self.movingRight:
-				if (rabbit.rect.x < (self.rect.x + self.rect.w)) and (rabbit.rect.x > self.rect.x):
-					if (self.rect.y + self.rect.h) > (rabbit.rect.y + 1):
-						if self.rect.y < (rabbit.rect.y + rabbit.rect.h):
-							self.movePos[0] = 0
-
-			if self.movingUp:
-				if (self.rect.y <= (rabbit.rect.y + rabbit.rect.h)) and (rabbit.rect.y <= self.rect.y):
-					if (self.rect.x + self.rect.w) > rabbit.rect.x:
-						if self.rect.x < (rabbit.rect.x + rabbit.rect.w):
-							self.movePos[1] = 0.01
-
-			if ((self.rect.y + self.rect.h) > rabbit.rect.y) and (self.rect.y < rabbit.rect.y):
-				if (self.rect.x + self.rect.w) >= rabbit.rect.x:
-					if self.rect.x <= (rabbit.rect.x + rabbit.rect.w):
-						self.isJumping = False
-						self.jump(-5)
-						rabbit.replaceRabbit()
-						self.points += 1
+			self.collisionDetection(rabbit, True)
 
 	def jump(self, velocity = -8):
 		if not self.isJumping:
