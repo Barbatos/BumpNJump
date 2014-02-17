@@ -36,10 +36,13 @@ class BumpNJump():
 	def __init__(self):
 		self.objectList = []
 		self.objectSpritesList = pygame.sprite.Group()
-		
+
 		pygame.init()
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
+
+		self.music = pygame.mixer.Sound("resources/sound/music.wav")
+		self.music.play(-1)
 
 		backgroundImage, backgroundRect = loadPNG("background.png")
 

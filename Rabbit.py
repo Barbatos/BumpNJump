@@ -54,12 +54,10 @@ class Rabbit():
 
 	def update(self):
 		if self.movingLeft == True:
-			if self.checkForCollisions2():
-				self.movePos[0] = -self.velocity
+			self.movePos[0] = -self.velocity
 
 		if self.movingRight == True:
-			if self.checkForCollisions2():
-				self.movePos[0] = self.velocity
+			self.movePos[0] = self.velocity
 
 		if self.movePos[1] is not 0:
 			self.movePos[1] += self.gravity
