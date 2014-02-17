@@ -14,7 +14,21 @@ from Resources import *
 class BumpNJump():
 
 	def initObjects(self):
-		self.objectList.append(Object("obj1", "earth.png", 250, 550))
+		for i in range(0, 16):
+			objType = random.randint(1, 2)
+
+			if objType == 1:
+				self.objectList.append(Object("obj" + str(i), "earth.png", i * 50, 550))
+			else:
+				self.objectList.append(Object("obj" + str(i), "ice.png", i * 50, 550))
+
+		for j in range(0, 30):
+			objType = random.randint(1, 2)
+
+			if objType == 1:
+				self.objectList.append(Object("obj" + str(j + 16), "earth.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50))
+			else:
+				self.objectList.append(Object("obj" + str(j + 16), "ice.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50))
 
 		for obj in self.objectList:
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
@@ -22,7 +36,7 @@ class BumpNJump():
 	def __init__(self):
 		self.objectList = []
 		self.objectSpritesList = pygame.sprite.Group()
-
+		
 		pygame.init()
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
@@ -30,7 +44,9 @@ class BumpNJump():
 		backgroundImage, backgroundRect = loadPNG("background.png")
 
 		background = pygame.Surface(screen.get_size())
-		background = background.convert()
+		background = backgroundImage
+
+		self.initObjects()
 
 		john = Rabbit(1, "john", self.objectList, self.objectSpritesList)
 		animJohnSprite = pygame.sprite.RenderPlain(john.getAnim())
@@ -40,7 +56,8 @@ class BumpNJump():
 		animRegisSprite = pygame.sprite.RenderPlain(regis.getAnim())
 		regis.getAnim().stopAnim()
 
-		self.initObjects()
+		john.appendRabbit(regis)
+		regis.appendRabbit(john)
 
 		clock = pygame.time.Clock()
 
@@ -95,18 +112,24 @@ class BumpNJump():
 					if event.key == K_d:
 						regis.moveRightStop()
 
-			screen.blit(backgroundImage, backgroundRect, backgroundRect)
-			screen.blit(backgroundImage, john.rect, john.rect)
-			screen.blit(backgroundImage, john.getAnim().getRect(), john.getAnim().getRect())
+			screen.blit(background, backgroundRect, backgroundRect)
+			screen.blit(background, john.rect, john.rect)
+			screen.blit(background, john.getAnim().getRect(), john.getAnim().getRect())
 
-			screen.blit(backgroundImage, regis.rect, regis.rect)
-			screen.blit(backgroundImage, regis.getAnim().getRect(), regis.getAnim().getRect())
+			screen.blit(background, regis.rect, regis.rect)
+			screen.blit(background, regis.getAnim().getRect(), regis.getAnim().getRect())
 
 			for obj in self.objectList:
-				screen.blit(backgroundImage, obj.rect, obj.rect)
+				screen.blit(background, obj.rect, obj.rect)
 
 			john.update()
 			regis.update()
+
+			if pygame.font:
+				font = pygame.font.Font(None, 36)
+				text = font.render(str(john.getPoints()) + " : " + str(regis.getPoints()), 1, (10, 10, 10))
+				textpos = text.get_rect(centerx=background.get_width()/2)
+				screen.blit(text, textpos)
 
 			animJohnSprite.update()
 			animJohnSprite.draw(screen)

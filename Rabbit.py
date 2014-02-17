@@ -2,6 +2,7 @@
 
 import pygame
 import Resources
+import random
 from Animation import *
 from pygame.locals import *
 
@@ -10,6 +11,11 @@ class Rabbit():
 	pygame.mixer.init()
 
 	def __init__(self, id = -1, name = "", objectList = [], objectSpritesList = []):
+		self.objectList = objectList
+		self.objectSpritesList = objectSpritesList
+
+		self.rabbitList = []
+
 		self.rect = pygame.Rect(0, 0, 43, 48)
 		self.rabbitAnim = Animation("rabbit", 30)
 		self.rabbitAnim.setFrameRange(1, 8);
@@ -17,9 +23,6 @@ class Rabbit():
 		self.area = self.screen.get_rect()
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
-
-		self.objectList = objectList
-		self.objectSpritesList = objectSpritesList
 
 		self.movingLeft = False
 		self.movingRight = False
@@ -40,19 +43,23 @@ class Rabbit():
 		self.gravity = 0.6
 		self.jumpVelocity = -8
 
-		self.movePos = [0,0]
-		self.rect.topleft = (300, self.floorLevel)
+		self.movePos = [0,0.01]
+
+		self.replaceRabbit()
+
+		self.points = 0
 
 	def __str__(self):
 		print "Rabbit ", self.id,  ": ", self.name
 
 	def update(self):
-
 		if self.movingLeft == True:
-			self.movePos[0] = -self.velocity
+			if self.checkForCollisions2():
+				self.movePos[0] = -self.velocity
 
 		if self.movingRight == True:
-			self.movePos[0] = self.velocity
+			if self.checkForCollisions2():
+				self.movePos[0] = self.velocity
 
 		if self.movePos[1] is not 0:
 			self.movePos[1] += self.gravity
@@ -76,6 +83,7 @@ class Rabbit():
 			self.movingDown = False
 
 		self.checkForCollision()
+		self.checkForRabbit()
 
 		newpos = self.rect.move(self.movePos)
 		if self.area.contains(newpos) and not self.collide:
@@ -142,14 +150,45 @@ class Rabbit():
 					self.isOnBlock = False
 					self.movePos[1] = 0.01
 
-	def jump(self):
+	def checkForRabbit(self):
+		if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0 and not self.isJumping:
+			return
+
+		for rabbit in self.rabbitList:
+			if self.movingLeft:
+				if (self.rect.x < (rabbit.rect.x + rabbit.rect.w)) and (rabbit.rect.x < self.rect.x):
+					if (self.rect.y + self.rect.h) > (rabbit.rect.y + 1):
+						if self.rect.y < (rabbit.rect.y + rabbit.rect.h):
+							self.movePos[0] = 0
+
+			if self.movingRight:
+				if (rabbit.rect.x < (self.rect.x + self.rect.w)) and (rabbit.rect.x > self.rect.x):
+					if (self.rect.y + self.rect.h) > (rabbit.rect.y + 1):
+						if self.rect.y < (rabbit.rect.y + rabbit.rect.h):
+							self.movePos[0] = 0
+
+			if self.movingUp:
+				if (self.rect.y <= (rabbit.rect.y + rabbit.rect.h)) and (rabbit.rect.y <= self.rect.y):
+					if (self.rect.x + self.rect.w) > rabbit.rect.x:
+						if self.rect.x < (rabbit.rect.x + rabbit.rect.w):
+							self.movePos[1] = 0.01
+
+			if ((self.rect.y + self.rect.h) > rabbit.rect.y) and (self.rect.y < rabbit.rect.y):
+				if (self.rect.x + self.rect.w) >= rabbit.rect.x:
+					if self.rect.x <= (rabbit.rect.x + rabbit.rect.w):
+						self.isJumping = False
+						self.jump(-5)
+						rabbit.replaceRabbit()
+						self.points += 1
+
+	def jump(self, velocity = -8):
 		if not self.isJumping:
 			self.jumpSound.play()
-			self.movePos[1] = self.jumpVelocity
+			self.movePos[1] = velocity
 		self.isJumping = True
  	
  	def moveLeftStart(self):
- 		if(self.rabbitAnim.getFlip()):
+ 		if self.rabbitAnim.getFlip():
  			self.rabbitAnim.flipAnim()
  		self.rabbitAnim.playAnim()
  		self.movingLeft = True
@@ -163,7 +202,7 @@ class Rabbit():
  		self.movePos[0] = 0
 
  	def moveRightStart(self):
- 		if(not self.rabbitAnim.getFlip()):
+ 		if not self.rabbitAnim.getFlip():
  			self.rabbitAnim.flipAnim()
  		self.rabbitAnim.playAnim()
  		self.movingRight = True
@@ -176,11 +215,21 @@ class Rabbit():
 		self.movingRight = False
 		self.movePos[0] = 0
 
+	def appendRabbit(self, rabbit):
+		self.rabbitList.append(rabbit)
+
+	def replaceRabbit(self):
+		randObj = self.objectList[random.randint(1, len(self.objectList)) - 1]
+		self.rect.topleft = (randObj.rect.x, randObj.rect.y - randObj.rect.h)
+
 	def getId(self):
 		return self.id
 
 	def getName(self):
 		return self.name
+
+	def getPoints(self):
+		return self.points
 
 	def getAnim(self):
 		return self.rabbitAnim
@@ -188,5 +237,8 @@ class Rabbit():
 	def setId(self, id):
 		self.id = id
 
-	def setName(self):
+	def setName(self, name):
 		self.name = name
+
+	def setPoints(self, points):
+		self.points = points
