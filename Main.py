@@ -80,7 +80,7 @@ class BumpNJump():
 						if key[K_LSHIFT]:
 							ob = Object("obj", "earth.png", x, y)
 						else:
-							ob = Object("obj", "ice.png", x, y)
+							ob = Object("obj", "boing.png", x, y)
 						self.objectList.append(ob)
 						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
 
