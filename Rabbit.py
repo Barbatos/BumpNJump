@@ -21,6 +21,8 @@ class Rabbit():
 		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
+		self.area.h += 100
+		self.area.y -= 100
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
 
@@ -122,12 +124,12 @@ class Rabbit():
 
 		if self.movingUp:
 			if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
-				if (self.rect.x + self.rect.w) > obj.rect.x+3:
+				if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
 					if self.rect.x < (obj.rect.x + obj.rect.w - 5):
 						self.movePos[1] = 0.01
 
 		if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
-			if (self.rect.x + self.rect.w) > obj.rect.x+3:
+			if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
 				if self.rect.x < (obj.rect.x + obj.rect.w - 5):
 					if self.movePos[1] >= 0 and not self.isOnBlock:
 						self.isJumping = False
