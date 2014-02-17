@@ -63,8 +63,7 @@ class BumpNJump():
 		regis.appendRabbit(john)
 
 		clock = pygame.time.Clock()
-
-		screen.blit(backgroundImage, (0, 0))
+		
 		pygame.display.flip()
 
 		while 1:

@@ -159,10 +159,10 @@ class Rabbit():
 		for rabbit in self.rabbitList:
 			self.collisionDetection(rabbit, True)
 
-	def jump(self, velocity = -8):
+	def jump(self, velocity = 8):
 		if not self.isJumping:
 			self.jumpSound.play()
-			self.movePos[1] = velocity
+			self.movePos[1] = (-1) * velocity
 		self.isJumping = True
  	
  	def moveLeftStart(self):
