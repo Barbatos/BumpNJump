@@ -4,7 +4,7 @@ import pygame
 import Resources
 
 class Object(pygame.sprite.Sprite):
-	def __init__(self, name = "", img = "", x = 0, y = 0):
+	def __init__(self, name = "", img = "", x = 0, y = 0, type = None):
 		pygame.sprite.Sprite.__init__(self)
 		self.image, self.rect = Resources.loadPNG(img, False)
 		screen = pygame.display.get_surface()
@@ -12,6 +12,7 @@ class Object(pygame.sprite.Sprite):
 		self.name = name
 		self.posX = x
 		self.posY = y
+		self.type = type
 
 		self.rect.topleft = (self.posX, self.posY)
 
@@ -26,3 +27,6 @@ class Object(pygame.sprite.Sprite):
 
 	def getPosY(self):
 		return self.posY
+
+	def getType(self):
+		return self.type

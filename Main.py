@@ -18,17 +18,17 @@ class BumpNJump():
 			objType = random.randint(1, 2)
 
 			if objType == 1:
-				self.objectList.append(Object("obj" + str(i), "earth.png", i * 50, 550))
+				self.objectList.append(Object("obj" + str(i), "earth.png", i * 50, 550, "Earth"))
 			else:
-				self.objectList.append(Object("obj" + str(i), "ice.png", i * 50, 550))
+				self.objectList.append(Object("obj" + str(i), "ice.png", i * 50, 550, "Ice"))
 
 		for j in range(0, 30):
 			objType = random.randint(1, 2)
 
 			if objType == 1:
-				self.objectList.append(Object("obj" + str(j + 16), "earth.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50))
+				self.objectList.append(Object("obj" + str(j + 16), "earth.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50, "Earth"))
 			else:
-				self.objectList.append(Object("obj" + str(j + 16), "ice.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50))
+				self.objectList.append(Object("obj" + str(j + 16), "ice.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50, "Ice"))
 
 		for obj in self.objectList:
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
@@ -78,9 +78,9 @@ class BumpNJump():
 						x = (int(mse[0]) / 50)*50
 						y = (int(mse[1]) / 50)*50
 						if key[K_LSHIFT]:
-							ob = Object("obj", "earth.png", x, y)
+							ob = Object("obj", "earth.png", x, y, "Earth")
 						else:
-							ob = Object("obj", "boing.png", x, y)
+							ob = Object("obj", "boing.png", x, y, "Boing")
 						self.objectList.append(ob)
 						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
 

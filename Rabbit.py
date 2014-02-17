@@ -136,6 +136,10 @@ class Rabbit():
 							self.jump(5)
 							obj.replaceRabbit()
 							self.points += 1
+
+						elif obj.getType() == "Boing":
+							self.jump(10)
+
 						else:
 							self.rect.y = obj.rect.y - self.rect.h
 							self.movePos[1] = 0
