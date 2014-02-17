@@ -133,7 +133,7 @@ class Rabbit():
 						self.isJumping = False
 						
 						if rabbit:
-							self.jump(-5)
+							self.jump(5)
 							obj.replaceRabbit()
 							self.points += 1
 						else:
