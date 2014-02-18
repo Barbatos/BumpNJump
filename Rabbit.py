@@ -21,7 +21,7 @@ class Rabbit():
 		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
-		self.area.h += 500
+		self.area.top += 500
 		self.area.y -= 500
 
 		self.floorLevel = self.screen.get_height() - self.rect.h

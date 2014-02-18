@@ -4,6 +4,7 @@ import pygame
 from Main import *
 from Button import *
 from Slider import *
+from Checkbox import *
 from pygame.locals import *
 
 class Menu():
@@ -26,6 +27,8 @@ class Menu():
 		quitButton = Button(screen, screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
 
 		sliderTest = Slider(screen, 50, 50, 200, 100)
+
+		checkboxTest = Checkbox(screen, 50, 100)
 
 		clock = pygame.time.Clock()
 
@@ -54,6 +57,9 @@ class Menu():
 					elif sliderTest.onSlider(mse):
 						sliderTest.setValue(mse[0])
 
+					elif checkboxTest.onCheckbox(mse):
+						checkboxTest.changeState()
+
 				if event.type == MOUSEMOTION:
 					mse = pygame.mouse.get_pos()
 					if sliderTest.onSlider(mse) and mouse[0]:
@@ -67,6 +73,8 @@ class Menu():
 			quitButton.update()
 
 			sliderTest.update()
+
+			checkboxTest.update()
 
 			pygame.display.update()
 
