@@ -11,11 +11,11 @@ class Animation(pygame.sprite.Sprite):
 		self.arrAnim = []
 		for i in range(0, nbFrames):
 			if i + 1 < 10:
-				self.arrAnim.append(Resources.loadPNG(image + "000" + str(i + 1) + ".png",(255, 25, 255) , True))
+				self.arrAnim.append(Resources.loadPNG(image + "000" + str(i + 1) + ".png", True))
 			elif i + 1 < 100:
-				self.arrAnim.append(Resources.loadPNG(image + "00" + str(i + 1) + ".png",(255, 25, 255) , True))
+				self.arrAnim.append(Resources.loadPNG(image + "00" + str(i + 1) + ".png", True))
 			else:
-				self.arrAnim.append(Resources.loadPNG(image + "0" + str(i + 1) + ".png",(255, 25, 255) , True))
+				self.arrAnim.append(Resources.loadPNG(image + "0" + str(i + 1) + ".png", True))
 
 		self.flip = False
 		self.interval = 0
