@@ -12,23 +12,26 @@ from Object import *
 from Resources import *
 
 class BumpNJump():
-
 	def initObjects(self):
 		for i in range(0, 16):
 			objType = random.randint(1, 2)
 
 			if objType == 1:
-				self.objectList.append(Object("obj" + str(i), "earth.png", i * 50, 550, "Earth"))
+				self.objectList.append(Object("obj1" + str(i), i * 50, 550, "earth"))
 			else:
-				self.objectList.append(Object("obj" + str(i), "ice.png", i * 50, 550, "Ice"))
+				self.objectList.append(Object("obj1" + str(i), i * 50, 550, "ice"))
 
 		for j in range(0, 30):
 			objType = random.randint(1, 2)
 
 			if objType == 1:
-				self.objectList.append(Object("obj" + str(j + 16), "earth.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50, "Earth"))
+				self.objectList.append(Object("obj2" + str(j), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "earth"))
 			else:
-				self.objectList.append(Object("obj" + str(j + 16), "ice.png", random.randint(0, 15) * 50, random.randint(1, 10) * 50, "Ice"))
+				self.objectList.append(Object("obj2" + str(j), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "ice"))
+
+		for k in range(0, 5):
+			randPos = random.randint(0, 46)
+			self.objectList.append(Object("obj3" + str(k), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
 
 		for obj in self.objectList:
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
@@ -78,9 +81,9 @@ class BumpNJump():
 						x = (int(mse[0]) / 50)*50
 						y = (int(mse[1]) / 50)*50
 						if key[K_LSHIFT]:
-							ob = Object("obj", "earth.png", x, y, "Earth")
+							ob = Object("obj", x, y, "earth")
 						else:
-							ob = Object("obj", "boing.png", x, y, "Boing")
+							ob = Object("obj", x, y, "boing")
 						self.objectList.append(ob)
 						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
 

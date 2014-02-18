@@ -3,6 +3,7 @@
 import pygame
 from Main import *
 from Button import *
+from Slider import *
 from pygame.locals import *
 
 class Menu():
@@ -18,15 +19,20 @@ class Menu():
 
 		playButton = Button(screen, screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
 
-		optionButton = Button(screen, screen.get_width()/2 - 200/2, 250, 200, 40, "OPTION")
+		editorButton = Button(screen, screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
+
+		optionButton = Button(screen, screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
 
 		quitButton = Button(screen, screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
+
+		sliderTest = Slider(screen, 50, 50, 200, 100)
 
 		clock = pygame.time.Clock()
 
 		pygame.display.flip()
 
 		while 1:
+			mouse = pygame.mouse.get_pressed()
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					return
@@ -34,8 +40,10 @@ class Menu():
 				elif event.type == MOUSEBUTTONDOWN:
 					mse = pygame.mouse.get_pos()
 					if playButton.onButton(mse):
-						print playButton.getText()
 						BumpNJump()
+
+					elif editorButton.onButton(mse):
+						print editorButton.getText()
 
 					elif optionButton.onButton(mse):
 						print optionButton.getText()
@@ -43,9 +51,22 @@ class Menu():
 					elif quitButton.onButton(mse):
 						return
 
+					elif sliderTest.onSlider(mse):
+						sliderTest.setValue(mse[0])
+
+				if event.type == MOUSEMOTION:
+					mse = pygame.mouse.get_pos()
+					if sliderTest.onSlider(mse) and mouse[0]:
+						sliderTest.setValue(mse[0])
+
+			screen.blit(background, background.get_rect(), background.get_rect())
+
 			playButton.update()
+			editorButton.update()
 			optionButton.update()
 			quitButton.update()
+
+			sliderTest.update()
 
 			pygame.display.update()
 

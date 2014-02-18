@@ -21,8 +21,8 @@ class Rabbit():
 		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
-		self.area.h += 100
-		self.area.y -= 100
+		self.area.h += 500
+		self.area.y -= 500
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
 
@@ -139,7 +139,7 @@ class Rabbit():
 							obj.replaceRabbit()
 							self.points += 1
 
-						elif obj.getType() == "Boing":
+						elif obj.getType() == "boing":
 							self.jump(10)
 
 						else:
