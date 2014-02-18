@@ -13,7 +13,7 @@ class Object(pygame.sprite.Sprite):
 		self.type = type
 
 		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = Resources.loadPNG(self.typeList[self.type], False)
+		self.image, self.rect = Resources.loadPNG(self.typeList[self.type],(255, 255, 255))
 		screen = pygame.display.get_surface()
 
 		self.rect.topleft = (self.posX, self.posY)

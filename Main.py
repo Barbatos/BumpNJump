@@ -47,7 +47,7 @@ class BumpNJump():
 		self.music = pygame.mixer.Sound("resources/sound/music.wav")
 		self.music.play(-1)
 
-		backgroundImage, backgroundRect = loadPNG("background.png")
+		backgroundImage, backgroundRect = loadPNG("background.png", (255, 255, 255))
 
 		background = pygame.Surface(screen.get_size())
 		background = backgroundImage
