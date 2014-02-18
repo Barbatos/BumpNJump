@@ -28,9 +28,11 @@ class Menu():
 
 		sliderTest = Slider(screen, 50, 50, 200, 100)
 
-		checkboxTest = Checkbox(screen, 50, 100)
+		checkboxTest = Checkbox(screen, 50, 100, "test")
 
 		clock = pygame.time.Clock()
+
+		print str(screen.get_rect())
 
 		pygame.display.flip()
 
