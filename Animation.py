@@ -47,6 +47,10 @@ class Animation(pygame.sprite.Sprite):
 			else:
 				self.image, self.rect = self.arrAnim[self.currentFrameNb]
 
+	def updateColor(self, color):
+		for img in self.arrAnim:
+			img[0].fill(color, special_flags = BLEND_MULT)
+
 	def playAnim(self, cyclic = True):
 		self.play = True
 		if not cyclic:

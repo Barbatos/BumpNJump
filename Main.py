@@ -54,11 +54,11 @@ class BumpNJump():
 
 		self.initObjects()
 
-		john = Rabbit(1, "john", self.objectList, self.objectSpritesList)
+		john = Rabbit(1, "john" ,(200, 50, 50) , self.objectList, self.objectSpritesList)
 		animJohnSprite = pygame.sprite.RenderPlain(john.getAnim())
 		john.getAnim().stopAnim()
 
-		regis = Rabbit(2, "regis", self.objectList, self.objectSpritesList)
+		regis = Rabbit(2, "regis" ,(50, 50, 200) , self.objectList, self.objectSpritesList)
 		animRegisSprite = pygame.sprite.RenderPlain(regis.getAnim())
 		regis.getAnim().stopAnim()
 

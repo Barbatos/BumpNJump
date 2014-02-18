@@ -10,7 +10,7 @@ class Rabbit():
 	pygame.mixer.pre_init(44100, -16, 1, 512)
 	pygame.mixer.init()
 
-	def __init__(self, id = -1, name = "", objectList = [], objectSpritesList = []):
+	def __init__(self, id = -1, name = "", color = (255, 255, 255), objectList = [], objectSpritesList = []):
 		self.objectList = objectList
 		self.objectSpritesList = objectSpritesList
 
@@ -18,6 +18,7 @@ class Rabbit():
 
 		self.rect = pygame.Rect(0, 0, 43, 48)
 		self.rabbitAnim = Animation("rabbit", 30)
+		self.rabbitAnim.updateColor(color)
 		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
@@ -205,6 +206,9 @@ class Rabbit():
 	def replaceRabbit(self):
 		randObj = self.objectList[random.randint(1, len(self.objectList)) - 1]
 		self.rect.topleft = (randObj.rect.x, randObj.rect.y - randObj.rect.h)
+
+	def updateColor(self, color):
+		self.rabbitAnim.updateColor(color)
 
 	def getId(self):
 		return self.id
