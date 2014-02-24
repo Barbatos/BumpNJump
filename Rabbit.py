@@ -10,9 +10,9 @@ class Rabbit():
 	pygame.mixer.pre_init(44100, -16, 1, 512)
 	pygame.mixer.init()
 
-	def __init__(self, id = -1, name = "", color = (255, 255, 255), objectList = [], objectSpritesList = []):
+	def __init__(self, id = -1, name = "", color = (255, 255, 255), objectList = [], spriteList = []):
 		self.objectList = objectList
-		self.objectSpritesList = objectSpritesList
+		self.spriteList = spriteList
 
 		self.rabbitList = []
 
@@ -44,13 +44,13 @@ class Rabbit():
 
 		self.velocity = 5
 		self.gravity = 0.6
-		self.jumpVelocity = -8
 
 		self.movePos = [0,0.01]
 
 		self.replaceRabbit()
 
 		self.points = 0
+		self.carrots = 0
 
 	def __str__(self):
 		print "Rabbit ", self.id,  ": ", self.name
@@ -161,12 +161,18 @@ class Rabbit():
 			return
 
 		for obj in self.objectList:
-			self.collisionDetection(obj, False)
+			if obj.getType() == "carrot" and obj.isInBlock(self.rect.x, self.rect.y + self.rect.h -5):
+				self.carrots += 1
+				self.objectList.remove(obj)
+				self.spriteList.remove(obj)
+
+			if obj.getType() is not "carrot":
+				self.collisionDetection(obj, False)
 
 		for rabbit in self.rabbitList:
 			self.collisionDetection(rabbit, True)
 
-	def jump(self, velocity = 8):
+	def jump(self, velocity = 8.1):
 		if not self.isJumping:
 			self.jumpSound.play()
 			self.movePos[1] = (-1) * velocity

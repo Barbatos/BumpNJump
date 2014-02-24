@@ -27,7 +27,7 @@ class Checkbox():
 		self.surface.blit(self.textDisp, self.textRect)
 
 	def onCheckbox(self, (x, y)):
-		if x >= self.getX() and x <= (self.getX() + 15) and y >= self.getY() and y <= (self.getY() + 15):
+		if x >= self.getX() and x <= (self.getX() + 25 + self.textRect.w) and y >= self.getY() and y <= (self.getY() + 15):
 			return True
 		else:
 			return False

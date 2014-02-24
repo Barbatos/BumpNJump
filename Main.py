@@ -10,55 +10,29 @@ from Rabbit import *
 from Animation import *
 from Object import *
 from Resources import *
+from Map import *
 
 class BumpNJump():
-	def initObjects(self):
-		for i in range(0, 16):
-			objType = random.randint(1, 2)
-
-			if objType == 1:
-				self.objectList.append(Object("obj1" + str(i), i * 50, 550, "earth"))
-			else:
-				self.objectList.append(Object("obj1" + str(i), i * 50, 550, "ice"))
-
-		for j in range(0, 30):
-			objType = random.randint(1, 2)
-
-			if objType == 1:
-				self.objectList.append(Object("obj2" + str(j), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "earth"))
-			else:
-				self.objectList.append(Object("obj2" + str(j), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "ice"))
-
-		for k in range(0, 5):
-			randPos = random.randint(0, 46)
-			self.objectList.append(Object("obj3" + str(k), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
-
-		for obj in self.objectList:
-			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
-
 	def __init__(self):
-		self.objectList = []
-		self.objectSpritesList = pygame.sprite.Group()
-
 		pygame.init()
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		self.music.play(-1)
+		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
+		# self.music.play(-1)
 
 		backgroundImage, backgroundRect = loadPNG("background.png")
 
 		background = pygame.Surface(screen.get_size())
 		background = backgroundImage
 
-		self.initObjects()
+		self.level = Map()
 
-		john = Rabbit(1, "john" ,(200, 50, 50) , self.objectList, self.objectSpritesList)
+		john = Rabbit(1, "john" ,(200, 50, 50) , self.level.objectList, self.level.objectSpritesList)
 		animJohnSprite = pygame.sprite.RenderPlain(john.getAnim())
 		john.getAnim().stopAnim()
 
-		regis = Rabbit(2, "regis" ,(50, 50, 200) , self.objectList, self.objectSpritesList)
+		regis = Rabbit(2, "regis" ,(50, 50, 200) , self.level.objectList, self.level.objectSpritesList)
 		animRegisSprite = pygame.sprite.RenderPlain(regis.getAnim())
 		regis.getAnim().stopAnim()
 
@@ -77,21 +51,18 @@ class BumpNJump():
 
 				elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):
 					mse = pygame.mouse.get_pos()
-					if not any(obj.rect.collidepoint(mse) for obj in self.objectList):
+					if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
 						x = (int(mse[0]) / 50)*50
 						y = (int(mse[1]) / 50)*50
 						if key[K_LSHIFT]:
-							ob = Object("obj", x, y, "earth")
+							self.level.addObject(x, y, "earth")
 						else:
-							ob = Object("obj", x, y, "boing")
-						self.objectList.append(ob)
-						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
+							self.level.addObject(x, y, "boing")
 
 				elif event.type == MOUSEMOTION and key[K_LALT]:
 					mse = pygame.mouse.get_pos()
-					if any(obj.rect.collidepoint(mse) for obj in self.objectList):
-						self.objectSpritesList.remove(obj)
-						self.objectList.remove(obj)
+					if any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
+						self.level.removeObject(obj)
 
 				elif event.type == KEYDOWN:
 					if event.key == K_UP:
@@ -124,8 +95,7 @@ class BumpNJump():
 			screen.blit(background, regis.rect, regis.rect)
 			screen.blit(background, regis.getAnim().getRect(), regis.getAnim().getRect())
 
-			for obj in self.objectList:
-				screen.blit(background, obj.rect, obj.rect)
+			self.level.blitMap(screen, background)
 
 			john.update()
 			regis.update()
@@ -145,8 +115,7 @@ class BumpNJump():
 			john.getAnim().update()
 			regis.getAnim().update()
 
-			self.objectSpritesList.update()
-			self.objectSpritesList.draw(screen)
+			self.level.update(screen)
 
 			pygame.display.update()
 

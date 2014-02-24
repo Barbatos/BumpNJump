@@ -32,8 +32,6 @@ class Menu():
 
 		clock = pygame.time.Clock()
 
-		print str(screen.get_rect())
-
 		pygame.display.flip()
 
 		while 1:

@@ -10,6 +10,7 @@ def loadPNG(name, anim = False):
 	else:
 		fullname = os.path.join('resources/img', name)
 	try:
+		print fullname
 		image = pygame.image.load(fullname)
 
 		if image.get_alpha() is None:
