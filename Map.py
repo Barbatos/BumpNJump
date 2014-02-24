@@ -62,6 +62,12 @@ class Map():
 		self.objectSpritesList.remove(obj)
 		self.objectList.remove(obj)
 
+	def removeObjectFromPos(self, (x, y)):
+		for obj in self.objectList:
+			if obj.isInBlock(x, y):
+				self.objectSpritesList.remove(obj)
+				self.objectList.remove(obj)
+
 	def isInBlock(self, x, y):
 		for obj in self.objectList:
 			if obj.isInBlock(x, y):

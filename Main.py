@@ -61,8 +61,7 @@ class BumpNJump():
 
 				elif event.type == MOUSEMOTION and key[K_LALT]:
 					mse = pygame.mouse.get_pos()
-					if any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
-						self.level.removeObject(obj)
+					self.level.removeObjectFromPos(mse)
 
 				elif event.type == KEYDOWN:
 					if event.key == K_UP:
