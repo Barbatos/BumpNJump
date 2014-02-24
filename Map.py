@@ -21,13 +21,23 @@ class Map():
 		for j in range(0, 30):
 			objType = random.randint(1, 2)
 
+			while True:
+				randPosX = random.randint(0, 15) * 50 
+				randPosY = random.randint(1, 10) * 50
+				if not self.isInBlock(randPosX + 10, randPosY + 10):
+					break
+
 			if objType == 1:
-				self.objectList.append(Object(len(self.objectList), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "earth"))
+				self.objectList.append(Object(len(self.objectList), randPosX, randPosY, "earth"))
 			else:
-				self.objectList.append(Object(len(self.objectList), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "ice"))
+				self.objectList.append(Object(len(self.objectList), randPosX, randPosY, "ice"))
 
 		for k in range(0, 5):
-			randPos = random.randint(0, 46)
+			while True:
+				randPos = random.randint(0, 46)
+				if not self.isInBlock(self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26):
+					break
+
 			self.objectList.append(Object(len(self.objectList), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
 
 		for obj in self.objectList:

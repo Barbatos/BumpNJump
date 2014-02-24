@@ -161,7 +161,7 @@ class Rabbit():
 			return
 
 		for obj in self.objectList:
-			if obj.getType() == "carrot" and obj.isInBlock(self.rect.x, self.rect.y + self.rect.h -5):
+			if obj.getType() == "carrot" and obj.isInBlock(self.rect.x + self.rect.w/2, self.rect.y + self.rect.h -5):
 				self.carrots += 1
 				self.objectList.remove(obj)
 				self.spriteList.remove(obj)
@@ -210,8 +210,25 @@ class Rabbit():
 		self.rabbitList.append(rabbit)
 
 	def replaceRabbit(self):
-		randObj = self.objectList[random.randint(1, len(self.objectList)) - 1]
+		while True:
+			randObj = self.objectList[random.randint(1, len(self.objectList)) - 1]
+			if self.isFloor(randObj):
+				break
+
 		self.rect.topleft = (randObj.rect.x, randObj.rect.y - randObj.rect.h)
+
+	def isInBlock(self, x, y):
+		for obj in self.objectList:
+			if obj.isInBlock(x, y):
+				return True
+
+		return False
+
+	def isFloor(self, object):
+		if self.isInBlock(object.getX() + 5, object.getY() - 5):
+			return False
+
+		return True
 
 	def updateColor(self, color):
 		self.rabbitAnim.updateColor(color)
