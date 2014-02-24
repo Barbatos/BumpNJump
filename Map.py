@@ -32,7 +32,6 @@ class Map():
 
 		for obj in self.objectList:
 			if not self.isFloor(obj):
-				print "blop"
 				obj.replaceImage("earth", False)
 
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))

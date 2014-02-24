@@ -27,9 +27,6 @@ class Object(pygame.sprite.Sprite):
 		else:
 			self.image = Resources.loadPNG("middle_" + self.typeList[objType], False)[0]
 
-# tmpImage, tmpRect
-		# self.image = tmpImage
-
 	def getId(self):
 		return self.id
 
