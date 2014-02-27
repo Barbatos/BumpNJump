@@ -11,6 +11,7 @@ from Animation import *
 from Object import *
 from Resources import *
 from Map import *
+from Particle import *
 
 class BumpNJump():
 	def __init__(self):
@@ -22,9 +23,6 @@ class BumpNJump():
 		# self.music.play(-1)
 
 		backgroundImage, backgroundRect = loadPNG("background.png")
-
-		background = pygame.Surface(screen.get_size())
-		background = backgroundImage
 
 		self.level = Map()
 
@@ -38,6 +36,11 @@ class BumpNJump():
 
 		john.appendRabbit(regis)
 		regis.appendRabbit(john)
+
+		particles = []
+
+		for i in range(0, 1000):
+			particles.append(Particle(1, 200, 200, (i/5, 50, 50), 10))
 
 		clock = pygame.time.Clock()
 		
@@ -87,23 +90,10 @@ class BumpNJump():
 					if event.key == K_d:
 						regis.moveRightStop()
 
-			screen.blit(background, backgroundRect, backgroundRect)
-			screen.blit(background, john.rect, john.rect)
-			screen.blit(background, john.getAnim().getRect(), john.getAnim().getRect())
-
-			screen.blit(background, regis.rect, regis.rect)
-			screen.blit(background, regis.getAnim().getRect(), regis.getAnim().getRect())
-
-			self.level.blitMap(screen, background)
+			screen.blit(backgroundImage, backgroundRect, backgroundRect)
 
 			john.update()
 			regis.update()
-
-			if pygame.font:
-				font = pygame.font.Font(None, 36)
-				text = font.render(str(john.getPoints()) + " : " + str(regis.getPoints()), 1, (10, 10, 10))
-				textpos = text.get_rect(centerx=background.get_width()/2)
-				screen.blit(text, textpos)
 
 			animJohnSprite.update()
 			animJohnSprite.draw(screen)
@@ -115,6 +105,15 @@ class BumpNJump():
 			regis.getAnim().update()
 
 			self.level.update(screen)
+
+			if pygame.font:
+				font = pygame.font.Font(None, 36)
+				text = font.render(str(john.getPoints()) + " : " + str(regis.getPoints()), 1, (10, 10, 10))
+				textpos = text.get_rect(centerx = screen.get_width()/2)
+				screen.blit(text, textpos)
+
+			for part in particles:
+				part.update()
 
 			pygame.display.update()
 

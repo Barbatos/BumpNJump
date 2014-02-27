@@ -18,17 +18,17 @@ class Menu():
 		background = background.convert()
 		background.fill((50, 50, 50))
 
-		playButton = Button(screen, screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
+		playButton = Button(screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
 
-		editorButton = Button(screen, screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
+		editorButton = Button(screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
 
-		optionButton = Button(screen, screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
+		optionButton = Button(screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
 
-		quitButton = Button(screen, screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
+		quitButton = Button(screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
 
-		sliderTest = Slider(screen, 50, 50, 200, 100)
+		sliderTest = Slider(50, 50, 200, 100)
 
-		checkboxTest = Checkbox(screen, 50, 100, "test")
+		checkboxTest = Checkbox(50, 100, "test")
 
 		clock = pygame.time.Clock()
 

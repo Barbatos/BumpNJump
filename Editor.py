@@ -5,52 +5,32 @@ import os
 import math
 import random
 import pygame
+import pickle
 from pygame.locals import *
-from Rabbit import *
-from Animation import *
 from Object import *
 from Resources import *
+from Map import *
 
 class Editor():
-	def initObjects(self):
-		for i in range(0, 16):
-			objType = random.randint(1, 2)
-
-			if objType == 1:
-				self.objectList.append(Object("obj1" + str(i), i * 50, 550, "earth"))
-			else:
-				self.objectList.append(Object("obj1" + str(i), i * 50, 550, "ice"))
-
-		for j in range(0, 30):
-			objType = random.randint(1, 2)
-
-			if objType == 1:
-				self.objectList.append(Object("obj2" + str(j), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "earth"))
-			else:
-				self.objectList.append(Object("obj2" + str(j), random.randint(0, 15) * 50, random.randint(1, 10) * 50, "ice"))
-
-		for k in range(0, 5):
-			randPos = random.randint(0, 46)
-			self.objectList.append(Object("obj3" + str(k), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
-
-		for obj in self.objectList:
-			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
-
 	def __init__(self):
-		self.objectList = []
-		self.objectSpritesList = pygame.sprite.Group()
-
 		pygame.init()
-		screen = pygame.display.set_mode((800, 600))
+		self.screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		self.music.play(-1)
+		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
+		# self.music.play(-1)
 
 		backgroundImage, backgroundRect = loadPNG("background.png")
 
-		background = pygame.Surface(screen.get_size())
-		background = backgroundImage
+		blockList = [Object(type = "earth"), Object(type = "boing"), Object(type = "ice")]
+
+		currentBlockNumber = 0
+		currentBlock = blockList[currentBlockNumber]
+		currentSpriteBlock = pygame.sprite.RenderPlain(currentBlock)
+
+		grid = False
+
+		self.level = Map(True)
 
 		clock = pygame.time.Clock()
 		
@@ -58,39 +38,70 @@ class Editor():
 
 		while 1:
 			key = pygame.key.get_pressed()
+			mouse = pygame.mouse.get_pressed()
 			for event in pygame.event.get():
+				mse = pygame.mouse.get_pos()
+				currentBlock.rect.topleft = ((int(mse[0]) / 50)*50, (int(mse[1]) / 50)*50)
+
 				if event.type == QUIT:
 					return
 
-				elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):
-					mse = pygame.mouse.get_pos()
-					if not any(obj.rect.collidepoint(mse) for obj in self.objectList):
-						x = (int(mse[0]) / 50)*50
-						y = (int(mse[1]) / 50)*50
-						if key[K_LSHIFT]:
-							ob = Object("obj", x, y, "earth")
+				elif key[K_F4] and key[K_LALT]:
+						return
+
+				elif event.type == MOUSEBUTTONDOWN:
+					if event.button == 5:
+						currentBlockNumber = (currentBlockNumber - 1) % len(blockList)
+					if event.button == 4:
+						currentBlockNumber = (currentBlockNumber + 1) % len(blockList)
+					if event.button == 3:
+						self.level.removeObjectFromPos(mse)
+					if event.button == 1:
+						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
+							self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+
+					currentBlock = blockList[currentBlockNumber]
+					currentSpriteBlock = pygame.sprite.RenderPlain(currentBlock)
+					currentBlock.rect.topleft = ((int(mse[0]) / 50)*50, (int(mse[1]) / 50)*50)
+
+					self.level.updateFloor()
+
+				elif event.type == MOUSEMOTION:
+					if mouse[0]:
+						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
+							self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+							self.level.updateFloor()
+
+					elif mouse[2]:
+						self.level.removeObjectFromPos(mse)
+						self.level.updateFloor()
+
+				elif event.type == KEYDOWN:
+					if event.key == K_g:
+						if grid:
+							grid = False
 						else:
-							ob = Object("obj", x, y, "boing")
-						self.objectList.append(ob)
-						self.objectSpritesList.add(pygame.sprite.RenderPlain(ob))
+							grid = True
 
-				elif event.type == MOUSEMOTION and key[K_LALT]:
-					mse = pygame.mouse.get_pos()
-					if any(obj.rect.collidepoint(mse) for obj in self.objectList):
-						self.objectSpritesList.remove(obj)
-						self.objectList.remove(obj)
+			self.screen.blit(backgroundImage, backgroundRect, backgroundRect)
 
-			screen.blit(background, backgroundRect, backgroundRect)
+			self.level.update(self.screen)
 
-			for obj in self.objectList:
-				screen.blit(background, obj.rect, obj.rect)
+			currentBlock.update()
+			currentSpriteBlock.draw(self.screen)
 
-			self.objectSpritesList.update()
-			self.objectSpritesList.draw(screen)
+			if grid:
+				self.drawGrid()
 
 			pygame.display.update()
 
 			clock.tick(60)
+
+	def drawGrid(self):
+		for i in range(50, self.screen.get_height(), 50):
+			pygame.draw.line(self.screen, (5, 5, 5), (0, i - 1), (self.screen.get_width(), i - 1))
+		for j in range(50, self.screen.get_width(), 50):
+			pygame.draw.line(self.screen, (5, 5, 5), (j - 1, 0), (j - 1, self.screen.get_height()))
 
 if __name__ == '__main__': 
 	Editor()

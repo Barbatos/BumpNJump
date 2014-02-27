@@ -4,8 +4,8 @@ import pygame
 from pygame.locals import *
 
 class Button():
-	def __init__(self, surface, x, y, width, height, text):
-		self.surface = surface
+	def __init__(self, x, y, width, height, text):
+		self.screen = pygame.display.get_surface()
 		self.text = text
 		self.buttonRect = pygame.Rect(x, y, width, height)
 
@@ -18,8 +18,8 @@ class Button():
 		self.textRect = self.textDisp.get_rect(centerx = x + width/2, centery = y + height/2)
 	
 	def update(self):
-		pygame.draw.rect(self.surface, self.color, self.buttonRect)
-		self.surface.blit(self.textDisp, self.textRect)
+		pygame.draw.rect(self.screen, self.color, self.buttonRect)
+		self.screen.blit(self.textDisp, self.textRect)
 
 	def onButton(self, (x, y)):
 		if x >= self.getX() and x <= (self.getX() + self.getWidth()) and y >= self.getY() and y <= (self.getY() + self.getHeight()):

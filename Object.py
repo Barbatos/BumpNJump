@@ -13,7 +13,7 @@ class Object(pygame.sprite.Sprite):
 		self.type = type
 
 		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = Resources.loadPNG(self.typeList[self.type], False)
+		self.image, self.rect = Resources.loadPNG(self.typeList[self.type])
 		screen = pygame.display.get_surface()
 
 		self.rect.topleft = (self.posX, self.posY)
@@ -21,11 +21,11 @@ class Object(pygame.sprite.Sprite):
 	def __str__(self):
 		print "Object ", self.id, " (", str(self.posX), ",", str(self.posY), self.type, ")"
 
-	def replaceImage(self, objType, isFloor = True):
+	def replaceImage(self, objType, isFloor = False):
 		if isFloor:
-			self.image = Resources.loadPNG(self.typeList[objType], False)[0]
+			self.image = Resources.loadPNG(self.typeList[objType])[0]
 		else:
-			self.image = Resources.loadPNG("middle_" + self.typeList[objType], False)[0]
+			self.image = Resources.loadPNG("middle_" + self.typeList[objType])[0]
 
 	def getId(self):
 		return self.id

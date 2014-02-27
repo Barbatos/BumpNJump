@@ -4,8 +4,8 @@ import pygame
 from pygame.locals import *
 
 class Slider():
-	def __init__(self, surface, x, y, width, value = 50, max = 100):
-		self.surface = surface
+	def __init__(self, x, y, width, value = 50, max = 100):
+		self.screen = pygame.display.get_surface()
 		self.value = value
 		self.max = max
 
@@ -16,15 +16,15 @@ class Slider():
 			self.font = pygame.font.Font(None, 22)
 	
 	def update(self):
-		pygame.draw.rect(self.surface, (150, 150, 150), self.sliderRect)
+		pygame.draw.rect(self.screen, (150, 150, 150), self.sliderRect)
 		self.squareRect.w = self.value/float(self.max) * self.sliderRect.w
-		pygame.draw.rect(self.surface, (125, 125, 200), self.squareRect)
+		pygame.draw.rect(self.screen, (125, 125, 200), self.squareRect)
 
 		if pygame.font:
 			self.textDisp = self.font.render(str(self.value), 1, (50, 50, 50))
 
 		self.textRect = self.textDisp.get_rect(centerx = self.sliderRect.x + self.sliderRect.w/2, centery = self.sliderRect.y + 11)
-		self.surface.blit(self.textDisp, self.textRect)
+		self.screen.blit(self.textDisp, self.textRect)
 
 	def onSlider(self, (x, y)):
 		if x >= self.getX() and x <= (self.getX() + self.getWidth()) and y >= self.getY() and y <= (self.getY() + 20):

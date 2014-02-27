@@ -36,7 +36,6 @@ class Rabbit():
 
 		self.collide = False
 
-		self.speed = 8
 		self.id = id
 		self.name = name
 
