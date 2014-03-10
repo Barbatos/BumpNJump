@@ -12,9 +12,11 @@ class Object(pygame.sprite.Sprite):
 		self.posY = y
 		self.type = type
 
-		pygame.sprite.Sprite.__init__(self)
-		self.image, self.rect = Resources.loadPNG(self.typeList[self.type])
-		screen = pygame.display.get_surface()
+		if self.type == "empty":
+			self.rect = pygame.Rect(0, 0, 0, 0)
+		else:
+			pygame.sprite.Sprite.__init__(self)
+			self.image, self.rect = Resources.loadPNG(self.typeList[self.type])
 
 		self.rect.topleft = (self.posX, self.posY)
 

@@ -43,11 +43,8 @@ class Editor():
 				mse = pygame.mouse.get_pos()
 				currentBlock.rect.topleft = ((int(mse[0]) / 50)*50, (int(mse[1]) / 50)*50)
 
-				if event.type == QUIT:
+				if event.type == QUIT or (key[K_F4] and key[K_LALT]):
 					return
-
-				elif key[K_F4] and key[K_LALT]:
-						return
 
 				elif event.type == MOUSEBUTTONDOWN:
 					if event.button == 5:
@@ -58,7 +55,8 @@ class Editor():
 						self.level.removeObjectFromPos(mse)
 					if event.button == 1:
 						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
-							self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing" and self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
+								self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
 
 					currentBlock = blockList[currentBlockNumber]
 					currentSpriteBlock = pygame.sprite.RenderPlain(currentBlock)
@@ -69,8 +67,9 @@ class Editor():
 				elif event.type == MOUSEMOTION:
 					if mouse[0]:
 						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
-							self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
-							self.level.updateFloor()
+							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing" and self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
+								self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+								self.level.updateFloor()
 
 					elif mouse[2]:
 						self.level.removeObjectFromPos(mse)

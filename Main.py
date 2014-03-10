@@ -11,7 +11,7 @@ from Animation import *
 from Object import *
 from Resources import *
 from Map import *
-from Particle import *
+from Explosion import *
 
 class BumpNJump():
 	def __init__(self):
@@ -19,8 +19,8 @@ class BumpNJump():
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		# self.music.play(-1)
+		self.music = pygame.mixer.Sound("resources/sound/music.wav")
+		self.music.play(-1)
 
 		backgroundImage, backgroundRect = loadPNG("background.png")
 
@@ -37,10 +37,7 @@ class BumpNJump():
 		john.appendRabbit(regis)
 		regis.appendRabbit(john)
 
-		particles = []
-
-		for i in range(0, 1000):
-			particles.append(Particle(1, 200, 200, (i/5, 50, 50), 10))
+		explosion = Explosion(200, 200, (200, 200, 200))
 
 		clock = pygame.time.Clock()
 		
@@ -49,7 +46,7 @@ class BumpNJump():
 		while 1:
 			key = pygame.key.get_pressed()
 			for event in pygame.event.get():
-				if event.type == QUIT:
+				if event.type == QUIT or (key[K_F4] and key[K_LALT]):
 					return
 
 				elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):
@@ -111,9 +108,8 @@ class BumpNJump():
 				text = font.render(str(john.getPoints()) + " : " + str(regis.getPoints()), 1, (10, 10, 10))
 				textpos = text.get_rect(centerx = screen.get_width()/2)
 				screen.blit(text, textpos)
-
-			for part in particles:
-				part.update()
+				
+			explosion.update()
 
 			pygame.display.update()
 
