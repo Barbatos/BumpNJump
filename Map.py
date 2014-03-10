@@ -39,7 +39,8 @@ class Map():
 					if not self.isInBlock(self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26):
 						break
 
-				self.objectList.append(Object(len(self.objectList), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
+				if self.objectList[randPos].getType() != "carrot":
+					self.objectList.append(Object(len(self.objectList), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
 
 			for obj in self.objectList:
 				if not self.isFloor(obj):

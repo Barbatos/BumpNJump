@@ -5,9 +5,10 @@ import Resources
 import random
 from Animation import *
 from pygame.locals import *
+from Explosion import *
 
 class Rabbit():
-	pygame.mixer.pre_init(44100, -16, 1, 512)
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
 	pygame.mixer.init()
 
 	def __init__(self, id = -1, name = "", color = (255, 255, 255), objectList = [], spriteList = []):
@@ -24,8 +25,11 @@ class Rabbit():
 		self.area = self.screen.get_rect()
 		self.area.h += 500
 		self.area.y -= 550
+		self.color = color
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
+
+		self.explosion = Explosion()
 
 		self.movingLeft = False
 		self.movingRight = False
@@ -40,6 +44,8 @@ class Rabbit():
 		self.name = name
 
 		self.jumpSound = pygame.mixer.Sound("resources/sound/jump.wav")
+		self.splashSound = pygame.mixer.Sound("resources/sound/splash.wav")
+		self.carrotSound = pygame.mixer.Sound("resources/sound/carrot.wav")
 
 		self.velocity = 5
 		self.gravity = 0.6
@@ -136,11 +142,14 @@ class Rabbit():
 						
 						if rabbit:
 							self.jump(5)
+							obj.explosion = Explosion(obj.rect.x, obj.rect.y, obj.color)
+							obj.explosion.startExplosion()
 							obj.replaceRabbit()
+							self.splashSound.play()
 							self.points += 1
 
 						elif obj.getType() == "boing":
-							self.jump(10)
+							self.jump(12.7)
 
 						else:
 							self.rect.y = obj.rect.y - self.rect.h
@@ -161,6 +170,7 @@ class Rabbit():
 
 		for obj in self.objectList:
 			if obj.getType() == "carrot" and obj.isInBlock(self.rect.x + self.rect.w/2, self.rect.y + self.rect.h -5):
+				self.carrotSound.play()
 				self.carrots += 1
 				self.objectList.remove(obj)
 				self.spriteList.remove(obj)

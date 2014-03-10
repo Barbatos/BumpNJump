@@ -55,8 +55,13 @@ class Editor():
 						self.level.removeObjectFromPos(mse)
 					if event.button == 1:
 						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
-							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing" and self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
-								self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+							if currentBlock.getType() == "boing":
+								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+									if self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
+										self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+							else:
+								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+									self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
 
 					currentBlock = blockList[currentBlockNumber]
 					currentSpriteBlock = pygame.sprite.RenderPlain(currentBlock)
@@ -67,9 +72,15 @@ class Editor():
 				elif event.type == MOUSEMOTION:
 					if mouse[0]:
 						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
-							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing" and self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
-								self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
-								self.level.updateFloor()
+							if currentBlock.getType() == "boing":
+								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+									if self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
+										self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+										self.level.updateFloor()
+							else:
+								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+									self.level.addObject(currentBlock.rect.x, currentBlock.rect.y, currentBlock.getType())
+									self.level.updateFloor()
 
 					elif mouse[2]:
 						self.level.removeObjectFromPos(mse)

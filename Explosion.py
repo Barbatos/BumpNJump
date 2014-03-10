@@ -14,12 +14,21 @@ class Explosion():
 		self.x = x
 		self.y = y
 
-		for i in range(0, 50):
-			self.particles.append(Particle(x, y, random.uniform(-2, 2), random.uniform(-5, 2), color, random.randint(15, 25)))
+		self.started = False
+
+		for i in range(0, 10):
+			self.particles.append(Particle(x, y, random.uniform(-5, 5), random.uniform(-5, -2), color, random.randint(10, 20)))
 
 	def update(self):
-		for part in self.particles:
-			part.update()
+		if self.started:
+			for part in self.particles:
+				part.update()
+
+	def startExplosion(self):
+		self.started = True
+
+	def stopExplosion(self):
+		self.started = False
 
 	def setTrail(self):
 		for part in self.particles:

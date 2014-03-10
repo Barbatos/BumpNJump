@@ -11,7 +11,6 @@ from Animation import *
 from Object import *
 from Resources import *
 from Map import *
-from Explosion import *
 
 class BumpNJump():
 	def __init__(self):
@@ -19,8 +18,8 @@ class BumpNJump():
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		self.music.play(-1)
+		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
+		# self.music.play(-1)
 
 		backgroundImage, backgroundRect = loadPNG("background.png")
 
@@ -36,8 +35,6 @@ class BumpNJump():
 
 		john.appendRabbit(regis)
 		regis.appendRabbit(john)
-
-		explosion = Explosion(200, 200, (200, 200, 200))
 
 		clock = pygame.time.Clock()
 		
@@ -92,6 +89,9 @@ class BumpNJump():
 			john.update()
 			regis.update()
 
+			john.explosion.update()
+			regis.explosion.update()
+
 			animJohnSprite.update()
 			animJohnSprite.draw(screen)
 
@@ -108,8 +108,6 @@ class BumpNJump():
 				text = font.render(str(john.getPoints()) + " : " + str(regis.getPoints()), 1, (10, 10, 10))
 				textpos = text.get_rect(centerx = screen.get_width()/2)
 				screen.blit(text, textpos)
-				
-			explosion.update()
 
 			pygame.display.update()
 
