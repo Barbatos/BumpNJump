@@ -4,79 +4,80 @@ import pygame
 from Button import *
 from Slider import *
 from Checkbox import *
+import Menu
 from pygame.locals import *
 
 class Option():
 	def __init__(self):
 		pygame.init()
 
-		screen = pygame.display.set_mode((800, 600))
-		pygame.display.set_caption("Menu")
+		self.screen = pygame.display.set_mode((800, 600))
+		pygame.display.set_caption("Bump'N'Jump")
 
 		if pygame.font:
-			font = pygame.font.Font(None, 22)
+			self.font = pygame.font.Font(None, 22)
 
-		background = pygame.Surface(screen.get_size())
-		background = background.convert()
-		background.fill((50, 50, 50))
+		self.background = pygame.Surface(self.screen.get_size())
+		self.background = self.background.convert()
+		self.background.fill((50, 50, 50))
 
-		musicSlider = Slider(screen, screen.get_width()/2 - 200/2, 100, 200, 100)
-		soundSlider = Slider(screen, screen.get_width()/2 - 200/2, 200, 200, 100)
+		self.musicSlider = Slider(self.screen.get_width()/2 - 200/2, 100, 200, 100)
+		self.soundSlider = Slider(self.screen.get_width()/2 - 200/2, 200, 200, 100)
 
-		returnButton = Button(screen, screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
+		self.returnButton = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
 
-		clock = pygame.time.Clock()
+		self.clock = pygame.time.Clock()
 
 		pygame.display.flip()
 
-		while 1:
-			mouse = pygame.mouse.get_pressed()
-			for event in pygame.event.get():
-				if event.type == QUIT:
-					return
+	def update(self):
+		key = pygame.key.get_pressed()
+		mouse = pygame.mouse.get_pressed()
+		for event in pygame.event.get():
+			if event.type == QUIT or (key[K_F4] and key[K_LALT]):
+				return False, self
 
-				elif event.type == MOUSEBUTTONDOWN:
-					mse = pygame.mouse.get_pos()
-					if musicSlider.onSlider(mse):
-						musicSlider.setValue(mse[0])
+			elif event.type == MOUSEBUTTONDOWN:
+				mse = pygame.mouse.get_pos()
+				if self.musicSlider.onSlider(mse):
+					self.musicSlider.setValue(mse[0])
 
-					elif soundSlider.onSlider(mse):
-						soundSlider.setValue(mse[0])
+				elif self.soundSlider.onSlider(mse):
+					self.soundSlider.setValue(mse[0])
 
-					elif returnButton.onButton(mse):
-						print returnButton.getText()
+				elif self.returnButton.onButton(mse):
+					return True, Menu.Menu()
 
-				elif event.type == MOUSEMOTION:
-					mse = pygame.mouse.get_pos()
-					if musicSlider.onSlider(mse) and mouse[0]:
-						musicSlider.setValue(mse[0])
+			elif event.type == MOUSEMOTION:
+				mse = pygame.mouse.get_pos()
+				if self.musicSlider.onSlider(mse) and mouse[0]:
+					self.musicSlider.setValue(mse[0])
 
-					elif soundSlider.onSlider(mse) and mouse[0]:
-						soundSlider.setValue(mse[0])
+				elif self.soundSlider.onSlider(mse) and mouse[0]:
+					self.soundSlider.setValue(mse[0])
 
-			screen.blit(background, background.get_rect(), background.get_rect())
+		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 
-			if pygame.font:
-				self.textDisp = font.render("Music volume", 1, (100, 100, 100))
+		if pygame.font:
+			self.textDisp = self.font.render("Music volume", 1, (100, 100, 100))
 
-			self.textRect = self.textDisp.get_rect(centerx = screen.get_width()/2, y = musicSlider.getY() - 25)
-			screen.blit(self.textDisp, self.textRect)
+		self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.musicSlider.getY() - 25)
+		self.screen.blit(self.textDisp, self.textRect)
 
-			musicSlider.update()
+		self.musicSlider.update()
 
-			if pygame.font:
-				self.textDisp = font.render("Sound volume", 1, (100, 100, 100))
+		if pygame.font:
+			self.textDisp = self.font.render("Sound volume", 1, (100, 100, 100))
 
-			self.textRect = self.textDisp.get_rect(centerx = screen.get_width()/2, y = soundSlider.getY() - 25)
-			screen.blit(self.textDisp, self.textRect)
+		self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.soundSlider.getY() - 25)
+		self.screen.blit(self.textDisp, self.textRect)
 
-			soundSlider.update()
+		self.soundSlider.update()
 
-			returnButton.update()
+		self.returnButton.update()
 
-			pygame.display.update()
+		pygame.display.update()
 
-			clock.tick(60)
+		self.clock.tick(60)
 
-if __name__ == '__main__':
-	Option()
+		return True, self

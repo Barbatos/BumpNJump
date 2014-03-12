@@ -1,84 +1,86 @@
 #!/usr/bin/python
 
 import pygame
-from Main import *
 from Button import *
 from Slider import *
 from Checkbox import *
+from Game import *
+from Editor import *
+from Option import *
 from pygame.locals import *
 
 class Menu():
 	def __init__(self):
 		pygame.init()
 
-		screen = pygame.display.set_mode((800, 600))
-		pygame.display.set_caption("Menu")
+		self.screen = pygame.display.set_mode((800, 600))
+		pygame.display.set_caption("Bump'N'Jump")
 
-		background = pygame.Surface(screen.get_size())
-		background = background.convert()
-		background.fill((50, 50, 50))
+		self.background = pygame.Surface(self.screen.get_size())
+		self.background = self.background.convert()
+		self.background.fill((50, 50, 50))
 
-		playButton = Button(screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
+		self.playButton = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
 
-		editorButton = Button(screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
+		self.editorButton = Button(self.screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
 
-		optionButton = Button(screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
+		self.optionButton = Button(self.screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
 
-		quitButton = Button(screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
+		self.quitButton = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
 
-		sliderTest = Slider(50, 50, 200, 100)
+		self.sliderTest = Slider(50, 50, 200, 100)
 
-		checkboxTest = Checkbox(50, 100, "test")
+		self.checkboxTest = Checkbox(50, 100, "test")
 
-		clock = pygame.time.Clock()
+		self.clock = pygame.time.Clock()
 
 		pygame.display.flip()
 
-		while 1:
-			mouse = pygame.mouse.get_pressed()
-			for event in pygame.event.get():
-				if event.type == QUIT:
-					return
+	def update(self):
+		key = pygame.key.get_pressed()
+		mouse = pygame.mouse.get_pressed()
+		for event in pygame.event.get():
+			if event.type == QUIT or (key[K_F4] and key[K_LALT]):
+				return False, self
 
-				elif event.type == MOUSEBUTTONDOWN:
-					mse = pygame.mouse.get_pos()
-					if playButton.onButton(mse):
-						BumpNJump()
+			elif event.type == MOUSEBUTTONDOWN:
+				mse = pygame.mouse.get_pos()
+				if self.playButton.onButton(mse):
+					return True, Game()
 
-					elif editorButton.onButton(mse):
-						print editorButton.getText()
+				elif self.editorButton.onButton(mse):
+					return True, Editor()
 
-					elif optionButton.onButton(mse):
-						print optionButton.getText()
+				elif self.optionButton.onButton(mse):
+					return True, Option()
 
-					elif quitButton.onButton(mse):
-						return
+				elif self.quitButton.onButton(mse):
+					return False, self
 
-					elif sliderTest.onSlider(mse):
-						sliderTest.setValue(mse[0])
+				elif self.sliderTest.onSlider(mse):
+					self.sliderTest.setValue(mse[0])
 
-					elif checkboxTest.onCheckbox(mse):
-						checkboxTest.changeState()
+				elif self.checkboxTest.onCheckbox(mse):
+					self.checkboxTest.changeState()
 
-				if event.type == MOUSEMOTION:
-					mse = pygame.mouse.get_pos()
-					if sliderTest.onSlider(mse) and mouse[0]:
-						sliderTest.setValue(mse[0])
+			if event.type == MOUSEMOTION:
+				mse = pygame.mouse.get_pos()
+				if self.sliderTest.onSlider(mse) and mouse[0]:
+					self.sliderTest.setValue(mse[0])
 
-			screen.blit(background, background.get_rect(), background.get_rect())
+		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 
-			playButton.update()
-			editorButton.update()
-			optionButton.update()
-			quitButton.update()
+		self.playButton.update()
+		self.editorButton.update()
+		self.optionButton.update()
+		self.quitButton.update()
 
-			sliderTest.update()
+		self.sliderTest.update()
 
-			checkboxTest.update()
+		self.checkboxTest.update()
 
-			pygame.display.update()
+		pygame.display.update()
 
-			clock.tick(60)
+		self.clock.tick(60)
 
-if __name__ == '__main__':
-	Menu()
+		return True, self
