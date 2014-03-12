@@ -32,8 +32,6 @@ class Menu():
 
 		self.checkboxTest = Checkbox(50, 100, "test")
 
-		self.clock = pygame.time.Clock()
-
 		pygame.display.flip()
 
 	def update(self):
@@ -80,7 +78,5 @@ class Menu():
 		self.checkboxTest.update()
 
 		pygame.display.update()
-
-		self.clock.tick(60)
 
 		return True, self

@@ -18,9 +18,6 @@ class Game():
 		self.screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		# self.music.play(-1)
-
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
 
 		self.level = Map()
@@ -35,8 +32,6 @@ class Game():
 
 		self.john.appendRabbit(self.regis)
 		self.regis.appendRabbit(self.john)
-
-		self.clock = pygame.time.Clock()
 		
 		pygame.display.flip()
 
@@ -110,7 +105,5 @@ class Game():
 			self.screen.blit(text, textpos)
 
 		pygame.display.update()
-
-		self.clock.tick(60)
 
 		return True, self

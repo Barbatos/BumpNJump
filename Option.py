@@ -26,8 +26,6 @@ class Option():
 
 		self.returnButton = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
 
-		self.clock = pygame.time.Clock()
-
 		pygame.display.flip()
 
 	def update(self):
@@ -60,24 +58,18 @@ class Option():
 
 		if pygame.font:
 			self.textDisp = self.font.render("Music volume", 1, (100, 100, 100))
+			self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.musicSlider.getY() - 25)
+			self.screen.blit(self.textDisp, self.textRect)
 
-		self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.musicSlider.getY() - 25)
-		self.screen.blit(self.textDisp, self.textRect)
+			self.textDisp = self.font.render("Sound volume", 1, (100, 100, 100))
+			self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.soundSlider.getY() - 25)
+			self.screen.blit(self.textDisp, self.textRect)
 
 		self.musicSlider.update()
-
-		if pygame.font:
-			self.textDisp = self.font.render("Sound volume", 1, (100, 100, 100))
-
-		self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.soundSlider.getY() - 25)
-		self.screen.blit(self.textDisp, self.textRect)
-
 		self.soundSlider.update()
 
 		self.returnButton.update()
 
 		pygame.display.update()
-
-		self.clock.tick(60)
 
 		return True, self

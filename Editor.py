@@ -17,9 +17,6 @@ class Editor():
 		self.screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		# self.music.play(-1)
-
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
 
 		self.blockList = [Object(type = "earth"), Object(type = "boing"), Object(type = "ice")]
@@ -31,8 +28,6 @@ class Editor():
 		self.grid = False
 
 		self.level = Map(True)
-
-		self.clock = pygame.time.Clock()
 		
 		pygame.display.flip()
 
@@ -57,7 +52,7 @@ class Editor():
 					if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
 						if self.currentBlock.getType() == "boing":
 							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
-								if self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
+								if not self.level.isInBlock(mse[0], mse[1] - 50):
 									self.level.addObject(self.currentBlock.rect.x, self.currentBlock.rect.y, self.currentBlock.getType())
 						else:
 							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
@@ -74,7 +69,7 @@ class Editor():
 					if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
 						if self.currentBlock.getType() == "boing":
 							if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
-								if self.level.objectFromPos((mse[0], mse[1] - 50)).getType() != "boing":
+								if not self.level.isInBlock(mse[0], mse[1] - 50):
 									self.level.addObject(self.currentBlock.rect.x, self.currentBlock.rect.y, self.currentBlock.getType())
 									self.level.updateFloor()
 						else:
@@ -104,8 +99,6 @@ class Editor():
 			self.drawGrid()
 
 		pygame.display.update()
-
-		self.clock.tick(60)
 
 		return True, self
 
