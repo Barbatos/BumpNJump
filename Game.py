@@ -15,7 +15,7 @@ from PauseGameMenu import *
 from Map import *
 
 class Game():
-	def __init__(self):
+	def __init__(self, color1, color2):
 		self.butterflies = []
 		self.butterfliesSpritesList = pygame.sprite.Group()
 
