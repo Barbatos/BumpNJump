@@ -15,7 +15,7 @@ from PauseGameMenu import *
 from Map import *
 
 class Game():
-	def __init__(self):
+	def __init__(self, color1, color2):
 		self.screen = pygame.display.get_surface()
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
@@ -24,11 +24,11 @@ class Game():
 
 		self.level = Map()
 
-		self.john = Rabbit(1, "john" ,(200, 50, 50) , self.level.objectList, self.level.objectSpritesList)
+		self.john = Rabbit(1, "john" ,color1 , self.level.objectList, self.level.objectSpritesList)
 		self.animJohnSprite = pygame.sprite.RenderPlain(self.john.getAnim())
 		self.john.getAnim().stopAnim()
 
-		self.regis = Rabbit(2, "regis" ,(50, 50, 200) , self.level.objectList, self.level.objectSpritesList)
+		self.regis = Rabbit(2, "regis" ,color2 , self.level.objectList, self.level.objectSpritesList)
 		self.animRegisSprite = pygame.sprite.RenderPlain(self.regis.getAnim())
 		self.regis.getAnim().stopAnim()
 
