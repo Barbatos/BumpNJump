@@ -4,29 +4,25 @@ import pygame
 from Button import *
 from Slider import *
 from Checkbox import *
-from Game import *
+from GameMenu import *
 from Editor import *
 from OptionMenu import *
 from pygame.locals import *
 
 class MainMenu():
 	def __init__(self):
-		pygame.init()
-
-		self.screen = pygame.display.set_mode((800, 600))
-		pygame.display.set_caption("Bump'N'Jump")
+		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
 
-		self.playButton = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
+		self.buttons = {}
 
-		self.editorButton = Button(self.screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
-
-		self.optionButton = Button(self.screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
-
-		self.quitButton = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
+		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
+		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
+		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
+		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
 
 		self.checkboxTest = Checkbox(50, 100, "test")
 
@@ -41,16 +37,16 @@ class MainMenu():
 
 			elif event.type == MOUSEBUTTONDOWN:
 				mse = pygame.mouse.get_pos()
-				if self.playButton.onButton(mse):
-					return True, Game()
+				if self.buttons["play"].onButton(mse):
+					return True, GameMenu()
 
-				elif self.editorButton.onButton(mse):
+				elif self.buttons["editor"].onButton(mse):
 					return True, Editor()
 
-				elif self.optionButton.onButton(mse):
+				elif self.buttons["option"].onButton(mse):
 					return True, OptionMenu()
 
-				elif self.quitButton.onButton(mse):
+				elif self.buttons["quit"].onButton(mse):
 					return False, self
 
 				elif self.checkboxTest.onCheckbox(mse):
@@ -59,27 +55,17 @@ class MainMenu():
 			if event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
 
-				if self.playButton.onButton(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+				for button in self.buttons.values():
+					if button.onButton(mse):
+						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
-				elif self.editorButton.onButton(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-
-				elif self.optionButton.onButton(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-
-				elif self.quitButton.onButton(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-
-				else:
-					pygame.mouse.set_cursor(*pygame.cursors.arrow)
+					else:
+						pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 
-		self.playButton.update()
-		self.editorButton.update()
-		self.optionButton.update()
-		self.quitButton.update()
+		for button in self.buttons.values():
+			button.update()
 
 		self.checkboxTest.update()
 

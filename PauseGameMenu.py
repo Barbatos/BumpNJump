@@ -11,9 +11,15 @@ class PauseGameMenu():
 		self.backgroundRect = pygame.Rect(0, 0, 250, 450)
 		self.backgroundRect.center = (self.screen.get_rect().center)
 
-		self.resumeButton = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "RESUME")
+		self.buttons = {}
+
+		self.buttons["resume"] = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "RESUME")
+		self.buttons["mainMenu"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "MAIN MENU")
 
 	def update(self):
+		pygame.mouse.set_cursor(*pygame.cursors.arrow)
+
 		pygame.draw.rect(self.screen, (50, 50, 50), self.backgroundRect)
 
-		self.resumeButton.update()
+		for button in self.buttons.values():
+			button.update()

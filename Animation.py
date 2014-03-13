@@ -8,14 +8,6 @@ from pygame.locals import *
 class Animation(pygame.sprite.Sprite):
 	def __init__(self, image, nbFrames):
 		pygame.sprite.Sprite.__init__(self)
-		self.arrAnim = []
-		for i in range(0, nbFrames):
-			if i + 1 < 10:
-				self.arrAnim.append(Resources.loadPNG(image + "000" + str(i + 1) + ".png", True))
-			elif i + 1 < 100:
-				self.arrAnim.append(Resources.loadPNG(image + "00" + str(i + 1) + ".png", True))
-			else:
-				self.arrAnim.append(Resources.loadPNG(image + "0" + str(i + 1) + ".png", True))
 
 		self.flip = False
 		self.interval = 0
@@ -24,6 +16,16 @@ class Animation(pygame.sprite.Sprite):
 		self.start = 0
 		self.end = nbFrames - 1
 		self.cyclic = True
+		self.imageName = image
+
+		self.arrAnim = []
+		for i in range(0, self.nbFrames):
+			if i + 1 < 10:
+				self.arrAnim.append(Resources.loadPNG(self.imageName + "000" + str(i + 1) + ".png", True))
+			elif i + 1 < 100:
+				self.arrAnim.append(Resources.loadPNG(self.imageName + "00" + str(i + 1) + ".png", True))
+			else:
+				self.arrAnim.append(Resources.loadPNG(self.imageName + "0" + str(i + 1) + ".png", True))
 
 		self.currentFrameNb = self.start
 		self.image, self.rect = self.arrAnim[self.currentFrameNb]
@@ -48,6 +50,19 @@ class Animation(pygame.sprite.Sprite):
 				self.image, self.rect = self.arrAnim[self.currentFrameNb]
 
 	def updateColor(self, color):
+		for img in self.arrAnim:
+			img[0].fill(color, special_flags = BLEND_MULT)
+
+	def resetColor(self, color):
+		self.arrAnim = []
+		for i in range(0, self.nbFrames):
+			if i + 1 < 10:
+				self.arrAnim.append(Resources.loadPNG(self.imageName + "000" + str(i + 1) + ".png", True))
+			elif i + 1 < 100:
+				self.arrAnim.append(Resources.loadPNG(self.imageName + "00" + str(i + 1) + ".png", True))
+			else:
+				self.arrAnim.append(Resources.loadPNG(self.imageName + "0" + str(i + 1) + ".png", True))
+
 		for img in self.arrAnim:
 			img[0].fill(color, special_flags = BLEND_MULT)
 
@@ -88,6 +103,11 @@ class Animation(pygame.sprite.Sprite):
 
 	def getRect(self):
 		return self.rect
+
+	def setPos(self, x, y):
+		for img in self.arrAnim:
+			img[1].x = x
+			img[1].y = y
 
 	def setRect(self, rect):
 		self.rect = rect

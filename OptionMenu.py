@@ -9,10 +9,7 @@ from pygame.locals import *
 
 class OptionMenu():
 	def __init__(self):
-		pygame.init()
-
-		self.screen = pygame.display.set_mode((800, 600))
-		pygame.display.set_caption("Bump'N'Jump")
+		self.screen = pygame.display.get_surface()
 
 		if pygame.font:
 			self.font = pygame.font.Font(None, 22)
@@ -21,8 +18,10 @@ class OptionMenu():
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
 
-		self.musicSlider = Slider(self.screen.get_width()/2 - 200/2, 100, 200, 100)
-		self.soundSlider = Slider(self.screen.get_width()/2 - 200/2, 200, 200, 100)
+		self.sliders = {}
+
+		self.sliders["music"] = Slider(self.screen.get_width()/2 - 200/2, 100, 200, 100)
+		self.sliders["sound"] = Slider(self.screen.get_width()/2 - 200/2, 200, 200, 100)
 
 		self.returnButton = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
 
@@ -37,28 +36,24 @@ class OptionMenu():
 
 			elif event.type == MOUSEBUTTONDOWN:
 				mse = pygame.mouse.get_pos()
-				if self.musicSlider.onSlider(mse):
-					self.musicSlider.setValue(mse[0])
 
-				elif self.soundSlider.onSlider(mse):
-					self.soundSlider.setValue(mse[0])
+				for slider in self.sliders.values():
+					if slider.onSlider(mse):
+						slider.setValue(mse[0])
 
-				elif self.returnButton.onButton(mse):
+				if self.returnButton.onButton(mse):
 					return True, MainMenu.MainMenu()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
-				if self.musicSlider.onSlider(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-					if mouse[0]:
-						self.musicSlider.setValue(mse[0])
 
-				elif self.soundSlider.onSlider(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-					if mouse[0]:
-						self.soundSlider.setValue(mse[0])
+				for slider in self.sliders.values():
+					if slider.onSlider(mse):
+						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+						if mouse[0]:
+							slider.setValue(mse[0])
 
-				elif self.returnButton.onButton(mse):
+				if self.returnButton.onButton(mse):
 					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
 				else:
@@ -68,15 +63,15 @@ class OptionMenu():
 
 		if pygame.font:
 			self.textDisp = self.font.render("Music volume", 1, (100, 100, 100))
-			self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.musicSlider.getY() - 25)
+			self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.sliders["music"].getY() - 25)
 			self.screen.blit(self.textDisp, self.textRect)
 
 			self.textDisp = self.font.render("Sound volume", 1, (100, 100, 100))
-			self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.soundSlider.getY() - 25)
+			self.textRect = self.textDisp.get_rect(centerx = self.screen.get_width()/2, y = self.sliders["sound"].getY() - 25)
 			self.screen.blit(self.textDisp, self.textRect)
 
-		self.musicSlider.update()
-		self.soundSlider.update()
+		for slider in self.sliders.values():
+			slider.update()
 
 		self.returnButton.update()
 

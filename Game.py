@@ -16,9 +16,7 @@ from Map import *
 
 class Game():
 	def __init__(self):
-		pygame.init()
-		self.screen = pygame.display.set_mode((800, 600))
-		pygame.display.set_caption("Bump'N'Jump")
+		self.screen = pygame.display.get_surface()
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
 

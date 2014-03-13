@@ -17,15 +17,15 @@ class Rabbit():
 
 		self.rabbitList = []
 
+		self.color = color
 		self.rect = pygame.Rect(0, 0, 43, 48)
 		self.rabbitAnim = Animation("rabbit", 30)
-		self.rabbitAnim.updateColor(color)
+		self.rabbitAnim.updateColor(self.color)
 		self.rabbitAnim.setFrameRange(1, 8);
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
 		self.area.h += 500
 		self.area.y -= 550
-		self.color = color
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
 
