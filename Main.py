@@ -11,8 +11,8 @@ class BumpNJump():
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		self.music.play(-1)
+		# self.music = pygame.mixer.Sound("resources/sound/music.wav")
+		# self.music.play(-1)
 
 		currentScene = MainMenu()
 
