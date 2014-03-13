@@ -15,7 +15,7 @@ class Button():
 			font = pygame.font.Font(None, 22)
 			self.textDisp = font.render(self.text, 1, (100, 100, 100))
 
-		self.textRect = self.textDisp.get_rect(centerx = x + width/2, centery = y + height/2)
+		self.textRect = self.textDisp.get_rect(centerx = x + width/2, centery = y + height/2 + 1)
 	
 	def update(self):
 		pygame.draw.rect(self.screen, self.color, self.buttonRect)

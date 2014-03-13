@@ -2,7 +2,7 @@
 
 import pygame
 from pygame.locals import *
-from Menu import *
+from MainMenu import *
 
 
 class BumpNJump():
@@ -14,7 +14,7 @@ class BumpNJump():
 		self.music = pygame.mixer.Sound("resources/sound/music.wav")
 		self.music.play(-1)
 
-		currentScene = Menu()
+		currentScene = MainMenu()
 
 		clock = pygame.time.Clock()
 

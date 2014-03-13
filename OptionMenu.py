@@ -4,10 +4,10 @@ import pygame
 from Button import *
 from Slider import *
 from Checkbox import *
-import Menu
+import MainMenu
 from pygame.locals import *
 
-class Option():
+class OptionMenu():
 	def __init__(self):
 		pygame.init()
 
@@ -44,15 +44,25 @@ class Option():
 					self.soundSlider.setValue(mse[0])
 
 				elif self.returnButton.onButton(mse):
-					return True, Menu.Menu()
+					return True, MainMenu.MainMenu()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
-				if self.musicSlider.onSlider(mse) and mouse[0]:
-					self.musicSlider.setValue(mse[0])
+				if self.musicSlider.onSlider(mse):
+					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+					if mouse[0]:
+						self.musicSlider.setValue(mse[0])
 
-				elif self.soundSlider.onSlider(mse) and mouse[0]:
-					self.soundSlider.setValue(mse[0])
+				elif self.soundSlider.onSlider(mse):
+					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+					if mouse[0]:
+						self.soundSlider.setValue(mse[0])
+
+				elif self.returnButton.onButton(mse):
+					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+
+				else:
+					pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 

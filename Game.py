@@ -10,6 +10,7 @@ from Rabbit import *
 from Animation import *
 from Object import *
 from Resources import *
+from PauseGameMenu import *
 from Map import *
 
 class Game():
@@ -19,6 +20,8 @@ class Game():
 		pygame.display.set_caption("Bump'N'Jump")
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
+
+		self.active = True
 
 		self.level = Map()
 
@@ -32,77 +35,103 @@ class Game():
 
 		self.john.appendRabbit(self.regis)
 		self.regis.appendRabbit(self.john)
+
+		self.pauseMenu = PauseGameMenu()
 		
 		pygame.display.flip()
 
 	def update(self):
+		pygame.mouse.set_cursor(*pygame.cursors.arrow)
+
 		key = pygame.key.get_pressed()
-		for event in pygame.event.get():
-			if event.type == QUIT or (key[K_F4] and key[K_LALT]):
-				return False, self
+		if self.active:
+			pygame.mouse.set_visible(0)
 
-			elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):
-				mse = pygame.mouse.get_pos()
-				if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
-					x = (int(mse[0]) / 50)*50
-					y = (int(mse[1]) / 50)*50
-					if key[K_LSHIFT]:
-						self.level.addObject(x, y, "earth")
-					else:
-						self.level.addObject(x, y, "boing")
+			for event in pygame.event.get():
+				if event.type == QUIT or (key[K_F4] and key[K_LALT]):
+					return False, self
 
-			elif event.type == MOUSEMOTION and key[K_LALT]:
-				mse = pygame.mouse.get_pos()
-				self.level.removeObjectFromPos(mse)
+				elif event.type == MOUSEMOTION and (key[K_LSHIFT] or key[K_LCTRL]):
+					mse = pygame.mouse.get_pos()
+					if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
+						x = (int(mse[0]) / 50)*50
+						y = (int(mse[1]) / 50)*50
+						if key[K_LSHIFT]:
+							self.level.addObject(x, y, "earth")
+						else:
+							self.level.addObject(x, y, "boing")
 
-			elif event.type == KEYDOWN:
-				if event.key == K_UP:
-					self.john.jump()
-				if event.key == K_LEFT:
-					self.john.moveLeftStart()
-				if event.key == K_RIGHT:
-					self.john.moveRightStart()
-				if event.key == K_w:
-					self.regis.jump()
-				if event.key == K_a:
-					self.regis.moveLeftStart()
-				if event.key == K_d:
-					self.regis.moveRightStart()
+				elif event.type == MOUSEMOTION and key[K_LALT]:
+					mse = pygame.mouse.get_pos()
+					self.level.removeObjectFromPos(mse)
 
-			elif event.type == KEYUP:
-				if event.key == K_LEFT:
-					self.john.moveLeftStop()
-				if event.key == K_RIGHT:
-					self.john.moveRightStop()
-				if event.key == K_a:
-					self.regis.moveLeftStop()
-				if event.key == K_d:
-					self.regis.moveRightStop()
+				elif event.type == KEYDOWN:
+					if event.key == K_UP:
+						self.john.jump()
+					if event.key == K_LEFT:
+						self.john.moveLeftStart()
+					if event.key == K_RIGHT:
+						self.john.moveRightStart()
+					if event.key == K_w:
+						self.regis.jump()
+					if event.key == K_a:
+						self.regis.moveLeftStart()
+					if event.key == K_d:
+						self.regis.moveRightStart()
+					if event.key == K_ESCAPE:
+						self.active = False
+						self.john.moveLeftStop()
+						self.john.moveRightStop()
+						self.regis.moveLeftStop()
+						self.regis.moveRightStop()
 
-		self.screen.blit(self.backgroundImage, self.backgroundRect, self.backgroundRect)
+				elif event.type == KEYUP:
+					if event.key == K_LEFT:
+						self.john.moveLeftStop()
+					if event.key == K_RIGHT:
+						self.john.moveRightStop()
+					if event.key == K_a:
+						self.regis.moveLeftStop()
+					if event.key == K_d:
+						self.regis.moveRightStop()
 
-		self.john.update()
-		self.regis.update()
+			self.screen.blit(self.backgroundImage, self.backgroundRect, self.backgroundRect)
 
-		self.john.explosion.update()
-		self.regis.explosion.update()
+			self.john.update()
+			self.regis.update()
 
-		self.animJohnSprite.update()
-		self.animJohnSprite.draw(self.screen)
+			self.john.explosion.update()
+			self.regis.explosion.update()
 
-		self.animRegisSprite.update()
-		self.animRegisSprite.draw(self.screen)
+			self.animJohnSprite.update()
+			self.animJohnSprite.draw(self.screen)
 
-		self.john.getAnim().update()
-		self.regis.getAnim().update()
+			self.animRegisSprite.update()
+			self.animRegisSprite.draw(self.screen)
 
-		self.level.update(self.screen)
+			self.john.getAnim().update()
+			self.regis.getAnim().update()
 
-		if pygame.font:
-			font = pygame.font.Font(None, 36)
-			text = font.render(str(self.john.getPoints()) + " : " + str(self.regis.getPoints()), 1, (10, 10, 10))
-			textpos = text.get_rect(centerx = self.screen.get_width()/2)
-			self.screen.blit(text, textpos)
+			self.level.update(self.screen)
+
+			if pygame.font:
+				font = pygame.font.Font(None, 36)
+				text = font.render(str(self.john.getPoints()) + " : " + str(self.regis.getPoints()), 1, (10, 10, 10))
+				textpos = text.get_rect(centerx = self.screen.get_width()/2)
+				self.screen.blit(text, textpos)
+
+		else:
+			pygame.mouse.set_visible(1)
+
+			for event in pygame.event.get():
+				if event.type == QUIT or (key[K_F4] and key[K_LALT]):
+					return False, self
+
+				elif event.type == KEYDOWN:
+					if event.key == K_ESCAPE:
+						self.active = True
+
+			self.pauseMenu.update()
 
 		pygame.display.update()
 
