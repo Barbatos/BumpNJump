@@ -10,16 +10,16 @@ from random import randint
 
 class Butterfly():
 
-	def __init__(self, color = (255, 255, 255), objectList = [], spriteList = []):
+	def __init__(self, x, y, color = (255, 255, 255), objectList = [], spriteList = []):
 		self.objectList = objectList
 		self.spriteList = spriteList
 
-		self.rect = pygame.Rect(randint(0, 800), randint(0, 600), 15, 15)
+		self.rect = pygame.Rect(x, y, 15, 15)
 		self.screen = pygame.display.get_surface()
 
-		self.butterflyAnim = Animation("butterfly", 2)
+		self.butterflyAnim = Animation("butterfly", 1)
 		self.butterflyAnim.updateColor(color)
-		self.butterflyAnim.setFrameRange(1, 8);
+		self.butterflyAnim.setFrameRange(1, 2);
 
 		self.area = self.screen.get_rect()
 		self.color = color
