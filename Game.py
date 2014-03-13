@@ -7,6 +7,7 @@ import random
 import pygame
 from pygame.locals import *
 from Rabbit import *
+from Butterfly import *
 from Animation import *
 from Object import *
 from Resources import *
@@ -38,6 +39,9 @@ class Game():
 
 		self.pauseMenu = PauseGameMenu()
 		
+		self.butterflyTest = Butterfly((255, 10, 100), self.level.objectList, self.level.objectSpritesList)
+		self.butterflyTestSprite = pygame.sprite.RenderPlain(self.butterflyTest.getAnim())
+
 		pygame.display.flip()
 
 	def update(self):
@@ -102,6 +106,9 @@ class Game():
 
 			self.john.explosion.update()
 			self.regis.explosion.update()
+
+			self.butterflyTest.update()
+			self.butterflyTestSprite.draw(self.screen)
 
 			self.animJohnSprite.update()
 			self.animJohnSprite.draw(self.screen)
