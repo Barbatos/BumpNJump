@@ -16,6 +16,9 @@ from Map import *
 
 class Game():
 	def __init__(self, color1, color2):
+		self.butterflies = []
+		self.butterfliesSpritesList = pygame.sprite.Group()
+
 		self.screen = pygame.display.get_surface()
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
@@ -37,8 +40,18 @@ class Game():
 
 		self.pauseMenu = PauseGameMenu()
 		
-		self.butterflyTest = Butterfly((255, 10, 100), self.level.objectList, self.level.objectSpritesList)
-		self.butterflyTestSprite = pygame.sprite.RenderPlain(self.butterflyTest.getAnim())
+		#self.butterflyTest = Butterfly((255, 10, 100), self.level.objectList, self.level.objectSpritesList)
+		#self.butterflyTestSprite = pygame.sprite.RenderPlain(self.butterflyTest.getAnim())
+
+		for l in range(0, 10):
+			while True:
+				randPos = random.randint(0, 46)
+				if not self.level.isInBlock(self.level.objectList[randPos].getX() + 10, self.level.objectList[randPos].getY() - 26):
+					break
+
+			butterfly = Butterfly(self.level.objectList[randPos].getX() + 10, self.level.objectList[randPos].getY() - 26, (255, 10, 100), self.level.objectList, self.level.objectSpritesList)
+			self.butterflies.append(butterfly)
+			self.butterfliesSpritesList.add(pygame.sprite.RenderPlain(butterfly.getAnim()))
 
 		pygame.display.flip()
 
@@ -105,8 +118,13 @@ class Game():
 			self.john.explosion.update()
 			self.regis.explosion.update()
 
-			self.butterflyTest.update()
-			self.butterflyTestSprite.draw(self.screen)
+			#self.butterflyTest.update()
+			#self.butterflyTestSprite.draw(self.screen)
+
+			for b in self.butterflies:
+				b.update()
+
+			self.butterfliesSpritesList.draw(self.screen)
 
 			self.animJohnSprite.update()
 			self.animJohnSprite.draw(self.screen)
