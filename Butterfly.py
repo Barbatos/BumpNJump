@@ -14,7 +14,7 @@ class Butterfly():
 		self.objectList = objectList
 		self.spriteList = spriteList
 
-		self.rect = pygame.Rect(0, 0, 15, 15)
+		self.rect = pygame.Rect(randint(0, 800), randint(0, 600), 15, 15)
 		self.screen = pygame.display.get_surface()
 
 		self.butterflyAnim = Animation("butterfly", 2)
@@ -22,8 +22,6 @@ class Butterfly():
 		self.butterflyAnim.setFrameRange(1, 8);
 
 		self.area = self.screen.get_rect()
-		self.area.h += 500
-		self.area.y -= 550
 		self.color = color
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
@@ -35,16 +33,13 @@ class Butterfly():
 
 		self.collide = False
 
-		self.velocity = 5
-		self.gravity = 0.6
-
 		self.movePos = [0,0.01]
 
 		self.butterflyAnim.playAnim()
 
 	def update(self):
-		self.movePos[0] = randint(-5, 5)
-		self.movePos[1] = randint(-5, 5)
+		self.movePos[0] = randint(-8, 8)
+		self.movePos[1] = randint(-8, 8)
 
 		self.checkForCollision()
 
@@ -52,35 +47,33 @@ class Butterfly():
 		if self.area.contains(newpos) and not self.collide:
 			self.rect = newpos
 
+		self.butterflyAnim.getRect().x = self.rect.x
+		self.butterflyAnim.getRect().y = self.rect.y
+
 		pygame.event.pump()
 
 	def collisionDetection(self, obj, rabbit = False):
 		if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
 			if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
 				if self.rect.y < (obj.rect.y + obj.rect.h):
-					self.movePos[0] = 0
+					self.movePos[0] = 5
 
 		if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
 			if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
 				if self.rect.y < (obj.rect.y + obj.rect.h):
-					self.movePos[0] = 0
+					self.movePos[0] = -5
 
 		if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
 			if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
 				if self.rect.x < (obj.rect.x + obj.rect.w - 5):
-					self.movePos[1] = 0.01
+					self.movePos[1] = 5
 
 		if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
 			if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
 				if self.rect.x < (obj.rect.x + obj.rect.w - 5):
-					if self.movePos[1] >= 0 and not self.isOnBlock:
-
-						if obj.getType() == "boing":
-							self.jump(12.7)
-
-						else:
-							self.rect.y = obj.rect.y - self.rect.h
-							self.movePos[1] = 0
+					if self.movePos[1] >= 0:
+						self.rect.y = obj.rect.y - self.rect.h
+						self.movePos[1] = -5
 
 	def checkForCollision(self):
 		#if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0:
