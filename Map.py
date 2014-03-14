@@ -68,16 +68,20 @@ class Map():
 	def addObject(self, x, y, type):
 		self.objectList.append(Object(len(self.objectList), x, y, type))
 		self.objectSpritesList.add(pygame.sprite.RenderPlain(self.objectList[-1]))
+		self.updateFloor()
 
 	def removeObject(self, obj):
 		self.objectSpritesList.remove(obj)
 		self.objectList.remove(obj)
+		self.updateFloor()
 
 	def removeObjectFromPos(self, (x, y)):
 		for obj in self.objectList:
 			if obj.isInBlock(x, y):
 				self.objectSpritesList.remove(obj)
 				self.objectList.remove(obj)
+
+		self.updateFloor()
 
 	def objectFromPos(self, (x, y)):
 		for obj in self.objectList:
@@ -107,4 +111,25 @@ class Map():
 
 		for obj in self.objectList:
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
-			
+
+	def save(self, name):
+		blocks = {}
+
+		with open("save/maps/" + name + ".mabbit", "w") as f:
+			for obj in self.objectList:
+				f.write(obj.getType() + ":" + str(obj.getX()) + ", " + str(obj.getY()) + "\n")
+
+	def load(self, name):
+		self.objectList = []
+		self.objectSpritesList = pygame.sprite.Group()
+
+		with open("save/maps/" + name + ".mabbit", "r") as f:
+			for line in f:
+				line =  line.strip("\n")
+
+				self.objectList.append(Object(len(self.objectList), int(line.split(":")[1].split(",")[0]), int(line.split(":")[1].split(",")[1]), line.split(":")[0]))
+
+		for obj in self.objectList:
+			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
+
+		self.updateFloor()

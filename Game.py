@@ -5,6 +5,7 @@ import os
 import math
 import random
 import pygame
+import MainMenu
 from pygame.locals import *
 from Rabbit import *
 from Butterfly import *
@@ -56,9 +57,8 @@ class Game():
 		pygame.display.flip()
 
 	def update(self):
-		pygame.mouse.set_cursor(*pygame.cursors.arrow)
-
 		key = pygame.key.get_pressed()
+
 		if self.active:
 			pygame.mouse.set_visible(0)
 
@@ -115,9 +115,6 @@ class Game():
 			self.john.update()
 			self.regis.update()
 
-			self.john.explosion.update()
-			self.regis.explosion.update()
-
 			#self.butterflyTest.update()
 			#self.butterflyTestSprite.draw(self.screen)
 
@@ -137,6 +134,9 @@ class Game():
 
 			self.level.update(self.screen)
 
+			self.john.explosion.update()
+			self.regis.explosion.update()
+
 			if pygame.font:
 				font = pygame.font.Font(None, 36)
 				text = font.render(str(self.john.getPoints()) + " : " + str(self.regis.getPoints()), 1, (10, 10, 10))
@@ -149,6 +149,25 @@ class Game():
 			for event in pygame.event.get():
 				if event.type == QUIT or (key[K_F4] and key[K_LALT]):
 					return False, self
+
+				elif event.type == MOUSEBUTTONDOWN:
+					mse = pygame.mouse.get_pos()
+
+					if self.pauseMenu.buttons["resume"].onButton(mse):
+						self.active = True
+
+					elif self.pauseMenu.buttons["mainMenu"].onButton(mse):
+						return True, MainMenu.MainMenu()
+
+
+				elif event.type == MOUSEMOTION:
+					mse = pygame.mouse.get_pos()
+
+					pygame.mouse.set_cursor(*pygame.cursors.arrow)
+
+					for button in self.pauseMenu.buttons.values():
+						if button.onButton(mse):
+							pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
 				elif event.type == KEYDOWN:
 					if event.key == K_ESCAPE:

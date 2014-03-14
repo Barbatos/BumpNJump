@@ -55,12 +55,11 @@ class MainMenu():
 			if event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
 
+				pygame.mouse.set_cursor(*pygame.cursors.arrow)
+
 				for button in self.buttons.values():
 					if button.onButton(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-
-					else:
-						pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 

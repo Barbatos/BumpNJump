@@ -23,7 +23,9 @@ class OptionMenu():
 		self.sliders["music"] = Slider(self.screen.get_width()/2 - 200/2, 100, 200, 100)
 		self.sliders["sound"] = Slider(self.screen.get_width()/2 - 200/2, 200, 200, 100)
 
-		self.returnButton = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
+		self.buttons = {}
+
+		self.buttons["return"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
 
 		pygame.display.flip()
 
@@ -41,11 +43,13 @@ class OptionMenu():
 					if slider.onSlider(mse):
 						slider.setValue(mse[0])
 
-				if self.returnButton.onButton(mse):
+				if self.buttons["return"].onButton(mse):
 					return True, MainMenu.MainMenu()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
+
+				pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
 				for slider in self.sliders.values():
 					if slider.onSlider(mse):
@@ -53,11 +57,9 @@ class OptionMenu():
 						if mouse[0]:
 							slider.setValue(mse[0])
 
-				if self.returnButton.onButton(mse):
-					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-
-				else:
-					pygame.mouse.set_cursor(*pygame.cursors.arrow)
+				for button in self.buttons.values():
+					if button.onButton(mse):
+						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 
@@ -73,7 +75,8 @@ class OptionMenu():
 		for slider in self.sliders.values():
 			slider.update()
 
-		self.returnButton.update()
+		for button in self.buttons.values():
+			button.update()
 
 		pygame.display.update()
 
