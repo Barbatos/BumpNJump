@@ -6,14 +6,17 @@ import math
 import random
 import pygame
 import MainMenu
+import glob
 from pygame.locals import *
 from Object import *
 from Resources import *
 from Map import *
 from PauseEditorMenu import *
+from LoadLevelMenu import *
+from SaveLevelMenu import *
 
 class Editor():
-	def __init__(self):
+	def __init__(self, levelPreset = "empty"):
 		self.screen = pygame.display.get_surface()
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
@@ -31,6 +34,9 @@ class Editor():
 		self.active = True
 
 		self.pauseMenu = PauseEditorMenu()
+
+		if levelPreset != "empty":
+			self.level.load(levelPreset)
 		
 		pygame.display.flip()
 
@@ -49,10 +55,10 @@ class Editor():
 					return False, self
 
 				elif key[K_LCTRL] and key[K_s]:
-					self.level.save("test")
+					return True, SaveLevelMenu(self.level)
 
 				elif key[K_LCTRL] and key[K_l]:
-					self.level.load("test")
+					return True, LoadLevelMenu()
 
 				elif event.type == MOUSEBUTTONDOWN:
 					if event.button == 5:
@@ -88,7 +94,6 @@ class Editor():
 
 					elif mouse[2]:
 						self.level.removeObjectFromPos(mse)
-						self.level.updateFloor()
 
 				elif event.type == KEYDOWN:
 					if event.key == K_g:
@@ -122,12 +127,10 @@ class Editor():
 						self.active = True
 
 					elif self.pauseMenu.buttons["save"].onButton(mse):
-						self.active = True
-						self.level.save("test")
+						return True, SaveLevelMenu(self.level)
 
 					elif self.pauseMenu.buttons["load"].onButton(mse):
-						self.active = True
-						self.level.load("test")
+						return True, LoadLevelMenu()
 
 					elif self.pauseMenu.buttons["mainMenu"].onButton(mse):
 						return True, MainMenu.MainMenu()

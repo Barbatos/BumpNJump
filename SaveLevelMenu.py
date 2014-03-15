@@ -1,58 +1,56 @@
 #!/usr/bin/python
 
 import pygame
+import glob
+import Editor
 from Button import *
-from Slider import *
-from Checkbox import *
-from GameMenu import *
-from Editor import *
-from OptionMenu import *
 from pygame.locals import *
 
-class MainMenu():
-	def __init__(self):
+class SaveLevelMenu():
+	def __init__(self, level):
 		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
 
+		self.level = level
+
 		self.buttons = {}
 
-		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
-		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
-		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
-		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
+		pos = 100
 
-		self.checkboxTest = Checkbox(50, 100, "test")
+		for f in glob.glob("save/maps/*.mabbit"):
+			name = f.split("\\")[-1].split(".")[0]
+
+			self.buttons[name] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, name.upper())
+
+			pos +=100
+
+		self.buttons["new"] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, "NEW")
 
 		pygame.display.flip()
 
 	def update(self):
 		key = pygame.key.get_pressed()
 		mouse = pygame.mouse.get_pressed()
-
+		
 		for event in pygame.event.get():
 			if event.type == QUIT or (key[K_F4] and key[K_LALT]):
 				return False, self
 
 			elif event.type == MOUSEBUTTONDOWN:
-				mse = pygame.mouse.get_pos()
+				for name, button in self.buttons.items():
+					mse = pygame.mouse.get_pos()
 
-				if self.buttons["play"].onButton(mse):
-					return True, GameMenu()
+					if button.onButton(mse):
+						if name == "new":
+							self.level.save("level" + str(len(self.buttons)))
+							return True, Editor.Editor("level" + str(len(self.buttons)))
 
-				elif self.buttons["editor"].onButton(mse):
-					return True, Editor()
-
-				elif self.buttons["option"].onButton(mse):
-					return True, OptionMenu()
-
-				elif self.buttons["quit"].onButton(mse):
-					return False, self
-
-				elif self.checkboxTest.onCheckbox(mse):
-					self.checkboxTest.changeState()
+						else:
+							self.level.save(name)
+							return True, Editor.Editor(name)
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
@@ -67,8 +65,6 @@ class MainMenu():
 
 		for button in self.buttons.values():
 			button.update()
-
-		self.checkboxTest.update()
 
 		pygame.display.update()
 
