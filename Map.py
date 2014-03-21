@@ -35,7 +35,7 @@ class Map():
 
 			for k in range(0, 5):
 				while True:
-					randPos = random.randint(0, 46)
+					randPos = random.randint(0, 45)
 					if not self.isInBlock(self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26):
 						break
 

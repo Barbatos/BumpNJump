@@ -25,7 +25,11 @@ class OptionMenu():
 
 		self.buttons = {}
 
-		self.buttons["return"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "RETURN")
+		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "BACK")
+
+		self.checkboxes = {}
+
+		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood")
 
 		pygame.display.flip()
 
@@ -43,8 +47,11 @@ class OptionMenu():
 					if slider.onSlider(mse):
 						slider.setValue(mse[0])
 
-				if self.buttons["return"].onButton(mse):
+				if self.buttons["back"].onButton(mse):
 					return True, MainMenu.MainMenu()
+
+				elif self.checkboxes["blood"].onCheckbox(mse):
+					self.checkboxes["blood"].changeState()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
@@ -77,6 +84,9 @@ class OptionMenu():
 
 		for button in self.buttons.values():
 			button.update()
+
+		for checkbox in self.checkboxes.values():
+			checkbox.update()
 
 		pygame.display.update()
 

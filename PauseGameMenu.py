@@ -14,6 +14,7 @@ class PauseGameMenu():
 		self.buttons = {}
 
 		self.buttons["resume"] = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "RESUME")
+		self.buttons["load level"] = Button(self.screen.get_width()/2 - 200/2, 200, 200, 40, "LOAD LEVEL")
 		self.buttons["mainMenu"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "MAIN MENU")
 
 	def update(self):

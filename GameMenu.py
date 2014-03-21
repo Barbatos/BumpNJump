@@ -41,7 +41,7 @@ class GameMenu():
 		self.buttons = {}
 
 		self.buttons["play"] = Button(self.screen.get_width() - self.screen.get_width()/4 - 200/2, 450, 200, 40, "PLAY")
-		self.buttons["return"] = Button(self.screen.get_width()/4 - 200/2, 450, 200, 40, "RETURN")
+		self.buttons["back"] = Button(self.screen.get_width()/4 - 200/2, 450, 200, 40, "BACK")
 
 		pygame.display.flip()
 
@@ -68,7 +68,7 @@ class GameMenu():
 				if self.buttons["play"].onButton(mse):
 					return True, Game((self.sliders["red1"].getValue(), self.sliders["green1"].getValue(), self.sliders["blue1"].getValue()), (self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
 
-				elif self.buttons["return"].onButton(mse):
+				elif self.buttons["back"].onButton(mse):
 					return True, MainMenu.MainMenu()
 
 			if event.type == MOUSEMOTION:

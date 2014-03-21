@@ -19,12 +19,10 @@ class MainMenu():
 
 		self.buttons = {}
 
-		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, 100, 200, 40, "PLAY")
-		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, 200, 200, 40, "EDITOR")
-		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, 300, 200, 40, "OPTION")
-		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "QUIT")
-
-		self.checkboxTest = Checkbox(50, 100, "test")
+		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 150 - 40/2, 200, 40, "PLAY")
+		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "EDITOR")
+		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 50 - 40/2, 200, 40, "OPTION")
+		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 150 - 40/2, 200, 40, "QUIT")
 
 		pygame.display.flip()
 
@@ -51,9 +49,6 @@ class MainMenu():
 				elif self.buttons["quit"].onButton(mse):
 					return False, self
 
-				elif self.checkboxTest.onCheckbox(mse):
-					self.checkboxTest.changeState()
-
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
 
@@ -67,8 +62,6 @@ class MainMenu():
 
 		for button in self.buttons.values():
 			button.update()
-
-		self.checkboxTest.update()
 
 		pygame.display.update()
 
