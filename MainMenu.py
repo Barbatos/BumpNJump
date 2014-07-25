@@ -5,9 +5,9 @@ from Button import *
 from Slider import *
 from Checkbox import *
 from GameMenu import *
-from MultiMenu import *
 from Editor import *
 from OptionMenu import *
+from PlayModeMenu import *
 from pygame.locals import *
 
 class MainMenu():
@@ -21,10 +21,9 @@ class MainMenu():
 		self.buttons = {}
 
 		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 150 - 40/2, 200, 40, "PLAY")
-		self.buttons["multiplayer"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "MULTIPLAYER")
-		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 50 - 40/2, 200, 40, "EDITOR")
-		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 150 - 40/2, 200, 40, "OPTION")
-		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 250 - 40/2, 200, 40, "QUIT")
+		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "EDITOR")
+		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 50 - 40/2, 200, 40, "OPTION")
+		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 150 - 40/2, 200, 40, "QUIT")
 
 		pygame.display.flip()
 
@@ -40,10 +39,7 @@ class MainMenu():
 				mse = pygame.mouse.get_pos()
 
 				if self.buttons["play"].onButton(mse):
-					return True, GameMenu()
-
-				elif self.buttons["multiplayer"].onButton(mse):
-					return True, MultiMenu()
+					return True, PlayModeMenu()
 
 				elif self.buttons["editor"].onButton(mse):
 					return True, Editor()

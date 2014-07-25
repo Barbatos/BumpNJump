@@ -36,11 +36,21 @@ class LoadLevelMenu():
 				return False, self
 
 			elif event.type == MOUSEBUTTONDOWN:
+				if event.button == 5:
+					if(self.buttons[self.buttons.keys()[0]].getY() > 25):
+						for button in self.buttons.values():
+							button.setY(button.getY() - 25)
+				if event.button == 4:
+					if(self.buttons[self.buttons.keys()[-1]].getY() < self.screen.get_height() - 65):
+						for button in self.buttons.values():
+							button.setY(button.getY() + 25)
+
 				for name, button in self.buttons.items():
 					mse = pygame.mouse.get_pos()
 
-					if button.onButton(mse):
-						return True, Editor.Editor(name)
+					if event.button == 1:
+						if button.onButton(mse):
+							return True, Editor.Editor(name)
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()

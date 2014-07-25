@@ -7,26 +7,26 @@ class Server():
 		self.hote = hote
 		self.port = 12800
 
-		self.connexion_principale = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.connexion_principale.bind((self.hote, self.port))
-		self.connexion_principale.listen(5)
+		self.main_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.main_connection.bind((self.hote, self.port))
+		self.main_connection.listen(5)
 
-		self.connexion_avec_client = None
-		self.infos_connexion = None
+		self.client_connection = None
+		self.connection_data = None
 
 	def connect(self):
 		print("Le serveur ecoute a present sur le port " + str(self.port))
-		self.connexion_avec_client, self.infos_connexion = self.connexion_principale.accept()
+		self.client_connection, self.connection_data = self.main_connection.accept()
 
-	def beginCom(self):
-		msg = b""
-		while msg != b"end":
-			msg = self.connexion_avec_client.recv(1024)
-			print(msg.decode())
+	def send(self, msg):
+		send_msg = msg.encode()
+		self.client_connection.send(send_msg)
 
-		self.finish()
+	def recieve(self):
+		rcv_msg = self.client_connection.recv(1024)
+		print(rcv_msg.decode())
 
 	def finish(self):
 		print("Fermeture de la connexion")
-		self.connexion_avec_client.close()
-		self.connexion_principale.close()
+		self.client_connection.close()
+		self.main_connection.close()

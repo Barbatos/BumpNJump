@@ -42,5 +42,9 @@ class Button():
 	def getText(self):
 		return self.text
 
+	def setY(self, y):
+		self.buttonRect.y = y
+		self.textRect = self.textDisp.get_rect(centerx = self.buttonRect.x + self.buttonRect.w/2, centery = self.buttonRect.y + self.buttonRect.h/2 + 1)
+
 	def setColor(self, color):
 		self.color = color

@@ -7,20 +7,20 @@ class Client():
 		self.hote = hote
 		self.port = 12800
 
-		self.connexion_avec_serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.server_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	def connect(self):
-		self.connexion_avec_serveur.connect((self.hote, self.port))
+		self.server_connection.connect((self.hote, self.port))
 		print("Connexion etablie avec le serveur sur le port " + str(self.port))
 
-	def beginCom(self):
-		msg = b""
-		while msg != b"fin":
-			msg = raw_input("> ")
-			self.connexion_avec_serveur.send(msg.encode())
+	def send(self, msg):
+		send_msg = msg.encode()
+		self.server_connection.send(send_msg)
 
-		self.finish()
+	def recieve(self):
+		rcv_msg = self.server_connection.recv(1024)
+		print(rcv_msg.decode())
 
 	def finish(self):
 		print("Fermeture de la connexion")
-		self.connexion_avec_serveur.close()
+		self.server_connection.close()

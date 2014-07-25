@@ -2,11 +2,11 @@
 
 import pygame
 from Button import *
-from Server import *
-from Client import *
+from GameMenu import *
+from MultiMenu import *
 from pygame.locals import *
 
-class MultiMenu():
+class PlayModeMenu():
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
@@ -16,9 +16,9 @@ class MultiMenu():
 
 		self.buttons = {}
 
-		self.buttons["server"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 150 - 40/2, 200, 40, "SERVER")
-		self.buttons["client"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "CLIENT")
-
+		self.buttons["local"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 150 - 40/2, 200, 40, "LOCAL")
+		self.buttons["network"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "NETWORK")
+		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 50 - 40/2, 200, 40, "BACK")
 		pygame.display.flip()
 
 	def update(self):
@@ -32,15 +32,14 @@ class MultiMenu():
 			elif event.type == MOUSEBUTTONDOWN:
 				mse = pygame.mouse.get_pos()
 
-				if self.buttons["server"].onButton(mse):
-					server = Server('');
-					server.connect()
-					server.recieve()
+				if self.buttons["local"].onButton(mse):
+					return True, GameMenu()
 
-				elif self.buttons["client"].onButton(mse):
-					client = Client('127.0.0.1')
-					client.connect()
-					client.send("bonjour")
+				elif self.buttons["network"].onButton(mse):
+					return True, MultiMenu()
+
+				elif self.buttons["back"].onButton(mse):
+					return True, MainMenu.MainMenu()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
