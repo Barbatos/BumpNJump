@@ -7,20 +7,11 @@ class Client():
 		self.hote = hote
 		self.port = 12800
 
-		self.server_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-	def connect(self):
-		self.server_connection.connect((self.hote, self.port))
-		print("Connexion etablie avec le serveur sur le port " + str(self.port))
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	def send(self, msg):
-		send_msg = msg.encode()
-		self.server_connection.send(send_msg)
+		self.sock.sendto(msg, (self.hote, self.port))
 
 	def recieve(self):
-		rcv_msg = self.server_connection.recv(1024)
-		print(rcv_msg.decode())
-
-	def finish(self):
-		print("Fermeture de la connexion")
-		self.server_connection.close()
+		msg, addr = self.sock.recvfrom(1024)
+		print(msg)

@@ -38,6 +38,9 @@ class Checkbox():
 		else:
 			self.checked = True
 
+	def isChecked(self):
+		return self.checked
+
 	def getX(self):
 		return self.checkboxRect.x
 

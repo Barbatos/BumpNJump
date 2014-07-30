@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
 import pygame
+import GameMenu
+import MainMenu
 from Button import *
-from GameMenu import *
 from MultiMenu import *
 from pygame.locals import *
 
@@ -33,7 +34,7 @@ class PlayModeMenu():
 				mse = pygame.mouse.get_pos()
 
 				if self.buttons["local"].onButton(mse):
-					return True, GameMenu()
+					return True, GameMenu.GameMenu()
 
 				elif self.buttons["network"].onButton(mse):
 					return True, MultiMenu()

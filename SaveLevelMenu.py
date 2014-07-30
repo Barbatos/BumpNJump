@@ -23,11 +23,13 @@ class SaveLevelMenu():
 		for f in glob.glob("save/maps/*.mabbit"):
 			name = f.split("\\")[-1].split(".")[0]
 
-			self.buttons[name] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, name.upper())
+			if(name != "last"):
+				self.buttons[name] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, name.upper())
 
-			pos +=100
+				pos +=100
 
 		self.buttons["new"] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, "NEW")
+		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, pos + 100, 200, 40, "BACK")
 
 		pygame.display.flip()
 
@@ -57,6 +59,9 @@ class SaveLevelMenu():
 							if name == "new":
 								self.level.save("level" + str(len(self.buttons)))
 								return True, Editor.Editor("level" + str(len(self.buttons)))
+
+							elif name == "back":
+								return True, Editor.Editor("last")
 
 							else:
 								self.level.save(name)

@@ -7,26 +7,14 @@ class Server():
 		self.hote = hote
 		self.port = 12800
 
-		self.main_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.main_connection.bind((self.hote, self.port))
-		self.main_connection.listen(5)
-
-		self.client_connection = None
-		self.connection_data = None
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	def connect(self):
-		print("Le serveur ecoute a present sur le port " + str(self.port))
-		self.client_connection, self.connection_data = self.main_connection.accept()
+		self.sock.bind((self.hote, self.port))
 
 	def send(self, msg):
-		send_msg = msg.encode()
-		self.client_connection.send(send_msg)
+		self.sock.sendto(msg, (self.hote, self.port))
 
 	def recieve(self):
-		rcv_msg = self.client_connection.recv(1024)
-		print(rcv_msg.decode())
-
-	def finish(self):
-		print("Fermeture de la connexion")
-		self.client_connection.close()
-		self.main_connection.close()
+		msg, addr = self.sock.recvfrom(1024)
+		print(msg)

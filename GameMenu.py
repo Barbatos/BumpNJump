@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import pygame
-import MainMenu
+import PlayModeMenu
 from Button import *
 from Slider import *
 from Game import *
@@ -69,7 +69,7 @@ class GameMenu():
 					return True, Game((self.sliders["red1"].getValue(), self.sliders["green1"].getValue(), self.sliders["blue1"].getValue()), (self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
 
 				elif self.buttons["back"].onButton(mse):
-					return True, MainMenu.MainMenu()
+					return True, PlayModeMenu.PlayModeMenu()
 
 			if event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()

@@ -35,7 +35,7 @@ class Map():
 
 			for k in range(0, 5):
 				while True:
-					randPos = random.randint(0, 45)
+					randPos = random.randint(0, len(self.objectList) - 1)
 					if not self.isInBlock(self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26):
 						break
 
@@ -110,6 +110,21 @@ class Map():
 		self.objectList = objectList
 
 		for obj in self.objectList:
+			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
+
+	def addCarrot(self):
+		while True:
+			randPos = random.randint(0, len(self.objectList) - 1)
+			if not self.isInBlock(self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26):
+				break
+
+		if self.objectList[randPos].getType() != "carrot":
+			self.objectList.append(Object(len(self.objectList), self.objectList[randPos].getX() + 10, self.objectList[randPos].getY() - 26, "carrot"))
+
+		for obj in self.objectList:
+			if not self.isFloor(obj):
+				obj.replaceImage(obj.getType())
+
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
 
 	def save(self, name):

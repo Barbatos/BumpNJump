@@ -20,6 +20,8 @@ class Game():
 		self.butterflies = []
 		self.butterfliesSpritesList = pygame.sprite.Group()
 
+		self.animCarrotSprites = []
+
 		self.screen = pygame.display.get_surface()
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
@@ -40,11 +42,14 @@ class Game():
 		self.regis.appendRabbit(self.john)
 
 		self.pauseMenu = PauseGameMenu()
+
+		self.deltaCarrot = 0
+		self.timeCarrot = random.randint(1, 4)
 		
 		#self.butterflyTest = Butterfly((255, 10, 100), self.level.objectList, self.level.objectSpritesList)
 		#self.butterflyTestSprite = pygame.sprite.RenderPlain(self.butterflyTest.getAnim())
 
-		for l in range(0, 10):
+		for l in range(0, 4):
 			while True:
 				randPos = random.randint(0, 46)
 				if not self.level.isInBlock(self.level.objectList[randPos].getX() + 10, self.level.objectList[randPos].getY() - 26):
@@ -81,18 +86,33 @@ class Game():
 					self.level.removeObjectFromPos(mse)
 
 				elif event.type == KEYDOWN:
-					if event.key == K_UP:
-						self.john.jump()
-					if event.key == K_LEFT:
-						self.john.moveLeftStart()
-					if event.key == K_RIGHT:
-						self.john.moveRightStart()
-					if event.key == K_w:
-						self.regis.jump()
-					if event.key == K_a:
-						self.regis.moveLeftStart()
-					if event.key == K_d:
-						self.regis.moveRightStart()
+					if not self.john.isTouched():
+						if event.key == K_UP:
+							self.john.jump()
+						if event.key == K_LEFT:
+							self.john.moveLeftStart()
+						if event.key == K_RIGHT:
+							self.john.moveRightStart()
+						if event.key == K_KP0:
+							self.john.throwCarrot()
+							for c in self.john.thrownCarrots:
+								self.animCarrotSprites.append(pygame.sprite.RenderPlain(c.getAnim()))
+
+					if not self.regis.isTouched():
+						if event.key == K_w:
+							self.regis.jump()
+						if event.key == K_a:
+							self.regis.moveLeftStart()
+						if event.key == K_d:
+							self.regis.moveRightStart()
+						if event.key == K_g:
+							self.regis.throwCarrot()
+							for c in self.regis.thrownCarrots:
+								self.animCarrotSprites.append(pygame.sprite.RenderPlain(c.getAnim()))
+
+					if event.key == K_c:
+						self.level.addCarrot()
+
 					if event.key == K_ESCAPE:
 						self.active = False
 						self.john.moveLeftStop()
@@ -115,6 +135,12 @@ class Game():
 			self.john.update()
 			self.regis.update()
 
+			for c in self.john.thrownCarrots:
+				c.update()
+
+			for c in self.regis.thrownCarrots:
+				c.update()
+
 			#self.butterflyTest.update()
 			#self.butterflyTestSprite.draw(self.screen)
 
@@ -122,6 +148,8 @@ class Game():
 				b.update()
 
 			self.butterfliesSpritesList.draw(self.screen)
+
+			self.level.update(self.screen)
 
 			self.animJohnSprite.update()
 			self.animJohnSprite.draw(self.screen)
@@ -132,10 +160,25 @@ class Game():
 			self.john.getAnim().update()
 			self.regis.getAnim().update()
 
-			self.level.update(self.screen)
-
 			self.john.explosion.update()
 			self.regis.explosion.update()
+
+			for animCarrotSprite in self.animCarrotSprites:
+				animCarrotSprite.update()
+				animCarrotSprite.draw(self.screen)
+
+			for c in self.john.thrownCarrots:
+				c.getAnim().update()
+
+			for c in self.regis.thrownCarrots:
+				c.getAnim().update()
+
+			if(self.deltaCarrot == self.timeCarrot * 3600):
+				self.level.addCarrot()
+				self.deltaCarrot = 0
+				self.timeCarrot = random.randint(1, 4)
+			else:
+				self.deltaCarrot += 1
 
 			if pygame.font:
 				font = pygame.font.Font(None, 36)

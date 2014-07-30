@@ -6,6 +6,7 @@ import random
 from Animation import *
 from pygame.locals import *
 from Explosion import *
+from Carrot import *
 
 class Rabbit():
 	pygame.mixer.pre_init(44100, -16, 2, 1024)
@@ -18,7 +19,7 @@ class Rabbit():
 		self.rabbitList = []
 
 		self.color = color
-		self.rect = pygame.Rect(0, 0, 43, 48)
+		self.rect = pygame.Rect(0, 0, 43, 30)
 		self.rabbitAnim = Animation("rabbit", 30)
 		self.rabbitAnim.updateColor(self.color)
 		self.rabbitAnim.setFrameRange(1, 8);
@@ -38,7 +39,11 @@ class Rabbit():
 		self.isJumping = False
 		self.isOnBlock = False
 
+		self.direction = "left"
+
 		self.collide = False
+
+		self.touched = False
 
 		self.id = id
 		self.name = name
@@ -56,6 +61,8 @@ class Rabbit():
 
 		self.points = 0
 		self.carrots = 0
+
+		self.thrownCarrots = []
 
 	def __str__(self):
 		print "Rabbit ", self.id,  ": ", self.name
@@ -111,7 +118,7 @@ class Rabbit():
 				self.rabbitAnim.playAnim()
 
 		self.rabbitAnim.getRect().x = self.rect.x
-		self.rabbitAnim.getRect().y = self.rect.y
+		self.rabbitAnim.getRect().y = self.rect.y - 18
 
 		pygame.event.pump()
 
@@ -184,7 +191,7 @@ class Rabbit():
 	def jump(self, velocity = 8.1):
 		if not self.isJumping:
 			self.jumpSound.play()
-			self.movePos[1] = (-1) * velocity
+			self.movePos[1] = -velocity
 		self.isJumping = True
  	
  	def moveLeftStart(self):
@@ -193,6 +200,7 @@ class Rabbit():
  		self.rabbitAnim.playAnim()
  		self.movingLeft = True
  		self.movingRight = False
+ 		self.direction = "left"
 
  	def moveLeftStop(self):
  		if not self.movingRight:
@@ -207,6 +215,7 @@ class Rabbit():
  		self.rabbitAnim.playAnim()
  		self.movingRight = True
  		self.movingLeft = False
+ 		self.direction = "right"
 	
 	def moveRightStop(self):
 		if not self.movingLeft:
@@ -238,6 +247,17 @@ class Rabbit():
 			return False
 
 		return True
+
+	def isTouched(self):
+		return self.touched
+
+	def throwCarrot(self):
+		if(self.carrots > 0):
+			if(self.direction == "right"):
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 40, self.rect.y - 18))
+			else:
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x - 42, self.rect.y - 18))
+			self.carrots -= 1
 
 	def updateColor(self, color):
 		self.rabbitAnim.updateColor(color)

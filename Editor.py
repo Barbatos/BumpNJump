@@ -104,6 +104,7 @@ class Editor():
 
 					elif event.key == K_ESCAPE:
 						self.active = False
+						self.level.save("last")
 
 			self.screen.blit(self.backgroundImage, self.backgroundRect, self.backgroundRect)
 

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import pygame
+import PlayModeMenu
 from Button import *
 from Server import *
 from Client import *
@@ -18,6 +19,7 @@ class MultiMenu():
 
 		self.buttons["server"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 150 - 40/2, 200, 40, "SERVER")
 		self.buttons["client"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "CLIENT")
+		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 50 - 40/2, 200, 40, "BACK")
 
 		pygame.display.flip()
 
@@ -39,8 +41,10 @@ class MultiMenu():
 
 				elif self.buttons["client"].onButton(mse):
 					client = Client('127.0.0.1')
-					client.connect()
 					client.send("bonjour")
+
+				elif self.buttons["back"].onButton(mse):
+					return True, PlayModeMenu.PlayModeMenu()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()

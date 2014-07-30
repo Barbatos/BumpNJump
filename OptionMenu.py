@@ -29,7 +29,9 @@ class OptionMenu():
 
 		self.checkboxes = {}
 
-		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood")
+		self.blood = True
+
+		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood", self.blood)
 
 		pygame.display.flip()
 
@@ -52,6 +54,8 @@ class OptionMenu():
 
 				elif self.checkboxes["blood"].onCheckbox(mse):
 					self.checkboxes["blood"].changeState()
+
+					self.blood = self.checkboxes["blood"].isChecked()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()

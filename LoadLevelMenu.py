@@ -21,9 +21,12 @@ class LoadLevelMenu():
 		for f in glob.glob("save/maps/*.mabbit"):
 			name = f.split("\\")[-1].split(".")[0]
 
-			self.buttons[name] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, name.upper())
+			if(name != "last"):
+				self.buttons[name] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, name.upper())
 
-			pos +=100
+				pos +=100
+
+		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, pos, 200, 40, "BACK")
 
 		pygame.display.flip()
 
@@ -50,7 +53,10 @@ class LoadLevelMenu():
 
 					if event.button == 1:
 						if button.onButton(mse):
-							return True, Editor.Editor(name)
+							if name == "back":
+								return True, Editor.Editor("last")
+							else:
+								return True, Editor.Editor(name)
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
