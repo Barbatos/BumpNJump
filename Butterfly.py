@@ -82,40 +82,62 @@ class Butterfly():
 		pygame.event.pump()
 
 	def collisionDetection(self, obj, rabbit = False):
-		# objCenterX = obj.rect.x + obj.rect.w/2
-		# objCenterY = obj.rect.y + obj.rect.h/2
+		#FLEE BEHAVIOR !!!
 
-		# butterflyCenterX = self.rect.x + self.rect.w/2
-		# butterflyCenterY = self.rect.y + self.rect.h/2
+		objCenterX = obj.rect.x + obj.rect.w/2
+		objCenterY = obj.rect.y + obj.rect.h/2
 
-		# dist = math.sqrt(((objCenterX - butterflyCenterX) * (objCenterX - butterflyCenterX)) + ((objCenterY - butterflyCenterY) * (objCenterY - butterflyCenterY)))
+		butterflyCenterX = self.rect.x + self.rect.w/2
+		butterflyCenterY = self.rect.y + self.rect.h/2
 
-		# if(dist < 60):
-		# 	self.degree += 180
+		dist = math.fabs(math.sqrt(((objCenterX - butterflyCenterX) * (objCenterX - butterflyCenterX)) + ((objCenterY - butterflyCenterY) * (objCenterY - butterflyCenterY))))
+		
+		if dist < 50:
+			distX = math.fabs(objCenterX - butterflyCenterX)
+			angle = math.degrees(math.acos(distX/dist))
+
+			if (objCenterX <= butterflyCenterX) and (objCenterY <= butterflyCenterY):
+				angle = 240 - angle
+
+			elif (objCenterX > butterflyCenterX) and (objCenterY <= butterflyCenterY):
+				angle = 360 - angle
+
+			elif (objCenterX <= butterflyCenterX) and (objCenterY > butterflyCenterY):
+				angle = 180 - angle
+
+			angle += 180
+			angle = angle % 360
+
+			self.degree = int(angle)
+
+		# if dist < 150:
+		# 	pygame.draw.line(self.screen, (200, 0, 0), (butterflyCenterX, butterflyCenterY), (objCenterX, objCenterY), 2)
+		# 	pygame.draw.line(self.screen, (200, 0, 0), (butterflyCenterX, butterflyCenterY), (objCenterX, butterflyCenterY), 2)
+		# 	pygame.draw.line(self.screen, (200, 0, 0), (objCenterX, butterflyCenterY), (objCenterX, objCenterY), 2)
 
 		#FLEE BEHAVIOR !!!
 
-		if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
-			if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
-				if self.rect.y < (obj.rect.y + obj.rect.h):
-					self.movePos[0] = 5
+		# if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
+		# 	if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
+		# 		if self.rect.y < (obj.rect.y + obj.rect.h):
+		# 			self.movePos[0] = 5
 
-		if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
-			if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
-				if self.rect.y < (obj.rect.y + obj.rect.h):
-					self.movePos[0] = -5
+		# if (obj.rect.x < (self.rect.x + self.rect.w)) and (obj.rect.x > self.rect.x):
+		# 	if (self.rect.y + self.rect.h) > (obj.rect.y + 1):
+		# 		if self.rect.y < (obj.rect.y + obj.rect.h):
+		# 			self.movePos[0] = -5
 
-		if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
-			if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
-				if self.rect.x < (obj.rect.x + obj.rect.w - 5):
-					self.movePos[1] = 5
+		# if (self.rect.y <= (obj.rect.y + obj.rect.h)) and (obj.rect.y <= self.rect.y):
+		# 	if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
+		# 		if self.rect.x < (obj.rect.x + obj.rect.w - 5):
+		# 			self.movePos[1] = 5
 
-		if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
-			if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
-				if self.rect.x < (obj.rect.x + obj.rect.w - 5):
-					if self.movePos[1] >= 0:
-						self.rect.y = obj.rect.y - self.rect.h
-						self.movePos[1] = -5
+		# if ((self.rect.y + self.rect.h) >= obj.rect.y) and (self.rect.y <= obj.rect.y):
+		# 	if (self.rect.x + self.rect.w) > (obj.rect.x + 3):
+		# 		if self.rect.x < (obj.rect.x + obj.rect.w - 5):
+		# 			if self.movePos[1] >= 0:
+		# 				self.rect.y = obj.rect.y - self.rect.h
+		# 				self.movePos[1] = -5
 
 	def checkForCollision(self):
 		#if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0:

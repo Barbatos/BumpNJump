@@ -44,6 +44,7 @@ class Rabbit():
 		self.collide = False
 
 		self.touched = False
+		self.touchDelay = 0
 
 		self.id = id
 		self.name = name
@@ -68,6 +69,9 @@ class Rabbit():
 		print "Rabbit ", self.id,  ": ", self.name
 
 	def update(self):
+		if self.touched:
+			touchDelayCalculation()
+
 		if self.movingLeft == True:
 			self.movePos[0] = -self.velocity
 
@@ -248,15 +252,25 @@ class Rabbit():
 
 		return True
 
+	def touch(self):
+		self.touched = True
+		self.touchDelay = 300
+
+	def touchDelayCalculation(self):
+		self.touchDelay -= 1
+
+		if(self.touchDelay == 0):
+			self.touched = False
+
 	def isTouched(self):
 		return self.touched
 
 	def throwCarrot(self):
 		if(self.carrots > 0):
 			if(self.direction == "right"):
-				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 40, self.rect.y - 18))
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 40, self.rect.y - 18, self.objectList))
 			else:
-				self.thrownCarrots.append(Carrot(self.direction, self.rect.x - 42, self.rect.y - 18))
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x - 42, self.rect.y - 18, self.objectList))
 			self.carrots -= 1
 
 	def updateColor(self, color):

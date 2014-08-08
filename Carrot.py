@@ -6,7 +6,9 @@ from Animation import *
 from pygame.locals import *
 
 class Carrot():
-	def __init__(self, direction, posX, posY):
+	def __init__(self, direction, posX, posY, objectList = []):
+		self.objectList = objectList
+
 		self.carrotAnim = Animation("carrot", 50)
 		self.carrotAnim.setFrameRange(1, 25);
 		self.carrotAnim.playAnim()
@@ -23,8 +25,10 @@ class Carrot():
 
 		self.direction = direction
 
+		self.end = False
+
 	def update(self):
-		if(self.direction == "right"):
+		if self.direction == "right":
 			self.moveX += 6
 		else:
 			self.moveX -= 6
@@ -32,6 +36,21 @@ class Carrot():
 		self.rect.x = self.moveX
 
 		self.carrotAnim.setRect(self.rect)
+
+		self.checkForCollision()
+
+		return self.end
+
+	def collisionDetection(self, obj):
+		if obj.isInBlock(self.rect.x + self.rect.w/2, self.rect.y + self.rect.h/2):
+			return True
+		else:
+			return False
+
+	def checkForCollision(self):
+		for obj in self.objectList:
+			if not self.end:
+				self.end = self.collisionDetection(obj)
 
 	def getAnim(self):
 		return self.carrotAnim
