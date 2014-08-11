@@ -53,6 +53,10 @@ class Rabbit():
 		self.splashSound = pygame.mixer.Sound("resources/sound/splash.wav")
 		self.carrotSound = pygame.mixer.Sound("resources/sound/carrot.wav")
 
+		self.jumpSound.set_volume(float(Resources.getOptionValue("sound"))/100)
+		self.splashSound.set_volume(float(Resources.getOptionValue("sound"))/100)
+		self.carrotSound.set_volume(float(Resources.getOptionValue("sound"))/100)
+
 		self.velocity = 5
 		self.gravity = 0.6
 
@@ -64,6 +68,8 @@ class Rabbit():
 		self.carrots = 0
 
 		self.thrownCarrots = []
+
+		self.blood = Resources.getOptionValue("blood")
 
 	def __str__(self):
 		print "Rabbit ", self.id,  ": ", self.name
@@ -153,10 +159,11 @@ class Rabbit():
 						
 						if rabbit:
 							self.jump(5)
-							obj.explosion = Explosion(obj.rect.x, obj.rect.y, obj.color)
-							obj.explosion.startExplosion()
+							if self.blood == 1:
+								obj.explosion = Explosion(obj.rect.x, obj.rect.y, obj.color)
+								obj.explosion.startExplosion()
+								self.splashSound.play()
 							obj.replaceRabbit()
-							self.splashSound.play()
 							self.points += 1
 
 						elif obj.getType() == "boing":

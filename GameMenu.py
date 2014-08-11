@@ -58,7 +58,7 @@ class GameMenu():
 
 				for slider in self.sliders.values():
 					if slider.onSlider(mse):
-						slider.setValue(mse[0])
+						slider.setValueByMousePos(mse[0])
 
 						self.rabbit2.resetColor((self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
 						self.rabbit2.setPos(self.screen.get_width() - self.screen.get_width()/4 - 21, 300)
@@ -80,7 +80,7 @@ class GameMenu():
 					if slider.onSlider(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 						if mouse[0]:
-							slider.setValue(mse[0])
+							slider.setValueByMousePos(mse[0])
 
 							self.rabbit2.resetColor((self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
 							self.rabbit2.setPos(self.screen.get_width() - self.screen.get_width()/4 - 21, 300)

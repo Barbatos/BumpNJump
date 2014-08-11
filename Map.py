@@ -128,8 +128,6 @@ class Map():
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
 
 	def save(self, name):
-		blocks = {}
-
 		with open("save/maps/" + name + ".mabbit", "w") as f:
 			for obj in self.objectList:
 				f.write(obj.getType() + ":" + str(obj.getX()) + ", " + str(obj.getY()) + "\n")
@@ -140,7 +138,7 @@ class Map():
 
 		with open("save/maps/" + name + ".mabbit", "r") as f:
 			for line in f:
-				line =  line.strip("\n")
+				line = line.strip("\n")
 
 				self.objectList.append(Object(len(self.objectList), int(line.split(":")[1].split(",")[0]), int(line.split(":")[1].split(",")[1]), line.split(":")[0]))
 

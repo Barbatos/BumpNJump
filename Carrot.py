@@ -9,8 +9,8 @@ class Carrot():
 	def __init__(self, direction, posX, posY, objectList = []):
 		self.objectList = objectList
 
-		self.carrotAnim = Animation("carrot", 50)
-		self.carrotAnim.setFrameRange(1, 25);
+		self.carrotAnim = Animation("carrot", 12)
+		self.carrotAnim.setFrameRange(1, 12);
 		self.carrotAnim.playAnim()
 
 		self.screen = pygame.display.get_surface()

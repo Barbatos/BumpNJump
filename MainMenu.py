@@ -20,10 +20,12 @@ class MainMenu():
 
 		self.buttons = {}
 
-		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 150 - 40/2, 200, 40, "PLAY")
-		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 - 50 - 40/2, 200, 40, "EDITOR")
-		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 50 - 40/2, 200, 40, "OPTION")
-		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, self.screen.get_height()/2 + 150 - 40/2, 200, 40, "QUIT")
+		menuPos = 175
+
+		self.buttons["play"] = Button(self.screen.get_width()/2 - 200/2, menuPos, 200, 40, "PLAY")
+		self.buttons["editor"] = Button(self.screen.get_width()/2 - 200/2, menuPos + 100, 200, 40, "EDITOR")
+		self.buttons["option"] = Button(self.screen.get_width()/2 - 200/2, menuPos + 200, 200, 40, "OPTION")
+		self.buttons["quit"] = Button(self.screen.get_width()/2 - 200/2, menuPos + 300, 200, 40, "QUIT")
 
 		pygame.display.flip()
 
@@ -60,6 +62,12 @@ class MainMenu():
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
+
+		if pygame.font:
+			font = pygame.font.Font(None, 65)
+			text = font.render("BUMP'N'JUMP", 1, (220, 220, 220))
+			textpos = text.get_rect(centerx = self.screen.get_width()/2, y = 70)
+			self.screen.blit(text, textpos)
 
 		for button in self.buttons.values():
 			button.update()

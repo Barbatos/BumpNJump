@@ -30,13 +30,13 @@ class Game():
 
 		self.level = Map()
 
-		self.john = Rabbit(1, "john" ,color1 , self.level.objectList, self.level.objectSpritesList)
-		self.animJohnSprite = pygame.sprite.RenderPlain(self.john.getAnim())
-		self.john.getAnim().stopAnim()
-
-		self.regis = Rabbit(2, "regis" ,color2 , self.level.objectList, self.level.objectSpritesList)
+		self.regis = Rabbit(1, "regis" ,color1 , self.level.objectList, self.level.objectSpritesList)
 		self.animRegisSprite = pygame.sprite.RenderPlain(self.regis.getAnim())
 		self.regis.getAnim().stopAnim()
+
+		self.john = Rabbit(2, "john" ,color2 , self.level.objectList, self.level.objectSpritesList)
+		self.animJohnSprite = pygame.sprite.RenderPlain(self.john.getAnim())
+		self.john.getAnim().stopAnim()
 
 		self.john.appendRabbit(self.regis)
 		self.regis.appendRabbit(self.john)
@@ -182,7 +182,7 @@ class Game():
 
 			if pygame.font:
 				font = pygame.font.Font(None, 36)
-				text = font.render(str(self.john.getPoints()) + " : " + str(self.regis.getPoints()), 1, (10, 10, 10))
+				text = font.render(self.john.getName() + " : " + str(self.john.getPoints()) + " / " + self.regis.getName() + " : " + str(self.regis.getPoints()), 1, (10, 10, 10))
 				textpos = text.get_rect(centerx = self.screen.get_width()/2)
 				self.screen.blit(text, textpos)
 

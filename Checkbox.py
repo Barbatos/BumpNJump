@@ -33,13 +33,19 @@ class Checkbox():
 			return False
 
 	def changeState(self):
-		if self.checked:
-			self.checked = False
+		if self.isChecked():
+			self.uncheck()
 		else:
-			self.checked = True
+			self.check()
 
 	def isChecked(self):
 		return self.checked
+
+	def check(self):
+		self.checked = True
+
+	def uncheck(self):
+		self.checked = False
 
 	def getX(self):
 		return self.checkboxRect.x

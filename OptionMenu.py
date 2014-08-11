@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
 import pygame
+import MainMenu
 from Button import *
 from Slider import *
 from Checkbox import *
-import MainMenu
 from pygame.locals import *
 
 class OptionMenu():
@@ -23,15 +23,16 @@ class OptionMenu():
 		self.sliders["music"] = Slider(self.screen.get_width()/2 - 200/2, 100, 200, 100)
 		self.sliders["sound"] = Slider(self.screen.get_width()/2 - 200/2, 200, 200, 100)
 
+		self.checkboxes = {}
+
+		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood", True)
+		self.checkboxes['fullscreen'] = Checkbox(self.screen.get_width()/2, 350, "Fullscreen", False)
+
+		self.loadOptions()
+
 		self.buttons = {}
 
 		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "BACK")
-
-		self.checkboxes = {}
-
-		self.blood = True
-
-		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood", self.blood)
 
 		pygame.display.flip()
 
@@ -47,15 +48,17 @@ class OptionMenu():
 
 				for slider in self.sliders.values():
 					if slider.onSlider(mse):
-						slider.setValue(mse[0])
+						slider.setValueByMousePos(mse[0])
 
 				if self.buttons["back"].onButton(mse):
+					self.saveOptions()
 					return True, MainMenu.MainMenu()
 
 				elif self.checkboxes["blood"].onCheckbox(mse):
 					self.checkboxes["blood"].changeState()
 
-					self.blood = self.checkboxes["blood"].isChecked()
+				elif self.checkboxes["fullscreen"].onCheckbox(mse):
+					self.checkboxes["fullscreen"].changeState()
 
 			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
@@ -66,11 +69,13 @@ class OptionMenu():
 					if slider.onSlider(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
 						if mouse[0]:
-							slider.setValue(mse[0])
+							slider.setValueByMousePos(mse[0])
 
 				for button in self.buttons.values():
 					if button.onButton(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+
+		pygame.mixer.music.set_volume(float(self.sliders["music"].getValue())/100)
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 
@@ -95,3 +100,27 @@ class OptionMenu():
 		pygame.display.update()
 
 		return True, self
+
+	def saveOptions(self):
+		with open("save/options.mabbit", "w") as f:
+			for key, sli in self.sliders.items():
+				f.write(key + ":" + str(sli.getValue()) + "\n")
+
+			for key, check in self.checkboxes.items():
+				if check.isChecked():
+					f.write(key + ":1\n")
+				else:
+					f.write(key + ":0\n")
+
+	def loadOptions(self):
+		with open("save/options.mabbit", "r") as f:
+			for line in f:
+				line = line.strip("\n")
+
+				if line.split(":")[0] in self.sliders:
+					self.sliders[line.split(":")[0]].setValueByNumber(int(line.split(":")[1]))
+				else:
+					if int(line.split(":")[1]) == 0:
+						self.checkboxes[line.split(":")[0]].uncheck()
+					else:
+						self.checkboxes[line.split(":")[0]].check()

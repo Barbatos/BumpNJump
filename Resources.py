@@ -20,3 +20,11 @@ def loadPNG(name, anim = False):
 		print 'Cannot load image: ', fullname
 		raise SystemExit, message
 	return image, image.get_rect()
+
+def getOptionValue(option):
+	with open("save/options.mabbit", "r") as f:
+		for line in f:
+			line = line.strip("\n")
+
+			if line.split(":")[0] == option:
+				return int(line.split(":")[1])

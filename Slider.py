@@ -44,6 +44,8 @@ class Slider():
 	def getValue(self):
 		return self.value
 
-	def setValue(self, x):
+	def setValueByMousePos(self, x):
 		self.value =  int((x - self.sliderRect.x) / float(self.sliderRect.w) * self.max)
 		
+	def setValueByNumber(self, value):
+		self.value = value

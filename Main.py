@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import pygame
+import Resources
 from pygame.locals import *
 from MainMenu import *
 
@@ -10,8 +11,12 @@ class BumpNJump():
 		screen = pygame.display.set_mode((800, 600))
 		pygame.display.set_caption("Bump'N'Jump")
 
-		self.music = pygame.mixer.Sound("resources/sound/music.wav")
-		#self.music.play(-1)
+		pygame.mixer.music.load("resources/sound/music.wav")
+		pygame.mixer.music.set_volume(float(Resources.getOptionValue("music"))/100)
+		pygame.mixer.music.play(-1)
+
+		# music = pygame.mixer.Sound("resources/sound/music.wav")
+		# music.play(-1)
 
 		currentScene = MainMenu()
 

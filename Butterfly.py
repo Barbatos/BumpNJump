@@ -110,11 +110,6 @@ class Butterfly():
 
 			self.degree = int(angle)
 
-		# if dist < 150:
-		# 	pygame.draw.line(self.screen, (200, 0, 0), (butterflyCenterX, butterflyCenterY), (objCenterX, objCenterY), 2)
-		# 	pygame.draw.line(self.screen, (200, 0, 0), (butterflyCenterX, butterflyCenterY), (objCenterX, butterflyCenterY), 2)
-		# 	pygame.draw.line(self.screen, (200, 0, 0), (objCenterX, butterflyCenterY), (objCenterX, objCenterY), 2)
-
 		#FLEE BEHAVIOR !!!
 
 		# if (self.rect.x < (obj.rect.x + obj.rect.w)) and (obj.rect.x < self.rect.x):
@@ -139,6 +134,29 @@ class Butterfly():
 		# 				self.rect.y = obj.rect.y - self.rect.h
 		# 				self.movePos[1] = -5
 
+	def screenCollisionDetection(self):
+		butterflyCenterX = self.rect.x + self.rect.w/2
+		butterflyCenterY = self.rect.y + self.rect.h/2
+
+		distBorder = butterflyCenterX
+		if distBorder < 10:
+			self.degree = 0
+
+		if (butterflyCenterY) < distBorder:
+			distBorder = butterflyCenterY
+			if distBorder < 10:
+				self.degree = 90
+
+		if (self.screen.get_rect().w - butterflyCenterX) < distBorder:
+			distBorder = self.screen.get_rect().w - butterflyCenterX
+			if distBorder < 10:
+				self.degree = 180
+
+		if (self.screen.get_rect().h - butterflyCenterY) < distBorder:
+			distBorder = self.screen.get_rect().h - butterflyCenterY
+			if distBorder < 10:
+				self.degree = 240
+
 	def checkForCollision(self):
 		#if not self.movingLeft and not self.movingRight and self.movePos[1] == 0 and self.velocity == 0:
 		#	return
@@ -146,6 +164,8 @@ class Butterfly():
 		for obj in self.objectList:
 			if obj.getType() is not "carrot":
 				self.collisionDetection(obj, False)
+
+		self.screenCollisionDetection()
 
 		#for rabbit in self.rabbitList:
 		#	self.collisionDetection(rabbit, True)
