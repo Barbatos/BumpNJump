@@ -23,6 +23,8 @@ class OptionMenu():
 		self.sliders["music"] = Slider(self.screen.get_width()/2 - 200/2, 100, 200, 100)
 		self.sliders["sound"] = Slider(self.screen.get_width()/2 - 200/2, 200, 200, 100)
 
+		self.currentSlider = None
+
 		self.checkboxes = {}
 
 		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood", True)
@@ -39,16 +41,18 @@ class OptionMenu():
 	def update(self):
 		key = pygame.key.get_pressed()
 		mouse = pygame.mouse.get_pressed()
+
 		for event in pygame.event.get():
 			if event.type == QUIT or (key[K_F4] and key[K_LALT]):
 				return False, self
 
-			elif event.type == MOUSEBUTTONDOWN:
+			if event.type == MOUSEBUTTONDOWN:
 				mse = pygame.mouse.get_pos()
 
-				for slider in self.sliders.values():
+				for sliderKey, slider in self.sliders.items():
 					if slider.onSlider(mse):
 						slider.setValueByMousePos(mse[0])
+						self.currentSlider = sliderKey
 
 				if self.buttons["back"].onButton(mse):
 					self.saveOptions()
@@ -68,12 +72,18 @@ class OptionMenu():
 				for slider in self.sliders.values():
 					if slider.onSlider(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-						if mouse[0]:
-							slider.setValueByMousePos(mse[0])
+
+				if self.currentSlider != None and mouse[0]:
+					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+					self.sliders[self.currentSlider].setValueByMousePos(mse[0])
 
 				for button in self.buttons.values():
 					if button.onButton(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+
+			elif event.type == MOUSEBUTTONUP:
+				if self.currentSlider != None:
+					self.currentSlider = None
 
 		pygame.mixer.music.set_volume(float(self.sliders["music"].getValue())/100)
 
