@@ -111,7 +111,7 @@ class Editor():
 
 			self.screen.blit(self.backgroundImage, self.backgroundRect, self.backgroundRect)
 
-			self.level.update(self.screen)
+			self.level.update()
 
 			self.currentBlock.update()
 			self.currentSpriteBlock.draw(self.screen)
