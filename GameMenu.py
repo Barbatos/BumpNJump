@@ -25,6 +25,8 @@ class GameMenu():
 		self.sliders["green2"] = Slider(self.screen.get_width() - self.screen.get_width()/4 - 200/2, 150, 200, 50, 255)
 		self.sliders["blue2"] = Slider(self.screen.get_width() - self.screen.get_width()/4 - 200/2, 200, 200, 200, 255)
 
+		self.currentSlider = None
+
 		self.rabbit1 = Animation("rabbit", 30)
 		self.rabbit1.updateColor((self.sliders["red1"].getValue(), self.sliders["green1"].getValue(), self.sliders["blue1"].getValue()))
 		self.rabbit1.setFrameRange(1, 8);
@@ -56,9 +58,10 @@ class GameMenu():
 			elif event.type == MOUSEBUTTONDOWN:
 				mse = pygame.mouse.get_pos()
 
-				for slider in self.sliders.values():
+				for sliderKey, slider in self.sliders.items():
 					if slider.onSlider(mse):
 						slider.setValueByMousePos(mse[0])
+						self.currentSlider = sliderKey
 
 						self.rabbit2.resetColor((self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
 						self.rabbit2.setPos(self.screen.get_width() - self.screen.get_width()/4 - 21, 300)
@@ -71,7 +74,7 @@ class GameMenu():
 				elif self.buttons["back"].onButton(mse):
 					return True, PlayModeMenu.PlayModeMenu()
 
-			if event.type == MOUSEMOTION:
+			elif event.type == MOUSEMOTION:
 				mse = pygame.mouse.get_pos()
 
 				pygame.mouse.set_cursor(*pygame.cursors.arrow)
@@ -79,31 +82,36 @@ class GameMenu():
 				for slider in self.sliders.values():
 					if slider.onSlider(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
-						if mouse[0]:
-							slider.setValueByMousePos(mse[0])
 
-							self.rabbit2.resetColor((self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
-							self.rabbit2.setPos(self.screen.get_width() - self.screen.get_width()/4 - 21, 300)
-							self.rabbit1.resetColor((self.sliders["red1"].getValue(), self.sliders["green1"].getValue(), self.sliders["blue1"].getValue()))
-							self.rabbit1.setPos(self.screen.get_width()/4 - 21, 300)
+				if self.currentSlider != None and mouse[0]:
+					pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+					self.sliders[self.currentSlider].setValueByMousePos(mse[0])
+
+					self.rabbit2.resetColor((self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
+					self.rabbit2.setPos(self.screen.get_width() - self.screen.get_width()/4 - 21, 300)
+					self.rabbit1.resetColor((self.sliders["red1"].getValue(), self.sliders["green1"].getValue(), self.sliders["blue1"].getValue()))
+					self.rabbit1.setPos(self.screen.get_width()/4 - 21, 300)
 
 				for button in self.buttons.values():
 					if button.onButton(mse):
 						pygame.mouse.set_cursor(*pygame.cursors.tri_left)
+
+			elif event.type == MOUSEBUTTONUP:
+				if self.currentSlider != None:
+					self.currentSlider = None
 
 		self.screen.blit(self.background, self.background.get_rect(), self.background.get_rect())
 
 		for slider in self.sliders.values():
 			slider.update()
 
+		self.rabbit1.update()
 		self.rabbit1Sprite.update()
 		self.rabbit1Sprite.draw(self.screen)
 
+		self.rabbit2.update()
 		self.rabbit2Sprite.update()
 		self.rabbit2Sprite.draw(self.screen)
-
-		self.rabbit1.update()
-		self.rabbit2.update()
 
 		for button in self.buttons.values():
 			button.update()

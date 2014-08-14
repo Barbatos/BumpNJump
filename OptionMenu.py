@@ -27,14 +27,15 @@ class OptionMenu():
 
 		self.checkboxes = {}
 
-		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2, 300, "Blood", True)
-		self.checkboxes['fullscreen'] = Checkbox(self.screen.get_width()/2, 350, "Fullscreen", False)
+		self.checkboxes["blood"] = Checkbox(self.screen.get_width()/2 - 50, 300, "Blood", True)
+		self.checkboxes['fullscreen'] = Checkbox(self.screen.get_width()/2 - 50, 350, "Fullscreen", False)
 
 		self.loadOptions()
 
 		self.buttons = {}
 
-		self.buttons["back"] = Button(self.screen.get_width()/2 - 200/2, 400, 200, 40, "BACK")
+		self.buttons["save"] = Button(self.screen.get_width() - self.screen.get_width()/4 - 200/2, 450, 200, 40, "SAVE")
+		self.buttons["back"] = Button(self.screen.get_width()/4 - 200/2, 450, 200, 40, "BACK")
 
 		pygame.display.flip()
 
@@ -46,7 +47,7 @@ class OptionMenu():
 			if event.type == QUIT or (key[K_F4] and key[K_LALT]):
 				return False, self
 
-			if event.type == MOUSEBUTTONDOWN:
+			elif event.type == MOUSEBUTTONDOWN:
 				mse = pygame.mouse.get_pos()
 
 				for sliderKey, slider in self.sliders.items():
@@ -54,8 +55,11 @@ class OptionMenu():
 						slider.setValueByMousePos(mse[0])
 						self.currentSlider = sliderKey
 
-				if self.buttons["back"].onButton(mse):
+				if self.buttons["save"].onButton(mse):
 					self.saveOptions()
+					return True, MainMenu.MainMenu()
+
+				elif self.buttons["back"].onButton(mse):
 					return True, MainMenu.MainMenu()
 
 				elif self.checkboxes["blood"].onCheckbox(mse):

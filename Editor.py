@@ -14,6 +14,7 @@ from Map import *
 from PauseEditorMenu import *
 from LoadLevelMenu import *
 from SaveLevelMenu import *
+from EditorToolbar import *
 
 class Editor():
 	def __init__(self, levelPreset = "empty"):
@@ -34,6 +35,8 @@ class Editor():
 		self.active = True
 
 		self.pauseMenu = PauseEditorMenu()
+
+		self.toolbar = EditorToolbar()
 
 		if levelPreset != "empty":
 			self.level.load(levelPreset)
@@ -70,11 +73,11 @@ class Editor():
 					if event.button == 1:
 						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
 							if self.currentBlock.getType() == "boing":
-								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+								if self.level.getObjectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
 									if not self.level.isInBlock(mse[0], mse[1] - 50):
 										self.level.addObject(self.currentBlock.rect.x, self.currentBlock.rect.y, self.currentBlock.getType())
 							else:
-								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+								if self.level.getObjectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
 									self.level.addObject(self.currentBlock.rect.x, self.currentBlock.rect.y, self.currentBlock.getType())
 
 					self.currentBlock = self.blockList[self.currentBlockNumber]
@@ -85,11 +88,11 @@ class Editor():
 					if mouse[0]:
 						if not any(obj.rect.collidepoint(mse) for obj in self.level.objectList):
 							if self.currentBlock.getType() == "boing":
-								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+								if self.level.getObjectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
 									if not self.level.isInBlock(mse[0], mse[1] - 50):
 										self.level.addObject(self.currentBlock.rect.x, self.currentBlock.rect.y, self.currentBlock.getType())
 							else:
-								if self.level.objectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
+								if self.level.getObjectFromPos((mse[0], mse[1] + 50)).getType() != "boing":
 									self.level.addObject(self.currentBlock.rect.x, self.currentBlock.rect.y, self.currentBlock.getType())
 
 					elif mouse[2]:

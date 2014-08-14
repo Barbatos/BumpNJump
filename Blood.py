@@ -14,8 +14,6 @@ class Blood():
 
 		self.x = x
 		self.y = y
-		self.xVel = xVel
-		self.yVel = yVel
 		self.size = size
 		self.color = color
 

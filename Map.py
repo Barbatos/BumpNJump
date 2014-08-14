@@ -9,6 +9,7 @@ class Map():
 	def __init__(self, empty = False):
 		self.objectList = []
 		self.objectSpritesList = pygame.sprite.Group()
+		self.screen = pygame.display.get_surface()
 
 		if not empty:
 			for i in range(0, 16):
@@ -48,9 +49,11 @@ class Map():
 
 				self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
 
-	def update(self, surface):
+	def update(self):
 		self.objectSpritesList.update()
-		self.objectSpritesList.draw(surface)
+		self.objectSpritesList.draw(self.screen)
+
+		pygame.event.pump()
 
 	def updateFloor(self):
 		for obj in self.objectList:
@@ -83,7 +86,7 @@ class Map():
 
 		self.updateFloor()
 
-	def objectFromPos(self, (x, y)):
+	def getObjectFromPos(self, (x, y)):
 		for obj in self.objectList:
 			if obj.isInBlock(x, y):
 				return obj

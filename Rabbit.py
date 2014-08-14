@@ -12,21 +12,27 @@ class Rabbit():
 	pygame.mixer.pre_init(44100, -16, 2, 1024)
 	pygame.mixer.init()
 
-	def __init__(self, id = -1, name = "", color = (255, 255, 255), objectList = [], spriteList = []):
+	def __init__(self, id = -1, name = "", color = (255, 255, 255), objectList = [], spriteList = [], x = 0, y = 0):
 		self.objectList = objectList
 		self.spriteList = spriteList
 
 		self.rabbitList = []
 
 		self.color = color
-		self.rect = pygame.Rect(0, 0, 43, 30)
+		self.rect = pygame.Rect(x, y, 43, 32)
 		self.rabbitAnim = Animation("rabbit", 30)
 		self.rabbitAnim.updateColor(self.color)
 		self.rabbitAnim.setFrameRange(1, 8);
+
+		self.sprite = pygame.sprite.RenderPlain(self.rabbitAnim)
+
+		self.rabbitAnim.stopAnim()
+
 		self.screen = pygame.display.get_surface()
 		self.area = self.screen.get_rect()
 		self.area.h += 500
 		self.area.y -= 550
+		self.area.w -= 200
 
 		self.floorLevel = self.screen.get_height() - self.rect.h
 
@@ -66,6 +72,8 @@ class Rabbit():
 
 		self.points = 0
 		self.carrots = 0
+
+		self.currentFriction = self.getFloorFriction()
 
 		self.thrownCarrots = []
 
@@ -128,7 +136,22 @@ class Rabbit():
 				self.rabbitAnim.playAnim()
 
 		self.rabbitAnim.getRect().x = self.rect.x
-		self.rabbitAnim.getRect().y = self.rect.y - 18
+		self.rabbitAnim.getRect().y = self.rect.y - 16
+
+		tmpThrownCarrots = []
+
+		for c in self.thrownCarrots:
+			end = c.update()
+
+			if not end:
+				tmpThrownCarrots.append(c)
+
+		self.thrownCarrots = tmpThrownCarrots
+
+		self.sprite.update()
+		self.sprite.draw(self.screen)
+		self.rabbitAnim.update()
+		self.explosion.update()
 
 		pygame.event.pump()
 
@@ -259,6 +282,9 @@ class Rabbit():
 
 		return True
 
+	def getFloorFriction(self):
+		return 0.7
+
 	def touch(self):
 		self.touched = True
 		self.touchDelay = 300
@@ -275,9 +301,9 @@ class Rabbit():
 	def throwCarrot(self):
 		if(self.carrots > 0):
 			if(self.direction == "right"):
-				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 40, self.rect.y - 18, self.objectList))
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 10, self.rect.y, self.objectList))
 			else:
-				self.thrownCarrots.append(Carrot(self.direction, self.rect.x - 42, self.rect.y - 18, self.objectList))
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x, self.rect.y, self.objectList))
 			self.carrots -= 1
 
 	def updateColor(self, color):
@@ -291,6 +317,9 @@ class Rabbit():
 
 	def getPoints(self):
 		return self.points
+
+	def getCarrots(self):
+		return self.carrots
 
 	def getAnim(self):
 		return self.rabbitAnim

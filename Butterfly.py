@@ -10,7 +10,6 @@ from Explosion import *
 from random import randint
 
 class Butterfly():
-
 	def __init__(self, x, y, color = (255, 255, 255), objectList = [], spriteList = []):
 		self.objectList = objectList
 		self.spriteList = spriteList
@@ -18,9 +17,13 @@ class Butterfly():
 		self.rect = pygame.Rect(x, y, 15, 15)
 		self.screen = pygame.display.get_surface()
 
-		self.butterflyAnim = Animation("butterfly", 1)
+		self.butterflyAnim = Animation("butterfly", 8)
 		self.butterflyAnim.updateColor(color)
-		self.butterflyAnim.setFrameRange(1, 2);
+		self.butterflyAnim.setFrameRange(1, 8);
+
+		self.sprite = pygame.sprite.RenderPlain(self.butterflyAnim)
+
+		self.butterflyAnim.playAnim()
 
 		self.area = self.screen.get_rect()
 		self.color = color
@@ -40,8 +43,6 @@ class Butterfly():
 		self.collide = False
 
 		self.movePos = [0,0.01]
-
-		self.butterflyAnim.playAnim()
 
 	def update(self):
 		if(self.detlaUpdate == 1):
@@ -76,8 +77,27 @@ class Butterfly():
 
 			self.butterflyAnim.getRect().x = self.rect.x
 			self.butterflyAnim.getRect().y = self.rect.y
+
+			if self.degree >= 90 and self.degree <= 240:
+				self.movingLeft = True
+				self.movingRight = False
+			else:
+				self.movingLeft = False
+				self.movingRight = True
+
+			if self.degree >= 0 and self.degree <= 180:
+				self.movingDown = True
+				self.movingUp = False
+			else:
+				self.movingDown = False
+				self.movingUp = True
+
 		else:
 			self.detlaUpdate += 1
+
+		self.butterflyAnim.update()
+		self.sprite.update()
+		self.sprite.draw(self.screen)
 
 		pygame.event.pump()
 

@@ -12,6 +12,11 @@ class Object(pygame.sprite.Sprite):
 		self.posY = y
 		self.type = type
 
+		self.friction = 0.7
+
+		if self.type == "ice":
+			self.friction == 0.2
+
 		if self.type == "empty":
 			self.rect = pygame.Rect(0, 0, 0, 0)
 		else:
@@ -46,3 +51,6 @@ class Object(pygame.sprite.Sprite):
 			return True
 		else:
 			return False
+
+	def getFriction(self):
+		return self.friction

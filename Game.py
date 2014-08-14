@@ -14,13 +14,11 @@ from Object import *
 from Resources import *
 from PauseGameMenu import *
 from Map import *
+from GameToolbar import *
 
 class Game():
 	def __init__(self, color1, color2):
 		self.butterflies = []
-		self.butterfliesSpritesList = pygame.sprite.Group()
-
-		self.animCarrotSprites = []
 
 		self.screen = pygame.display.get_surface()
 
@@ -30,13 +28,11 @@ class Game():
 
 		self.level = Map()
 
+		self.toolbar = GameToolbar()
+
 		self.regis = Rabbit(1, "regis" ,color1 , self.level.objectList, self.level.objectSpritesList)
-		self.animRegisSprite = pygame.sprite.RenderPlain(self.regis.getAnim())
-		self.regis.getAnim().stopAnim()
 
 		self.john = Rabbit(2, "john" ,color2 , self.level.objectList, self.level.objectSpritesList)
-		self.animJohnSprite = pygame.sprite.RenderPlain(self.john.getAnim())
-		self.john.getAnim().stopAnim()
 
 		self.john.appendRabbit(self.regis)
 		self.regis.appendRabbit(self.john)
@@ -45,9 +41,6 @@ class Game():
 
 		self.deltaCarrot = 0
 		self.timeCarrot = random.randint(1, 4)
-		
-		#self.butterflyTest = Butterfly((255, 10, 100), self.level.objectList, self.level.objectSpritesList)
-		#self.butterflyTestSprite = pygame.sprite.RenderPlain(self.butterflyTest.getAnim())
 
 		for l in range(0, 4):
 			while True:
@@ -57,7 +50,6 @@ class Game():
 
 			butterfly = Butterfly(self.level.objectList[randPos].getX() + 10, self.level.objectList[randPos].getY() - 26, (255, 10, 100), self.level.objectList, self.level.objectSpritesList)
 			self.butterflies.append(butterfly)
-			self.butterfliesSpritesList.add(pygame.sprite.RenderPlain(butterfly.getAnim()))
 
 		pygame.display.flip()
 
@@ -95,8 +87,6 @@ class Game():
 							self.john.moveRightStart()
 						if event.key == K_KP0:
 							self.john.throwCarrot()
-							for c in self.john.thrownCarrots:
-								self.animCarrotSprites.append(pygame.sprite.RenderPlain(c.getAnim()))
 
 					if not self.regis.isTouched():
 						if event.key == K_w:
@@ -105,10 +95,8 @@ class Game():
 							self.regis.moveLeftStart()
 						if event.key == K_d:
 							self.regis.moveRightStart()
-						if event.key == K_g:
+						if event.key == K_e:
 							self.regis.throwCarrot()
-							for c in self.regis.thrownCarrots:
-								self.animCarrotSprites.append(pygame.sprite.RenderPlain(c.getAnim()))
 
 					if event.key == K_c:
 						self.level.addCarrot()
@@ -132,59 +120,27 @@ class Game():
 
 			self.screen.blit(self.backgroundImage, self.backgroundRect, self.backgroundRect)
 
+			#LEVEL UPDATE
+			self.level.update()
+
+			#RABBITS UPDATE
 			self.john.update()
 			self.regis.update()
 
-			for c in self.john.thrownCarrots:
-				c.update()
+			#TOOLBAR UPDATE
+			self.toolbar.update(self.john, self.regis)
 
-			for c in self.regis.thrownCarrots:
-				c.update()
-
-			#self.butterflyTest.update()
-			#self.butterflyTestSprite.draw(self.screen)
-
+			#BUTTERFLIES UPDATE
 			for b in self.butterflies:
 				b.update()
 
-			self.butterfliesSpritesList.draw(self.screen)
-
-			self.level.update(self.screen)
-
-			self.animJohnSprite.update()
-			self.animJohnSprite.draw(self.screen)
-
-			self.animRegisSprite.update()
-			self.animRegisSprite.draw(self.screen)
-
-			self.john.getAnim().update()
-			self.regis.getAnim().update()
-
-			self.john.explosion.update()
-			self.regis.explosion.update()
-
-			for animCarrotSprite in self.animCarrotSprites:
-				animCarrotSprite.update()
-				animCarrotSprite.draw(self.screen)
-
-			for c in self.john.thrownCarrots:
-				c.getAnim().update()
-
-			for c in self.regis.thrownCarrots:
-				c.getAnim().update()
-
+			#NEW CARROTS
 			if(self.deltaCarrot == self.timeCarrot * 3600):
 				self.level.addCarrot()
 				self.deltaCarrot = 0
 				self.timeCarrot = random.randint(1, 4)
 			else:
 				self.deltaCarrot += 1
-
-			if pygame.font:
-				font = pygame.font.Font(None, 36)
-				text = font.render(self.john.getName() + " : " + str(self.john.getPoints()) + " / " + self.regis.getName() + " : " + str(self.regis.getPoints()), 1, (10, 10, 10))
-				textpos = text.get_rect(centerx = self.screen.get_width()/2)
-				self.screen.blit(text, textpos)
 
 		else:
 			pygame.mouse.set_visible(1)
