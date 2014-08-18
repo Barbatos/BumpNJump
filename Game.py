@@ -17,7 +17,7 @@ from Map import *
 from GameToolbar import *
 
 class Game():
-	def __init__(self, color1, color2):
+	def __init__(self, color1, color2, levelPreset = "empty"):
 		self.butterflies = []
 
 		self.screen = pygame.display.get_surface()
@@ -26,7 +26,10 @@ class Game():
 
 		self.active = True
 
-		self.level = Map()
+		if levelPreset == "empty":
+			self.level = Map()
+		else:
+			self.level = Map(True)
 
 		self.toolbar = GameToolbar()
 
@@ -42,7 +45,7 @@ class Game():
 		self.deltaCarrot = 0
 		self.timeCarrot = random.randint(1, 4)
 
-		for l in range(0, 4):
+		for l in range(0, 6):
 			while True:
 				randPos = random.randint(0, 46)
 				if not self.level.isInBlock(self.level.objectList[randPos].getX() + 10, self.level.objectList[randPos].getY() - 26):
@@ -154,6 +157,9 @@ class Game():
 
 					if self.pauseMenu.buttons["resume"].onButton(mse):
 						self.active = True
+
+					elif self.pauseMenu.buttons["loadlevel"].onButton(mse):
+						print "okay"
 
 					elif self.pauseMenu.buttons["mainMenu"].onButton(mse):
 						return True, MainMenu.MainMenu()

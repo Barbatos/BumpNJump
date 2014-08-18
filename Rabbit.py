@@ -84,7 +84,7 @@ class Rabbit():
 
 	def update(self):
 		if self.touched:
-			touchDelayCalculation()
+			self.touchDelayCalculation()
 
 		if self.movingLeft == True:
 			self.movePos[0] = -self.velocity
@@ -262,6 +262,8 @@ class Rabbit():
 		self.rabbitList.append(rabbit)
 
 	def replaceRabbit(self):
+		self.touched = False
+		
 		while True:
 			randObj = self.objectList[random.randint(1, len(self.objectList)) - 1]
 			if self.isFloor(randObj):
@@ -287,7 +289,7 @@ class Rabbit():
 
 	def touch(self):
 		self.touched = True
-		self.touchDelay = 300
+		self.touchDelay = 180
 
 	def touchDelayCalculation(self):
 		self.touchDelay -= 1
@@ -301,9 +303,9 @@ class Rabbit():
 	def throwCarrot(self):
 		if(self.carrots > 0):
 			if(self.direction == "right"):
-				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 10, self.rect.y, self.objectList))
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x + 10, self.rect.y, self.objectList, self.rabbitList))
 			else:
-				self.thrownCarrots.append(Carrot(self.direction, self.rect.x, self.rect.y, self.objectList))
+				self.thrownCarrots.append(Carrot(self.direction, self.rect.x, self.rect.y, self.objectList, self.rabbitList))
 			self.carrots -= 1
 
 	def updateColor(self, color):

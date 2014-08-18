@@ -20,6 +20,7 @@ class Butterfly():
 		self.butterflyAnim = Animation("butterfly", 8)
 		self.butterflyAnim.updateColor(color)
 		self.butterflyAnim.setFrameRange(1, 8);
+		self.butterflyAnim.setCurrentFrame(randint(1, 8))
 
 		self.sprite = pygame.sprite.RenderPlain(self.butterflyAnim)
 
