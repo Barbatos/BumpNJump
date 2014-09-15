@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import pygame
+import Resources
 from Button import *
 from Slider import *
 from Checkbox import *
@@ -11,12 +12,18 @@ from PlayModeMenu import *
 from pygame.locals import *
 
 class MainMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.buttons = {}
 
@@ -41,15 +48,19 @@ class MainMenu():
 				mse = pygame.mouse.get_pos()
 
 				if self.buttons["play"].onButton(mse):
+					self.buttonSound.play()
 					return True, PlayModeMenu()
 
 				elif self.buttons["editor"].onButton(mse):
+					self.buttonSound.play()
 					return True, Editor()
 
 				elif self.buttons["option"].onButton(mse):
+					self.buttonSound.play()
 					return True, OptionMenu()
 
 				elif self.buttons["quit"].onButton(mse):
+					self.buttonSound.play()
 					return False, self
 
 			elif event.type == MOUSEMOTION:
