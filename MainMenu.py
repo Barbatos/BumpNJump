@@ -5,7 +5,6 @@ import Resources
 from Button import *
 from Slider import *
 from Checkbox import *
-from GameMenu import *
 from Editor import *
 from OptionMenu import *
 from PlayModeMenu import *

@@ -6,6 +6,7 @@ import math
 import random
 import pygame
 import MainMenu
+import Resources
 from pygame.locals import *
 from Rabbit import *
 from Butterfly import *
@@ -17,12 +18,18 @@ from Map import *
 from GameToolbar import *
 
 class Game():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self, color1, color2, levelPreset = "empty"):
 		self.butterflies = []
 
 		self.screen = pygame.display.get_surface()
 
 		self.backgroundImage, self.backgroundRect = loadPNG("background.png")
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.active = True
 
@@ -33,9 +40,9 @@ class Game():
 
 		self.toolbar = GameToolbar()
 
-		self.regis = Rabbit(1, "regis" ,color1 , self.level.objectList, self.level.objectSpritesList)
+		self.regis = Rabbit(1, "regis", color1, self.level.objectList, self.level.objectSpritesList)
 
-		self.john = Rabbit(2, "john" ,color2 , self.level.objectList, self.level.objectSpritesList)
+		self.john = Rabbit(2, "john", color2, self.level.objectList, self.level.objectSpritesList)
 
 		self.john.appendRabbit(self.regis)
 		self.regis.appendRabbit(self.john)
@@ -47,7 +54,7 @@ class Game():
 
 		for l in range(0, 6):
 			while True:
-				randPos = random.randint(0, 46)
+				randPos = random.randint(0, 16)
 				if not self.level.isInBlock(self.level.objectList[randPos].getX() + 10, self.level.objectList[randPos].getY() - 26):
 					break
 
@@ -81,25 +88,25 @@ class Game():
 					self.level.removeObjectFromPos(mse)
 
 				elif event.type == KEYDOWN:
-					if not self.john.isTouched():
-						if event.key == K_UP:
-							self.john.jump()
-						if event.key == K_LEFT:
-							self.john.moveLeftStart()
-						if event.key == K_RIGHT:
-							self.john.moveRightStart()
-						if event.key == K_KP0:
-							self.john.throwCarrot()
+					#KEYS FOR JOHN
+					if event.key == K_UP:
+						self.john.jump()
+					if event.key == K_LEFT:
+						self.john.moveLeftStart()
+					if event.key == K_RIGHT:
+						self.john.moveRightStart()
+					if event.key == K_KP0:
+						self.john.throwCarrot()
 
-					if not self.regis.isTouched():
-						if event.key == K_w:
-							self.regis.jump()
-						if event.key == K_a:
-							self.regis.moveLeftStart()
-						if event.key == K_d:
-							self.regis.moveRightStart()
-						if event.key == K_e:
-							self.regis.throwCarrot()
+					#KEYS FOR REGIS
+					if event.key == K_w:
+						self.regis.jump()
+					if event.key == K_a:
+						self.regis.moveLeftStart()
+					if event.key == K_d:
+						self.regis.moveRightStart()
+					if event.key == K_e:
+						self.regis.throwCarrot()
 
 					if event.key == K_c:
 						self.level.addCarrot()
@@ -120,6 +127,20 @@ class Game():
 						self.regis.moveLeftStop()
 					if event.key == K_d:
 						self.regis.moveRightStop()
+
+				#IF A RABBIT IS TOUCHED
+				elif event.type == USEREVENT + 1:
+					print "touche"
+					if self.john.isTouched():
+						self.john.moveLeftStop()
+						self.john.moveRightStop()
+
+					elif self.regis.isTouched():
+						self.regis.moveLeftStop()
+						self.regis.moveRightStop()
+
+				elif event.type == USEREVENT + 2:
+					print "plus touche"
 
 			self.screen.blit(self.backgroundImage, self.backgroundRect, self.backgroundRect)
 
@@ -156,12 +177,15 @@ class Game():
 					mse = pygame.mouse.get_pos()
 
 					if self.pauseMenu.buttons["resume"].onButton(mse):
+						self.buttonSound.play()
 						self.active = True
 
 					elif self.pauseMenu.buttons["loadlevel"].onButton(mse):
+						self.buttonSound.play()
 						print "okay"
 
 					elif self.pauseMenu.buttons["mainMenu"].onButton(mse):
+						self.buttonSound.play()
 						return True, MainMenu.MainMenu()
 
 

@@ -29,7 +29,7 @@ class Object(pygame.sprite.Sprite):
 		print "Object ", self.id, " (", str(self.posX), ",", str(self.posY), self.type, ")"
 
 	def replaceImage(self, objType, isFloor = False):
-		if isFloor:
+		if isFloor or self.type == "boing":
 			self.image = Resources.loadPNG(self.typeList[objType])[0]
 		else:
 			self.image = Resources.loadPNG("middle_" + self.typeList[objType])[0]

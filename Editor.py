@@ -7,6 +7,7 @@ import random
 import pygame
 import MainMenu
 import glob
+import Resources
 from pygame.locals import *
 from Object import *
 from Resources import *
@@ -17,6 +18,9 @@ from SaveLevelMenu import *
 from EditorToolbar import *
 
 class Editor():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self, levelPreset = "empty"):
 		self.screen = pygame.display.get_surface()
 
@@ -27,6 +31,9 @@ class Editor():
 		self.currentBlockNumber = 0
 		self.currentBlock = self.blockList[self.currentBlockNumber]
 		self.currentSpriteBlock = pygame.sprite.RenderPlain(self.currentBlock)
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.grid = False
 
@@ -128,15 +135,19 @@ class Editor():
 					mse = pygame.mouse.get_pos()
 
 					if self.pauseMenu.buttons["resume"].onButton(mse):
+						self.buttonSound.play()
 						self.active = True
 
 					elif self.pauseMenu.buttons["save"].onButton(mse):
+						self.buttonSound.play()
 						return True, SaveLevelMenu(self.level)
 
 					elif self.pauseMenu.buttons["load"].onButton(mse):
+						self.buttonSound.play()
 						return True, LoadLevelMenu()
 
 					elif self.pauseMenu.buttons["mainMenu"].onButton(mse):
+						self.buttonSound.play()
 						return True, MainMenu.MainMenu()
 
 				elif event.type == MOUSEMOTION:

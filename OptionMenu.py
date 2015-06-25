@@ -2,12 +2,16 @@
 
 import pygame
 import MainMenu
+import Resources
 from Button import *
 from Slider import *
 from Checkbox import *
 from pygame.locals import *
 
 class OptionMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
@@ -17,6 +21,9 @@ class OptionMenu():
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.sliders = {}
 
@@ -56,16 +63,20 @@ class OptionMenu():
 						self.currentSlider = sliderKey
 
 				if self.buttons["save"].onButton(mse):
+					self.buttonSound.play()
 					self.saveOptions()
 					return True, MainMenu.MainMenu()
 
 				elif self.buttons["back"].onButton(mse):
+					self.buttonSound.play()
 					return True, MainMenu.MainMenu()
 
 				elif self.checkboxes["blood"].onCheckbox(mse):
+					self.buttonSound.play()
 					self.checkboxes["blood"].changeState()
 
 				elif self.checkboxes["fullscreen"].onCheckbox(mse):
+					self.buttonSound.play()
 					self.checkboxes["fullscreen"].changeState()
 
 			elif event.type == MOUSEMOTION:

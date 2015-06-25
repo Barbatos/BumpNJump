@@ -1,19 +1,26 @@
 #!/usr/bin/python
 
 import pygame
-import GameMenu
+import GameRabbitMenu
 import MainMenu
+import Resources
 from Button import *
 from MultiMenu import *
 from pygame.locals import *
 
 class PlayModeMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.buttons = {}
 
@@ -34,12 +41,15 @@ class PlayModeMenu():
 				mse = pygame.mouse.get_pos()
 
 				if self.buttons["local"].onButton(mse):
-					return True, GameMenu.GameMenu()
+					self.buttonSound.play()
+					return True, GameRabbitMenu.GameRabbitMenu()
 
 				elif self.buttons["network"].onButton(mse):
+					self.buttonSound.play()
 					return True, MultiMenu()
 
 				elif self.buttons["back"].onButton(mse):
+					self.buttonSound.play()
 					return True, MainMenu.MainMenu()
 
 			elif event.type == MOUSEMOTION:

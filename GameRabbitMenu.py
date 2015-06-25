@@ -1,19 +1,26 @@
 #!/usr/bin/python
 
 import pygame
+import Resources
 import PlayModeMenu
 from Button import *
 from Slider import *
 from Game import *
 from pygame.locals import *
 
-class GameMenu():
+class GameRabbitMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.sliders = {}
 
@@ -69,9 +76,11 @@ class GameMenu():
 						self.rabbit1.setPos(self.screen.get_width()/4 - 21, 300)
 
 				if self.buttons["play"].onButton(mse):
+					self.buttonSound.play()
 					return True, Game((self.sliders["red1"].getValue(), self.sliders["green1"].getValue(), self.sliders["blue1"].getValue()), (self.sliders["red2"].getValue(), self.sliders["green2"].getValue(), self.sliders["blue2"].getValue()))
 
 				elif self.buttons["back"].onButton(mse):
+					self.buttonSound.play()
 					return True, PlayModeMenu.PlayModeMenu()
 
 			elif event.type == MOUSEMOTION:

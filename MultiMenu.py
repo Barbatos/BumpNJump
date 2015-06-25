@@ -1,19 +1,26 @@
 #!/usr/bin/python
 
 import pygame
+import Resources
 import PlayModeMenu
+import MultiGameRabbitMenu
 from Button import *
 from Server import *
-from Client import *
 from pygame.locals import *
 
 class MultiMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.buttons = {}
 
@@ -35,15 +42,28 @@ class MultiMenu():
 				mse = pygame.mouse.get_pos()
 
 				if self.buttons["server"].onButton(mse):
+					self.buttonSound.play()
 					server = Server('');
 					server.connect()
-					server.recieve()
+
+					return True, MultiGameRabbitMenu.MultiGameRabbitMenu(server)
+
+					# server.accept()
+					# server.send(b"connexion avec client : OK")
+					# server.recieve()
 
 				elif self.buttons["client"].onButton(mse):
-					client = Client('127.0.0.1')
-					client.send("bonjour")
+					self.buttonSound.play()
+
+					return True, MultiGameRabbitMenu.MultiGameRabbitMenu()
+
+					# client = Client('localhost')
+					# client.connect()
+					# client.recieve()
+					# client.send(b"connexion avec serveur : OK")
 
 				elif self.buttons["back"].onButton(mse):
+					self.buttonSound.play()
 					return True, PlayModeMenu.PlayModeMenu()
 
 			elif event.type == MOUSEMOTION:

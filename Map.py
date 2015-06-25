@@ -17,22 +17,24 @@ class Map():
 
 				if objType == 1:
 					self.objectList.append(Object(len(self.objectList), i * 50, 550, "earth"))
-				else:
+				elif objType == 2:
 					self.objectList.append(Object(len(self.objectList), i * 50, 550, "ice"))
+				# else:
+				# 	self.objectList.append(Object(len(self.objectList), i * 50, 550, "boing"))
 
-			for j in range(0, 30):
-				objType = random.randint(1, 2)
+			# for j in range(0, 30):
+			# 	objType = random.randint(1, 2)
 
-				while True:
-					randPosX = random.randint(0, 15) * 50 
-					randPosY = random.randint(1, 10) * 50
-					if not self.isInBlock(randPosX + 10, randPosY + 10):
-						break
+			# 	while True:
+			# 		randPosX = random.randint(0, 15) * 50 
+			# 		randPosY = random.randint(1, 10) * 50
+			# 		if not self.isInBlock(randPosX + 10, randPosY + 10):
+			# 			break
 
-				if objType == 1:
-					self.objectList.append(Object(len(self.objectList), randPosX, randPosY, "earth"))
-				else:
-					self.objectList.append(Object(len(self.objectList), randPosX, randPosY, "ice"))
+			# 	if objType == 1:
+			# 		self.objectList.append(Object(len(self.objectList), randPosX, randPosY, "earth"))
+			# 	else:
+			# 		self.objectList.append(Object(len(self.objectList), randPosX, randPosY, "ice"))
 
 			for k in range(0, 5):
 				while True:
@@ -48,6 +50,8 @@ class Map():
 					obj.replaceImage(obj.getType())
 
 				self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
+
+			self.save("tempServer")
 
 	def update(self):
 		self.objectSpritesList.update()
@@ -135,6 +139,10 @@ class Map():
 			for obj in self.objectList:
 				f.write(obj.getType() + ":" + str(obj.getX()) + ", " + str(obj.getY()) + "\n")
 
+	def saveFromStr(self, name, string):
+		with open("save/maps/" + name + ".mabbit", "w") as f:
+			f.write(string)
+
 	def load(self, name):
 		self.objectList = []
 		self.objectSpritesList = pygame.sprite.Group()
@@ -149,3 +157,10 @@ class Map():
 			self.objectSpritesList.add(pygame.sprite.RenderPlain(obj))
 
 		self.updateFloor()
+
+	def getMapStr(self):
+		mapStr = ""
+		for obj in self.objectList:
+			mapStr = mapStr + obj.getType() + ":" + str(obj.getX()) + ", " + str(obj.getY()) + "\n"
+
+		return mapStr

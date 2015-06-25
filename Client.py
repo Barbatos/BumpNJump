@@ -3,15 +3,22 @@
 import socket
 
 class Client():
-	def __init__(self, hote):
-		self.hote = hote
+	def __init__(self, host):
+		self.host = host
 		self.port = 12800
 
-		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		self.connectServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+	def connect(self):
+		self.connectServer.connect((self.host, self.port))
 
 	def send(self, msg):
-		self.sock.sendto(msg, (self.hote, self.port))
+		self.connectServer.send(msg)
 
-	def recieve(self):
-		msg, addr = self.sock.recvfrom(1024)
-		print(msg)
+	def recieve(self, buff):
+		msg = self.connectServer.recv(1024)
+		# print msg
+		return msg
+
+	def close(self):
+		self.connectServer.close()

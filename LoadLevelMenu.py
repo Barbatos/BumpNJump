@@ -3,16 +3,23 @@
 import pygame
 import glob
 import Editor
+import Resources
 from Button import *
 from pygame.locals import *
 
 class LoadLevelMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
 		self.background = pygame.Surface(self.screen.get_size())
 		self.background = self.background.convert()
 		self.background.fill((50, 50, 50))
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.buttons = {}
 
@@ -53,6 +60,7 @@ class LoadLevelMenu():
 
 					if event.button == 1:
 						if button.onButton(mse):
+							self.buttonSound.play()
 							if name == "back":
 								return True, Editor.Editor("last")
 							else:

@@ -1,15 +1,22 @@
 #!/usr/bin/python
 
 import pygame
+import Resources
 from pygame.locals import *
 from Button import *
 
 class PauseEditorMenu():
+	pygame.mixer.pre_init(44100, -16, 2, 1024)
+	pygame.mixer.init()
+
 	def __init__(self):
 		self.screen = pygame.display.get_surface()
 
 		self.backgroundRect = pygame.Rect(0, 0, 250, 400)
 		self.backgroundRect.center = (self.screen.get_rect().center)
+
+		self.buttonSound = pygame.mixer.Sound("resources/sound/button.wav")
+		self.buttonSound.set_volume(float(Resources.getOptionValue("sound"))/100)
 
 		self.buttons = {}
 
